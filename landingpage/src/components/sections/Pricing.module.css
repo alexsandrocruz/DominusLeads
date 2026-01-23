@@ -1,0 +1,159 @@
+.pricing {
+    padding: 8rem 0;
+    background: var(--background);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.subtitle {
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.description {
+    font-size: 1.125rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.popular {
+    border-color: var(--accent);
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px -20px rgba(3, 105, 161, 0.2);
+}
+
+.badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+}
+
+.planName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.priceWrapper {
+    margin-bottom: 0.5rem;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.period {
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.credits {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 2rem;
+}
+
+.featuresList {
+    list-style: none;
+    margin-bottom: 2.5rem;
+    flex-grow: 1;
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+.check {
+    color: var(--accent);
+    font-weight: 800;
+}
+
+.cta {
+    width: 100%;
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1rem;
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+.cta:hover {
+    background: var(--background);
+    border-color: var(--muted);
+}
+
+.ctaPopular {
+    background: var(--accent);
+    color: white;
+    border: none;
+}
+
+.ctaPopular:hover {
+    background: #025a8b;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+    .popular {
+        transform: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.25rem;
+    }
+}

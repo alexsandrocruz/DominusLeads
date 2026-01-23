@@ -1,0 +1,114 @@
+.ctaBanner {
+    padding: 8rem 0;
+    background: var(--primary);
+    text-align: center;
+}
+
+.ctaContent {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.ctaTitle {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.ctaDescription {
+    font-size: 1.25rem;
+    color: var(--muted-foreground);
+    margin-bottom: 3rem;
+}
+
+.finalCta {
+    background: var(--accent);
+    color: white;
+    padding: 1.25rem 3rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 10px 15px -3px rgba(3, 105, 161, 0.4);
+}
+
+.finalCta:hover {
+    background: #025a8b;
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(3, 105, 161, 0.4);
+}
+
+.footer {
+    padding: 6rem 0 3rem;
+    background: #050b1a;
+    /* Even darker navy */
+    color: white;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footerGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+}
+
+.brandName {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.brandDesc {
+    color: var(--muted-foreground);
+    line-height: 1.5;
+    max-width: 300px;
+}
+
+.linkTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.links a {
+    color: var(--muted-foreground);
+    transition: color 0.2s ease;
+}
+
+.links a:hover {
+    color: white;
+}
+
+.bottom {
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}
+
+@media (max-width: 1024px) {
+    .footerGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .ctaTitle {
+        font-size: 2rem;
+    }
+
+    .footerGrid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
