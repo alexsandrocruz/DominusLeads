@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -10px;
+            width: 2px;
+            background-color: #232f48;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white min-h-screen">
+<!-- Top Navigation -->
+<div class="relative flex h-auto w-full flex-col bg-background-light dark:bg-background-dark">
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-white flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined cursor-pointer">arrow_back_ios</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Detalhes do Lead</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-lg h-12 bg-transparent text-slate-900 dark:text-white">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Profile Header Section -->
+<div class="flex p-4 @container bg-background-light dark:bg-background-dark">
+<div class="flex w-full flex-col gap-4 items-start">
+<div class="flex gap-4 flex-row items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl min-h-24 w-24 bg-primary/20 flex items-center justify-center border-2 border-primary/30" data-alt="Prédio comercial corporativo moderno fachada de vidro" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuALOk4mKBgiWMB258xV5h_aQDYmdnffngscmabejOOjCd6gWzBmAO7kdGuvSbO1y4ewC3QGVSRxsiV3kpLkVSYOv8H1DfIMKBAknK7wbTKsBiua_pEMyCwEA_PZb9ZQy-JYxC5QBkr13lKGRKNujvND7llkHHeeUnrsrceYsBLbqkXSU654o7zI4C70qcdk-Ie20FwI3poppsB-cE9Qs0nqd3npOK8lsLc8RFlMrORDbxT652nSw7-QCR-mHwXYcC-wVHdH-CHEG_Z9");'>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<span class="bg-green-500/20 text-green-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Lead Quente</span>
+</div>
+<p class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">Tecnologia Avançada Ltda</p>
+<p class="text-slate-500 dark:text-[#92a4c9] text-sm font-normal leading-normal">CNAE: 6201-5/01</p>
+<p class="text-slate-400 dark:text-[#92a4c9]/70 text-xs font-normal">Desenvolvimento de software sob encomenda</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions Bar -->
+<div class="bg-background-light dark:bg-background-dark">
+<div class="@container">
+<div class="gap-3 px-4 grid grid-cols-3">
+<div class="flex flex-col items-center gap-2 py-2.5 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors">
+<div class="rounded-full bg-primary p-3 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white" style="font-size: 24px;">chat</span>
+</div>
+<p class="text-slate-700 dark:text-white text-xs font-medium">WhatsApp</p>
+</div>
+<div class="flex flex-col items-center gap-2 py-2.5 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors">
+<div class="rounded-full bg-slate-200 dark:bg-[#232f48] p-3">
+<span class="material-symbols-outlined text-slate-700 dark:text-white" style="font-size: 24px;">call</span>
+</div>
+<p class="text-slate-700 dark:text-white text-xs font-medium">Ligar</p>
+</div>
+<div class="flex flex-col items-center gap-2 py-2.5 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl transition-colors">
+<div class="rounded-full bg-slate-200 dark:bg-[#232f48] p-3">
+<span class="material-symbols-outlined text-slate-700 dark:text-white" style="font-size: 24px;">edit_square</span>
+</div>
+<p class="text-slate-700 dark:text-white text-xs font-medium">Status</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Contact Info Section -->
+<div class="mt-4">
+<h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight px-4 pb-2">Informações de Contato</h3>
+<div class="flex flex-col gap-1 px-2">
+<!-- Email -->
+<div class="flex items-center gap-4 bg-white/50 dark:bg-[#111722]/50 rounded-xl px-4 min-h-[64px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-sm font-medium line-clamp-1">contato@tecavancada.com.br</p>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs font-normal">E-mail Corporativo</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">content_copy</span>
+</div>
+<!-- Phone -->
+<div class="flex items-center gap-4 bg-white/50 dark:bg-[#111722]/50 rounded-xl px-4 min-h-[64px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">phone_iphone</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-sm font-medium line-clamp-1">(11) 98765-4321</p>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs font-normal">Celular (Decisor)</p>
+</div>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+</div>
+</div>
+<!-- Location -->
+<div class="flex items-center gap-4 bg-white/50 dark:bg-[#111722]/50 rounded-xl px-4 min-h-[64px] py-2 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-sm font-medium line-clamp-1">Av. Paulista, 1000 - Bela Vista</p>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs font-normal">São Paulo, SP</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400">map</span>
+</div>
+</div>
+</div>
+<!-- Timeline Section -->
+<div class="mt-8 pb-10">
+<h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight px-4 pb-4 flex items-center justify-between">
+            Linha do Tempo
+            <span class="text-primary text-xs font-medium cursor-pointer">Ver Tudo</span>
+</h3>
+<div class="px-4 space-y-0 relative">
+<!-- Timeline Item 1 -->
+<div class="relative pl-12 pb-8 timeline-item">
+<div class="timeline-line"></div>
+<div class="absolute left-0 top-0 size-10 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-green-500 text-xl">reply</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<p class="text-slate-900 dark:text-white text-sm font-bold">Resposta Recebida</p>
+<span class="text-slate-400 dark:text-[#92a4c9] text-[10px]">Hoje, 14:20</span>
+</div>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs mt-1 bg-slate-100 dark:bg-white/5 p-3 rounded-lg border-l-4 border-green-500 italic">
+                        "Olá, vi a apresentação e gostei. Podemos marcar uma call amanhã às 10h?"
+                    </p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-12 pb-8 timeline-item">
+<div class="timeline-line"></div>
+<div class="absolute left-0 top-0 size-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-primary text-xl">send</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<p class="text-slate-900 dark:text-white text-sm font-bold">WhatsApp Enviado</p>
+<span class="text-slate-400 dark:text-[#92a4c9] text-[10px]">Hoje, 09:15</span>
+</div>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs mt-1">Script: "Primeiro Contato - Abordagem Consultiva"</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-12 pb-8 timeline-item">
+<div class="timeline-line"></div>
+<div class="absolute left-0 top-0 size-10 rounded-full bg-slate-200 dark:bg-[#232f48] border-2 border-slate-400 dark:border-slate-600 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 text-xl">hub</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<p class="text-slate-900 dark:text-white text-sm font-bold">Validado pelo n8n</p>
+<span class="text-slate-400 dark:text-[#92a4c9] text-[10px]">Ontem, 17:45</span>
+</div>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs mt-1">Status: Perfil compatível com ICP verificado via automação.</p>
+</div>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative pl-12 pb-4 timeline-item">
+<div class="absolute left-0 top-0 size-10 rounded-full bg-slate-200 dark:bg-[#232f48] border-2 border-slate-400 dark:border-slate-600 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 text-xl">add_business</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<p class="text-slate-900 dark:text-white text-sm font-bold">Lead Criado no CRM</p>
+<span class="text-slate-400 dark:text-[#92a4c9] text-[10px]">Ontem, 17:40</span>
+</div>
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs mt-1">Origem: Prospecção Ativa (Linkedin)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Persistent Action -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark/95 backdrop-blur-md border-t border-slate-200 dark:border-white/10 flex gap-3">
+<button class="flex-1 bg-primary text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">chat</span>
+            Abrir no WhatsApp
+        </button>
+</div>
+<div class="h-20"></div>
+</body></html>

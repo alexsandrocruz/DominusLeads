@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .ios-toggle:checked + .ios-toggle-bg {
+            background-color: #135bec;
+        }
+        .ios-toggle:checked + .ios-toggle-bg .ios-toggle-circle {
+            transform: translateX(20px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #232f48;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between px-4 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">arrow_back_ios</span>
+<h1 class="text-lg font-bold tracking-tight">Integrações Webhooks</h1>
+</div>
+<button class="flex items-center justify-center p-2 text-primary">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Instructional Header -->
+<section class="px-4 pt-6 pb-4">
+<div class="p-4 rounded-xl bg-primary/10 border border-primary/20">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                        Envie dados do <strong>Dominus Leads</strong> para CRMs externos como Salesforce, Pipedrive e n8n automaticamente através de eventos gatilho.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Webhooks List -->
+<section class="px-4">
+<div class="flex items-center justify-between mb-4 mt-2">
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500">Webhooks de Saída</h3>
+<button class="text-xs font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                    NOVO WEBHOOK
+                </button>
+</div>
+<div class="space-y-3">
+<!-- Webhook Item 1 -->
+<div class="bg-white dark:bg-[#1a2233] p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">api</span>
+</div>
+<div>
+<h4 class="font-bold text-base">Enviar para n8n</h4>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                    Lead Qualificado
+                                </span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only ios-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full ios-toggle-bg transition-colors duration-200">
+<div class="absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-200 ios-toggle-circle shadow-sm"></div>
+</div>
+</label>
+</div>
+<div class="mt-4 flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded text-xs font-mono text-slate-500 dark:text-slate-400 overflow-hidden">
+<span class="truncate">https://n8n.dominus.leads/webhook/123-abc-456</span>
+<span class="material-symbols-outlined text-sm cursor-pointer hover:text-primary">content_copy</span>
+</div>
+</div>
+<!-- Webhook Item 2 -->
+<div class="bg-white dark:bg-[#1a2233] p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">cloud_sync</span>
+</div>
+<div>
+<h4 class="font-bold text-base">CRM Salesforce</h4>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                                    Novo Contato
+                                </span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only ios-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full ios-toggle-bg transition-colors duration-200">
+<div class="absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-200 ios-toggle-circle shadow-sm"></div>
+</div>
+</label>
+</div>
+<div class="mt-4 flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded text-xs font-mono text-slate-500 dark:text-slate-400 overflow-hidden">
+<span class="truncate">https://salesforce.com/api/v2/leads/ingest</span>
+<span class="material-symbols-outlined text-sm cursor-pointer hover:text-primary">content_copy</span>
+</div>
+</div>
+</div>
+</section>
+<!-- New Webhook Form (Inline/Bottom Sheet Style) -->
+<section class="mt-8 px-4">
+<div class="bg-white dark:bg-[#1a2233] rounded-t-2xl border-x border-t border-slate-200 dark:border-slate-800 p-6 shadow-xl">
+<div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto mb-6"></div>
+<h3 class="text-xl font-bold mb-6">Configurar Novo Webhook</h3>
+<div class="space-y-5">
+<div>
+<label class="block text-xs font-bold uppercase text-slate-500 mb-2">URL do Endpoint</label>
+<input class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="https://seu-servidor.com/webhook" type="url"/>
+</div>
+<div class="flex gap-4">
+<div class="flex-1">
+<label class="block text-xs font-bold uppercase text-slate-500 mb-2">Método</label>
+<div class="flex bg-slate-50 dark:bg-background-dark rounded-lg p-1 border border-slate-200 dark:border-slate-800">
+<button class="flex-1 py-2 text-xs font-bold rounded bg-primary text-white shadow-sm">POST</button>
+<button class="flex-1 py-2 text-xs font-bold text-slate-500">GET</button>
+</div>
+</div>
+<div class="flex-1">
+<label class="block text-xs font-bold uppercase text-slate-500 mb-2">Evento Gatilho</label>
+<select class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none">
+<option>Lead Qualificado</option>
+<option>Novo Lead</option>
+<option>Mudança de Status</option>
+</select>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block text-xs font-bold uppercase text-slate-500">Cabeçalhos Customizados</label>
+<button class="text-xs text-primary font-bold">+ Adicionar</button>
+</div>
+<div class="space-y-2">
+<div class="flex gap-2">
+<input class="flex-1 bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs" placeholder="Chave" type="text" value="Content-Type"/>
+<input class="flex-1 bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs" placeholder="Valor" type="text" value="application/json"/>
+<button class="p-2 text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-[#1a2233]/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 px-6 py-6 pb-8 safe-area-bottom">
+<div class="flex gap-3">
+<button class="flex-1 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-white font-bold py-4 rounded-xl hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-xl">send</span>
+                Testar Conexão
+            </button>
+<button class="flex-[1.5] flex items-center justify-center gap-2 bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-xl">save</span>
+                Salvar Integração
+            </button>
+</div>
+</footer>
+</body></html>

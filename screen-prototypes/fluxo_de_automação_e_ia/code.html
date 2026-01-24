@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .flow-connector {
+            background-image: linear-gradient(to bottom, #324467 50%, transparent 50%);
+            background-size: 2px 8px;
+            background-repeat: repeat-y;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-[480px] mx-auto border-x border-white/5">
+<!-- TopAppBar -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-50">
+<div class="text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-white/10 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Configuração de Fluxo</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0">Testar</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Flow Header Info -->
+<div class="px-4 py-4 mb-2">
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-2">
+<span class="material-symbols-outlined text-white">hub</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">Dominus Leads: Prospecção B2B</h3>
+<p class="text-[#92a4c9] text-xs">Ativo • Última edição há 2h</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Flow -->
+<div class="grid grid-cols-[56px_1fr] gap-x-2 px-4">
+<!-- Step 1 -->
+<div class="flex flex-col items-center gap-1 pt-3">
+<div class="bg-primary flex items-center justify-center rounded-full size-10 shadow-lg shadow-primary/20 ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-white text-[20px]">chat</span>
+</div>
+<div class="w-[2px] bg-primary h-12 grow"></div>
+</div>
+<div class="flex flex-1 flex-col py-3 pb-6">
+<p class="text-white text-base font-semibold leading-normal">1. Disparo Inicial WhatsApp</p>
+<div class="mt-2 bg-[#192233] border border-[#324467] rounded-xl p-3">
+<div class="flex gap-3">
+<div class="size-16 rounded-lg bg-cover bg-center shrink-0 overflow-hidden border border-white/10" data-alt="Imagem de apresentação de serviços B2B" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkxoFp0JMFIINu4emHDb6t1b9zIrEp60tpaIHA_AWYDs5Cf-fvLwrfyA7g78XZOrV-sgFcmo0e9MLEozh5AJdGZv69YT7DG2WajNcbQ9ztxQ_ik429nQOARU3ko-ZwNz2PKKXCX64KWGWTwk3mgC2BrVr6R2luUSDPAjaZF6Zzu4UEI2bH8Mdu4947MVMP2EuqIXdwZfkJybMFYUwbt2diVmbvSTtvdxHD29PpxLNgyyeMED3EG153dB3oHy4AhPhewzOlQpR4qNtq')"></div>
+<div class="flex flex-col justify-center">
+<p class="text-[#92a4c9] text-sm italic">"Olá! Vi que sua empresa..."</p>
+<span class="text-[10px] text-primary font-bold mt-1 uppercase tracking-wider">Mídia: imagem_v1.png</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2 (Conditional) -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-[2px] bg-primary h-6"></div>
+<div class="bg-[#192233] border-2 border-primary flex items-center justify-center rounded-lg size-10 rotate-45 shrink-0">
+<span class="material-symbols-outlined text-primary -rotate-45 text-[20px]">help_center</span>
+</div>
+<div class="w-[2px] bg-[#324467] h-6 grow"></div>
+</div>
+<div class="flex flex-1 flex-col py-3 pb-8">
+<p class="text-white text-base font-semibold leading-normal">2. Condicional: Se responder</p>
+<p class="text-[#92a4c9] text-sm font-normal leading-normal">Aguardar interação por até 24h</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-1 bg-green-500/20 text-green-400 text-[10px] font-bold rounded uppercase">Sim: Seguir fluxo</span>
+<span class="px-2 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold rounded uppercase">Não: Encerrar</span>
+</div>
+</div>
+<!-- Step 3 (IA Settings) -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-[2px] bg-[#324467] h-6"></div>
+<div class="bg-gradient-to-br from-purple-500 to-primary flex items-center justify-center rounded-full size-10 shadow-lg shadow-purple-500/20 ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-white text-[20px]">psychology</span>
+</div>
+<div class="w-[2px] bg-primary h-12 grow"></div>
+</div>
+<div class="flex flex-1 flex-col py-3 pb-8">
+<div class="flex items-center gap-2">
+<p class="text-white text-base font-semibold leading-normal">3. Processamento IA</p>
+<span class="bg-purple-500/20 text-purple-400 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">n8n Workflow</span>
+</div>
+<div class="mt-4 space-y-4">
+<!-- Webhook Selector -->
+<div class="flex flex-col gap-2">
+<label class="text-[#92a4c9] text-xs font-medium uppercase tracking-wider">Webhook n8n</label>
+<div class="relative">
+<select class="appearance-none w-full rounded-lg text-white border border-[#324467] bg-[#192233] h-12 px-4 pr-10 text-sm focus:ring-1 focus:ring-primary outline-none">
+<option value="lead-v2">Classification_Lead_V2 (Ativo)</option>
+<option value="interest">Check_Interest_Score</option>
+<option value="demo">Schedule_Demo_Trigger</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#92a4c9] pointer-events-none">unfold_more</span>
+</div>
+</div>
+<!-- IA Prompt -->
+<div class="flex flex-col gap-2">
+<label class="text-[#92a4c9] text-xs font-medium uppercase tracking-wider">Instruções da IA (Prompt)</label>
+<textarea class="w-full rounded-lg text-white border border-[#324467] bg-[#192233] min-h-32 p-4 text-sm focus:ring-1 focus:ring-primary outline-none resize-none placeholder:text-white/20" placeholder="Ex: Analise se o lead demonstrou interesse real ou apenas curiosidade técnica...">Analise a resposta do lead e classifique em: 
+1. INTERESSE_IMEDIATO (Deseja call ou demo)
+2. CURIOSO (Fez perguntas técnicas)
+3. NEGATIVO (Pediu para não contatar)
+
+Se 1, extraia o horário sugerido se houver.</textarea>
+</div>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center gap-1 pb-3">
+<div class="w-[2px] bg-primary h-6"></div>
+<div class="bg-white flex items-center justify-center rounded-full size-10 shadow-lg ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-background-dark text-[20px]">rocket_launch</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col py-3">
+<p class="text-white text-base font-semibold leading-normal">4. Ação Final</p>
+<div class="mt-3 grid grid-cols-2 gap-3">
+<div class="bg-[#192233] border border-primary/40 rounded-xl p-3 flex flex-col items-center text-center gap-2">
+<span class="material-symbols-outlined text-primary">sync_alt</span>
+<p class="text-[11px] font-bold text-white uppercase">Sincronizar CRM</p>
+</div>
+<div class="bg-[#192233] border border-white/10 rounded-xl p-3 flex flex-col items-center text-center gap-2 opacity-50">
+<span class="material-symbols-outlined text-[#92a4c9]">call</span>
+<p class="text-[11px] font-bold text-[#92a4c9] uppercase">Agendar Call</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Actions -->
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-background-dark/80 backdrop-blur-md border-t border-white/5 flex gap-4">
+<button class="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl transition-colors border border-white/10">
+                Pausar Fluxo
+            </button>
+<button class="flex-[1.5] bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20">
+                Salvar Alterações
+            </button>
+</div>
+<!-- Float Add Step Button -->
+<button class="absolute bottom-24 right-6 size-14 bg-primary rounded-full shadow-2xl flex items-center justify-center text-white ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+</body></html>

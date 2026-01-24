@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-white min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 justify-between">
+<div class="w-10"></div> <!-- Spacer for centering title or balance -->
+<div class="flex items-center justify-end">
+<button class="text-[#92a4c9] text-base font-medium leading-normal hover:text-white transition-colors">
+                Pular
+            </button>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col items-center justify-center px-6">
+<!-- Illustration Placeholder -->
+<div class="w-full max-w-[320px] aspect-square relative flex items-center justify-center mb-8">
+<div class="absolute inset-0 bg-primary/20 blur-[80px] rounded-full"></div>
+<div class="relative w-full h-full flex items-center justify-center">
+<!-- Smartphone Mockup -->
+<div class="w-32 h-64 bg-slate-800 rounded-[2.5rem] border-[6px] border-slate-700 shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-700 rounded-b-xl"></div>
+<div class="mt-8 flex flex-col gap-2 px-3">
+<div class="h-2 w-16 bg-slate-600 rounded"></div>
+<div class="h-2 w-12 bg-slate-600 rounded"></div>
+</div>
+</div>
+<!-- Floating Message Icons representing Automation -->
+<div class="absolute -top-4 -right-4 bg-primary p-3 rounded-2xl shadow-lg border border-white/10">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="chat">chat</span>
+</div>
+<div class="absolute top-1/2 -left-8 bg-[#25D366] p-3 rounded-2xl shadow-lg border border-white/10">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="chat_bubble">chat_bubble</span>
+</div>
+<div class="absolute bottom-12 -right-8 bg-blue-400 p-3 rounded-2xl shadow-lg border border-white/10">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="sms">sms</span>
+</div>
+<!-- Visual Image Component (Abstract replacement) -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" data-alt="Abstract glowing network of automated message bubbles floating around a smartphone" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAtanOCR7iQjFufhawFxDIQrXCvWgrFjKgxYm2-X5TMlk3z6xeiXplRQc9UOLfSNT4B9_DYD7R0MEkzQ5Oy_SC3ybfFaNRBtnnGHXpiQbijSVbSgrOxdr3etEeC3Am64s573RV_SbAVDcVpdAlC1PCeeK9DOfYYPBiijiYUEZ5PF-j-dOy5cdXAs9AOJ-K0W67IrenHlzgT2Jvc6Wf1enShsSzTFCfnKzIPK6srLl4CIJCASgyyEvYtP3YBiVyfhj9h-SKWYL9xLX24"); background-size: cover;'>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-3">
+<h1 class="text-white tracking-tight text-[32px] font-bold leading-tight">
+                Automação Inteligente
+            </h1>
+<p class="text-[#92a4c9] text-base font-normal leading-relaxed px-2">
+                Qualificamos seus leads via WhatsApp e SMS automaticamente. Você só fala com quem tem interesse.
+            </p>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="px-6 pb-12 w-full max-w-md mx-auto">
+<!-- Page Indicators (2 of 3) -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-8">
+<div class="h-2 w-2 rounded-full bg-[#324467]"></div>
+<div class="h-2 w-6 rounded-full bg-primary transition-all duration-300"></div>
+<div class="h-2 w-2 rounded-full bg-[#324467]"></div>
+</div>
+<!-- Primary Button -->
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-[0.98]">
+            Próximo
+        </button>
+<!-- iOS Home Indicator Safe Area Spacer -->
+<div class="h-2"></div>
+</div>
+</body></html>

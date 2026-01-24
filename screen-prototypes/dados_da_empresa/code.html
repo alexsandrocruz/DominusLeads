@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dados da Empresa - Dominus Leads</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 ios-blur border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 h-16 max-w-md mx-auto justify-between">
+<div class="flex size-10 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined cursor-pointer">arrow_back_ios</span>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Dados da Empresa</h1>
+</div>
+</header>
+<main class="flex-1 max-w-md mx-auto w-full pb-32">
+<!-- ProfileHeader / Logo Section -->
+<section class="flex flex-col items-center py-8 px-4">
+<div class="relative group">
+<div class="bg-slate-200 dark:bg-slate-800 aspect-square rounded-full w-32 h-32 flex items-center justify-center overflow-hidden border-4 border-white dark:border-slate-700 shadow-xl" data-alt="Logo circular da empresa Dominus Leads" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtHHHSD3R_VOW-RGxLnKkBcm4-Lp1G61IYONIp-iGOdheF28Sk7jVjRzJbmklm8aSJvPiuQMZWeGUu7CV-oQIsfI6Lm11jNJA0nxFbnsRdjWgVnDhSXRPgGzzmw8ZJq14OOmKA_-KC9mIJe3n3lphtPtthgakB_r2pe7UXUOS82tDiPru-akpshQA0Bnl7e1W9epXJzbDQm0kN4TVvENDM7Fhy5h-KmJRwDDJbS6Kt48S5rH3-_KNEolHZoXn9WrZkIZreg0WwWhqw'); background-size: cover;">
+</div>
+<label class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full cursor-pointer shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">edit</span>
+<input class="hidden" type="file"/>
+</label>
+</div>
+<div class="mt-4 text-center">
+<p class="text-xl font-bold leading-tight">Dominus Leads</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Gerenciamento de Identidade</p>
+</div>
+<button class="mt-4 text-primary text-sm font-semibold px-4 py-2 hover:bg-primary/10 rounded-lg transition-colors">
+                Alterar Logotipo
+            </button>
+</section>
+<!-- General Info Section -->
+<section class="px-4 space-y-4">
+<div class="flex items-center gap-2 pb-2">
+<span class="material-symbols-outlined text-primary text-lg">business</span>
+<h3 class="text-lg font-bold leading-tight tracking-tight">Informações Gerais</h3>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Razão Social</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all outline-none" placeholder="Ex: Dominus Leads Soluções Digitais LTDA" type="text" value="Dominus Leads Soluções B2B"/>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">CNPJ</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all outline-none" placeholder="00.000.000/0000-00" type="text" value="42.123.456/0001-99"/>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Nome Fantasia</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all outline-none" placeholder="Nome comercial" type="text" value="Dominus Leads"/>
+</div>
+<div class="flex flex-col relative">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Setor de Atuação</p>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 pr-10 text-base transition-all outline-none">
+<option selected="" value="tecnologia">Tecnologia e SaaS</option>
+<option value="marketing">Marketing Digital</option>
+<option value="servicos">Serviços B2B</option>
+<option value="industria">Indústria</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Site/URL</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base transition-all outline-none" placeholder="https://exemplo.com.br" type="url" value="https://dominusleads.com.br"/>
+</div>
+</div>
+</section>
+<!-- Address Section -->
+<section class="px-4 mt-8 space-y-4">
+<div class="flex items-center gap-2 pb-2">
+<span class="material-symbols-outlined text-primary text-lg">location_on</span>
+<h3 class="text-lg font-bold leading-tight tracking-tight">Endereço Comercial</h3>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col col-span-2">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">CEP</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base outline-none" placeholder="00000-000" type="text" value="04571-010"/>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="flex flex-col col-span-3">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Logradouro</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base outline-none" placeholder="Rua, Av..." type="text" value="Avenida Berrini"/>
+</div>
+<div class="flex flex-col col-span-1">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Número</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base outline-none" placeholder="S/N" type="text" value="105"/>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium pb-1.5 pl-1">Cidade</p>
+<input class="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#192233] focus:ring-2 focus:ring-primary focus:border-primary h-12 px-4 text-base outline-none" placeholder="Cidade" type="text" value="São Paulo - SP"/>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action -->
+<footer class="fixed bottom-0 left-0 right-0 bg-background-light/90 dark:bg-background-dark/90 ios-blur border-t border-slate-200 dark:border-slate-800 p-4">
+<div class="max-w-md mx-auto">
+<button class="w-full bg-primary hover:bg-blue-700 text-white font-bold h-14 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">save</span>
+                Salvar Alterações
+            </button>
+</div>
+</footer>
+</body></html>
