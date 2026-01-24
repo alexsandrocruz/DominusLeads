@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<title>Dominus Leads - Gestão de Tenants</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary material-symbols-outlined" style="font-size: 28px;">dashboard_customize</div>
+<div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Dominus Leads</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Painel Superadmin</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center rounded-full w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs">AD</div>
+</div>
+</div>
+</header>
+<main class="pb-24">
+<!-- SearchBar -->
+<div class="px-4 py-4">
+<label class="flex flex-col w-full">
+<div class="flex w-full items-stretch rounded-xl h-12 bg-white dark:bg-[#1a2235] border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full border-none bg-transparent focus:ring-0 text-base font-normal placeholder:text-slate-500" placeholder="Buscar empresa ou tenant..."/>
+<div class="flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400">tune</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Chips / Filters -->
+<div class="flex gap-2 px-4 overflow-x-auto hide-scrollbar pb-2">
+<button class="flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary text-white px-4 text-sm font-medium">
+<span>Todos</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg bg-white dark:bg-[#1a2235] border border-slate-200 dark:border-slate-800 px-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span>Plano</span>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg bg-white dark:bg-[#1a2235] border border-slate-200 dark:border-slate-800 px-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span>Status</span>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg bg-white dark:bg-[#1a2235] border border-slate-200 dark:border-slate-800 px-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span>Nível de Uso</span>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+<!-- SectionHeader -->
+<div class="flex items-center justify-between px-4 pt-6 pb-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight">Monitoramento de Tenants</h3>
+<span class="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded">24 Ativos</span>
+</div>
+<!-- Tenant Cards (Data Grid) -->
+<div class="space-y-4 px-4 mt-2">
+<!-- Card 1: Critical Abuse Alert -->
+<div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-[#1a2235] p-4 shadow-sm border-l-4 border-red-500 border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-white text-base font-bold">Tech Solutions Ltda</p>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20">ENTERPRISE</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">ID: tenant_88291 • Ref: 15 Out</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-red-500 flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-xs">warning</span> Abuso: 85/100
+                        </span>
+<span class="text-[10px] font-medium text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full mt-1">ATIVO</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+<span>Créditos Consumidos</span>
+<span>942 / 1.000</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full rounded-full w-[94%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1a2235] bg-slate-300 flex items-center justify-center text-[10px] font-bold" data-alt="User avatar">JD</div>
+<div class="w-6 h-6 rounded-full border-2 border-white dark:border-[#1a2235] bg-primary flex items-center justify-center text-[10px] font-bold text-white" data-alt="User avatar">MS</div>
+</div>
+<button class="flex items-center gap-1 text-primary text-sm font-semibold">
+                        Ver Logs <span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Normal Usage -->
+<div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-[#1a2235] p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-white text-base font-bold">Inova Digital</p>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">PREMIUM</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">ID: tenant_44120 • Ref: 02 Nov</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-xs">verified_user</span> Seguro: 12/100
+                        </span>
+<span class="text-[10px] font-medium text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full mt-1">ATIVO</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+<span>Créditos Consumidos</span>
+<span>125 / 500</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[25%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex items-center gap-1 text-slate-400 text-[11px]">
+<span class="material-symbols-outlined text-sm">schedule</span> Último acesso: 5m atrás
+                    </div>
+<button class="flex items-center gap-1 text-primary text-sm font-semibold">
+                        Ver Logs <span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Suspended -->
+<div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-[#1a2235] p-4 shadow-sm border border-slate-200 dark:border-slate-800 opacity-75">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-white text-base font-bold">Alpha Marketing</p>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-500/10 text-slate-500 border border-slate-500/20">BASIC</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">ID: tenant_11055 • Ref: --</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-medium text-slate-500 bg-slate-500/10 px-2 py-0.5 rounded-full mt-1">SUSPENSO</span>
+</div>
+</div>
+<div class="flex items-center justify-center p-2 rounded bg-slate-50 dark:bg-slate-800/50">
+<p class="text-[11px] text-slate-500 italic">Conta suspensa por falta de pagamento</p>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex items-center gap-1 text-slate-400 text-[11px]">
+<span class="material-symbols-outlined text-sm">event_busy</span> Suspensa em 01 Out
+                    </div>
+<button class="flex items-center gap-1 text-slate-500 text-sm font-semibold">
+                        Gerenciar <span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 4: High Usage Normal -->
+<div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-[#1a2235] p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-white text-base font-bold">Global Sales S.A</p>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20">ENTERPRISE</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">ID: tenant_99211 • Ref: 20 Out</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-amber-500 flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-xs">query_stats</span> Alerta: 42/100
+                        </span>
+<span class="text-[10px] font-medium text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full mt-1">ATIVO</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+<span>Créditos Consumidos</span>
+<span>2.840 / 3.000</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full w-[94%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex items-center gap-1 text-slate-400 text-[11px]">
+<span class="material-symbols-outlined text-sm">trending_up</span> Crescimento +15% esta semana
+                    </div>
+<button class="flex items-center gap-1 text-primary text-sm font-semibold">
+                        Ver Logs <span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center z-40">
+<span class="material-symbols-outlined" style="font-size: 32px;">person_add</span>
+</button>
+<!-- Bottom Navigation (iOS Style) -->
+<nav class="fixed bottom-0 w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-[10px] font-medium">Tenants</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-medium">Insights</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[10px] font-medium">Segurança</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Ajustes</span>
+</div>
+</nav>
+<!-- Mini Log Sheet Mockup (Triggered view) -->
+<div class="fixed bottom-0 left-0 right-0 h-1/2 bg-white dark:bg-[#1a2235] rounded-t-3xl shadow-2xl z-50 translate-y-full transform transition-transform duration-300 pointer-events-none">
+<!-- Handle -->
+<div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto my-3"></div>
+<div class="px-6 pb-6">
+<div class="flex justify-between items-center mb-4">
+<h4 class="text-lg font-bold">Logs Recentes</h4>
+<button class="text-primary text-sm font-bold">Ver Tudo</button>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3 items-start border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="w-8 h-8 rounded bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">lock_open</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Tentativa de login atípica</p>
+<p class="text-xs text-slate-500 italic">IP: 192.168.1.1 (China) • 2m atrás</p>
+</div>
+</div>
+<div class="flex gap-3 items-start border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">database</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Exportação massiva de leads</p>
+<p class="text-xs text-slate-500 italic">15.000 registros • 15m atrás</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

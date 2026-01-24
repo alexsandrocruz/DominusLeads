@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dominus Leads - Dashboard Executivo Host</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for mobile feel */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-20">
+<!-- Top Navigation Bar -->
+<div class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-lg mx-auto">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+<span class="material-symbols-outlined text-primary">shield_person</span>
+</div>
+<div class="flex flex-col items-center">
+<h1 class="text-white text-sm font-bold leading-tight tracking-tight uppercase opacity-60">Dominus Leads</h1>
+<h2 class="text-white text-lg font-bold leading-tight">Dashboard Executivo</h2>
+</div>
+<div class="flex w-10 items-center justify-end">
+<button class="relative flex size-10 items-center justify-center rounded-full hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-white">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-background-dark"></span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-lg mx-auto space-y-2">
+<!-- Global KPIs -->
+<div class="grid grid-cols-2 gap-3 p-4">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#192233] border border-slate-800 shadow-xl">
+<div class="flex items-center justify-between">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">MRR</p>
+<span class="material-symbols-outlined text-primary text-sm">payments</span>
+</div>
+<p class="text-white tracking-tight text-xl font-bold leading-tight">R$ 148.250</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[#0bda5e] text-xs">trending_up</span>
+<p class="text-[#0bda5e] text-xs font-bold leading-normal">+5.2%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#192233] border border-slate-800 shadow-xl">
+<div class="flex items-center justify-between">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">ARR</p>
+<span class="material-symbols-outlined text-primary text-sm">account_balance</span>
+</div>
+<p class="text-white tracking-tight text-xl font-bold leading-tight">R$ 1.8M</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[#0bda5e] text-xs">trending_up</span>
+<p class="text-[#0bda5e] text-xs font-bold leading-normal">+8.1%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#192233] border border-slate-800 shadow-xl">
+<div class="flex items-center justify-between">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Churn Rate</p>
+<span class="material-symbols-outlined text-red-400 text-sm">person_remove</span>
+</div>
+<p class="text-white tracking-tight text-xl font-bold leading-tight">2.4%</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[#fa6238] text-xs">trending_down</span>
+<p class="text-[#fa6238] text-xs font-bold leading-normal">-0.5%</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-[#192233] border border-slate-800 shadow-xl">
+<div class="flex items-center justify-between">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Crescimento</p>
+<span class="material-symbols-outlined text-primary text-sm">rocket_launch</span>
+</div>
+<p class="text-white tracking-tight text-xl font-bold leading-tight">+15.8%</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[#0bda5e] text-xs">trending_up</span>
+<p class="text-[#0bda5e] text-xs font-bold leading-normal">+2.3%</p>
+</div>
+</div>
+</div>
+<!-- Growth Chart Section -->
+<div class="px-4">
+<div class="flex flex-col gap-2 rounded-xl border border-slate-800 bg-[#192233] p-6 shadow-xl">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-white text-base font-bold leading-tight">Crescimento de Base</h3>
+<p class="text-slate-400 text-xs">Assinaturas vs. Cancelamentos (12m)</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-1">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-[10px] text-slate-300 font-medium">Novos</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="size-2 rounded-full bg-slate-500"></span>
+<span class="text-[10px] text-slate-300 font-medium">Churn</span>
+</div>
+</div>
+</div>
+<div class="flex min-h-[160px] flex-col gap-4 py-4">
+<svg fill="none" height="120" preserveaspectratio="none" viewbox="0 0 400 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 100C30 90 60 110 90 80C120 50 150 70 180 40C210 10 240 30 270 20C300 10 330 40 360 15C390 -10 400 0 400 0V120H0V100Z" fill="url(#chartGradient)"></path>
+<path d="M0 100C30 90 60 110 90 80C120 50 150 70 180 40C210 10 240 30 270 20C300 10 330 40 360 15C390 -10 400 0" stroke="#135bec" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0 110C30 115 60 105 90 112C120 108 150 115 180 110C210 105 240 108 270 105" opacity="0.5" stroke="#94a3b8" stroke-dasharray="4 4" stroke-linecap="round" stroke-width="2"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="chartGradient" x1="200" x2="200" y1="0" y2="120">
+<stop stop-color="#135bec" stop-opacity="0.3"></stop>
+<stop offset="1" stop-color="#135bec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="flex justify-between px-1">
+<p class="text-slate-500 text-[10px] font-bold">JAN</p>
+<p class="text-slate-500 text-[10px] font-bold">MAR</p>
+<p class="text-slate-500 text-[10px] font-bold">JUN</p>
+<p class="text-slate-500 text-[10px] font-bold">SET</p>
+<p class="text-slate-500 text-[10px] font-bold">DEZ</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Funil Global & Eficiência -->
+<div class="px-4 pt-4">
+<h3 class="text-white text-lg font-bold leading-tight tracking-tight mb-4">Funil Global &amp; Eficiência</h3>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center gap-4 rounded-xl border border-slate-800 bg-[#192233] p-4 shadow-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-orange-500/20 text-orange-500">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<h2 class="text-white text-sm font-bold leading-tight">Trials Ativos</h2>
+<p class="text-slate-400 text-xs font-normal leading-normal">Monitorando 450 novas contas</p>
+</div>
+<div class="text-right">
+<p class="text-white font-bold">450</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">+12%</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-xl border border-slate-800 bg-[#192233] p-4 shadow-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined">ads_click</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<h2 class="text-white text-sm font-bold leading-tight">Conversões para Pago</h2>
+<p class="text-slate-400 text-xs font-normal leading-normal">Taxa de ativação global</p>
+</div>
+<div class="text-right">
+<p class="text-white font-bold">18.5%</p>
+<p class="text-slate-400 text-[10px] font-bold">Meta: 20%</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-xl border border-slate-800 bg-[#192233] p-4 shadow-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-purple-500/20 text-purple-500">
+<span class="material-symbols-outlined">wallet</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<h2 class="text-white text-sm font-bold leading-tight">LTV Médio</h2>
+<p class="text-slate-400 text-xs font-normal leading-normal">Lifetime Value por Tenant</p>
+</div>
+<div class="text-right">
+<p class="text-white font-bold">R$ 2.450</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">+R$ 120</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Tenants -->
+<div class="px-4 pt-6 pb-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-white text-lg font-bold leading-tight tracking-tight">Top 5 Tenants</h3>
+<button class="text-primary text-xs font-bold hover:underline">Ver todos</button>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-slate-800 bg-[#192233] overflow-hidden shadow-xl">
+<!-- Tenant Item 1 -->
+<div class="flex items-center gap-4 p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center border border-slate-700" data-alt="Logotipo da empresa Alpha Solutions" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAkm4fexYbRSIqplqER5vQCbaS8OUTnVvf3Y5_zBlzNgTzcd-BxH6On72kuwiIa9agy3w_edbNHSXlkrBeFHdqMOE1TbS9zkwIRKLO2317ZB0KY9Ro7n3Qbdmu7U8CwMrEzYPveoIk1XuiupmNmxl1GvCnZIGqwIOhIUNFnHTTI9Z5nOtblyz70E32TVBGxPAIn83wgn2Jf3tZ4Iu9V83PyMrnTCGQ23dVMNZGTn-jGhBaMmI2Xc40vP7n1AQmGJZgbarUxx1zkLnr5');"></div>
+<div class="flex-1">
+<h4 class="text-white text-sm font-bold">Alpha Solutions</h4>
+<p class="text-slate-500 text-[10px] font-medium uppercase">Plano Enterprise</p>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">R$ 12.400</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">8.4% share</p>
+</div>
+</div>
+<!-- Tenant Item 2 -->
+<div class="flex items-center gap-4 p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center border border-slate-700" data-alt="Logotipo da empresa Beta Tech" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAw4deUchJDUPH-FLO6TjEZyxILPh_dh1I8P7LVQgB1IsQv6SO30qw00kFApI6c25pOpXQ0mrnTEu0m9ddQhtfyfc3bOuM7IDNE0g7yEodHQUGOc9KDxmuKVRrYAN3Hh3cW9AfK4gkqlt4fW9pYXGzPWb12dZvhwsniI9eFfbsjBYUu5AwgOd89KGUCQASfwhRdKGJ9SYLoSM_z_ir2GBfP6NwQv4QUwVhdFrkSMnOPbNBxIGe-ufJ59TKU-ozdk8mBDelpaskoY3LE');"></div>
+<div class="flex-1">
+<h4 class="text-white text-sm font-bold">Beta Tech</h4>
+<p class="text-slate-500 text-[10px] font-medium uppercase">Plano Growth</p>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">R$ 9.850</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">6.6% share</p>
+</div>
+</div>
+<!-- Tenant Item 3 -->
+<div class="flex items-center gap-4 p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center border border-slate-700" data-alt="Logotipo da empresa Delta Marketing" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmrT84D_0yCHBFIwJ15W6_ZHoAySbBm2AsyTvtZuOsAvJrdmfTWu_eMmNLtf4n9mWr2oXc6lC2RPMW-hiJ334KIx4PE6JPspW0ZA4ctRQRA_q52DDP9BbtM9v8XCwkfmSYV2rz85VZiYG16uNwMtVDkprDlS_2x6lziTmQ3VQW1BfPUirUHT4dpWJrftOq68G0taR7DxF9v2kLIGRZ7TEtmC8DWMvQnigHdnlykaf4vcaQABSmPWRyoTnNWmBd01ZRnN3Ht96c5_us');"></div>
+<div class="flex-1">
+<h4 class="text-white text-sm font-bold">Delta Marketing</h4>
+<p class="text-slate-500 text-[10px] font-medium uppercase">Plano Enterprise</p>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">R$ 8.200</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">5.5% share</p>
+</div>
+</div>
+<!-- Tenant Item 4 -->
+<div class="flex items-center gap-4 p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center border border-slate-700" data-alt="Logotipo da empresa Nexus Core" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCiauhGNtANQ5XjI1nyjx5jNVwcLGnYfo0oT2nJF14CgmOPvu2AOWojDbPm9-FsGFh0TDdAQuW9fvov-I3IqijwJx1BpGt457Q95fXhQipdN5M8b4rsR_j718NjPs2Jgu-Hpotyy0pjc8u6tqmsLGlawOirH9S9rM_-LdT5Z-pQU_X17D0ib-GERMUoj8SE-bikRM872n9NkUTOoEGf99ZvTOVCoqhDhMjIAPcJ1yYsZuwGzJ-GYpERksRBA2p69LW3vjeiMJCMxD3Q');"></div>
+<div class="flex-1">
+<h4 class="text-white text-sm font-bold">Nexus Core</h4>
+<p class="text-slate-500 text-[10px] font-medium uppercase">Plano Pro</p>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">R$ 7.150</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">4.8% share</p>
+</div>
+</div>
+<!-- Tenant Item 5 -->
+<div class="flex items-center gap-4 p-4 hover:bg-slate-800/30 transition-colors">
+<div class="size-10 rounded-full bg-cover bg-center border border-slate-700" data-alt="Logotipo da empresa Zenith IT" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHbYCyFRUUujr2iysLhPbssQTv5OcqT7m1wRDmsnxGPjFS-WijbHsa8PWPMld4-k5VmpyVSiVGVk0Sy2coyuN7NhlE0brpA-LM-NpY5WQiMphmuI0l6EZcwju0Gk2_3Z8gmURFTESq4th1h5_s7WPwWn1NOWfffUS4WqmllIZo6CRE_qDq2HjNm8eGDkldjf8Qd9melVP2fhUX-hv0ssj8ZCPpqiq5dUko9ql-UeLL9TndvREdTM7E4RKCiAPTl1YTz7rhrdlWn-pM');"></div>
+<div class="flex-1">
+<h4 class="text-white text-sm font-bold">Zenith IT</h4>
+<p class="text-slate-500 text-[10px] font-medium uppercase">Plano Growth</p>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-bold">R$ 6.900</p>
+<p class="text-[#0bda5e] text-[10px] font-bold">4.6% share</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar (iOS Style) -->
+<div class="fixed bottom-0 left-0 right-0 bg-background-dark/80 backdrop-blur-xl border-t border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined font-variation-fill">dashboard</span>
+<span class="text-[10px] font-bold">Painel</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">corporate_fare</span>
+<span class="text-[10px] font-bold">Tenants</span>
+</button>
+<div class="size-12 rounded-full bg-primary flex items-center justify-center -mt-8 shadow-lg shadow-primary/40 text-white">
+<span class="material-symbols-outlined text-2xl">add</span>
+</div>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-bold">Relatórios</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Ajustes</span>
+</button>
+</div>
+</body></html>

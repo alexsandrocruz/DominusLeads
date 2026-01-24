@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Dominus Leads</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden">
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-50">
+<div class="flex size-10 shrink-0 items-center">
+<div class="bg-primary rounded-lg size-10 flex items-center justify-center text-white">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+</div>
+<div class="flex-1 px-4">
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Dominus Leads</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400">Bem-vindo, Especialista</p>
+</div>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-full h-10 w-10 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4">
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-[#192233] p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex flex-[2_2_0px] flex-col justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-slate-500 dark:text-[#92a4c9] text-xs font-semibold uppercase tracking-wider">Créditos Ativos</p>
+<p class="text-slate-900 dark:text-white text-3xl font-extrabold leading-tight">1.250</p>
+</div>
+<button class="flex mt-4 min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white gap-2 text-sm font-bold shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="truncate">Comprar Mais</span>
+</button>
+</div>
+<div class="flex-1 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg flex items-center justify-center border border-primary/10 aspect-square">
+<span class="material-symbols-outlined text-primary text-5xl">database</span>
+</div>
+</div>
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight pt-4">Busca Rápida</h3>
+<div class="py-1">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="text-slate-400 dark:text-[#92a4c9] flex bg-white dark:bg-[#232f48] items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-[#232f48] h-full placeholder:text-slate-400 dark:placeholder:text-[#92a4c9] px-4 pl-2 text-base font-normal" placeholder="Buscar por Empresa ou CNPJ..."/>
+</div>
+</label>
+</div>
+<div class="pb-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 px-4 bg-slate-100 dark:bg-[#232f48] text-slate-700 dark:text-white gap-2 text-sm font-semibold border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span class="truncate">Filtrar por CNAE / Localização</span>
+</button>
+</div>
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight pt-2">Desempenho de Prospecção</h3>
+<div class="bg-white dark:bg-[#192233] p-4 rounded-xl border border-slate-200 dark:border-slate-800 mt-2">
+<div class="flex justify-between items-end mb-4 h-32 gap-2">
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/20 rounded-t-sm h-[40%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">S</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/40 rounded-t-sm h-[60%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">T</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/30 rounded-t-sm h-[45%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Q</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/70 rounded-t-sm h-[85%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">Q</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary rounded-t-sm h-[100%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">S</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/10 rounded-t-sm h-[20%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">S</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/10 rounded-t-sm h-[15%]"></div>
+<span class="text-[10px] text-slate-400 uppercase font-bold">D</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-slate-100 dark:border-slate-800">
+<p class="text-xs text-slate-500 dark:text-slate-400">Leads Qualificados (7d)</p>
+<p class="text-sm font-bold text-primary">+12.4%</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-6 pb-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Atividade Recente</h3>
+<button class="text-xs font-bold text-primary uppercase">Ver Tudo</button>
+</div>
+<div class="flex flex-col gap-3 pb-24">
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-white dark:bg-[#192233] border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-sm">Tech Solutions Ltda</h4>
+<p class="text-xs text-slate-500 dark:text-[#92a4c9]">CNAE: 6201-5/00</p>
+</div>
+<span class="px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold uppercase tracking-tight">Validado</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+<span class="text-[11px] text-slate-500 dark:text-slate-400 italic">Validado via WhatsApp há 2h</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-white dark:bg-[#192233] border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-sm">Green Energy Corp</h4>
+<p class="text-xs text-slate-500 dark:text-[#92a4c9]">CNAE: 3511-5/01</p>
+</div>
+<span class="px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-tight">Novo Lead</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm text-primary">schedule</span>
+<span class="text-[11px] text-slate-500 dark:text-slate-400 italic">Aguardando enriquecimento há 5h</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-xl bg-white dark:bg-[#192233] border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-slate-900 dark:text-white font-bold text-sm">Logistics Pro</h4>
+<p class="text-xs text-slate-500 dark:text-[#92a4c9]">CNAE: 4930-2/02</p>
+</div>
+<span class="px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold uppercase tracking-tight">Validado</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+<span class="text-[11px] text-slate-500 dark:text-slate-400 italic">Validado via WhatsApp há 8h</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-[#101622]/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 flex justify-around items-center h-20 pb-4">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Início</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">Leads</span>
+</button>
+<div class="relative -top-6">
+<button class="flex items-center justify-center size-14 bg-primary rounded-full text-white shadow-xl shadow-primary/40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">campaign</span>
+<span class="text-[10px] font-bold">Campanhas</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Ajustes</span>
+</button>
+</div>
+</div>
+
+</body></html>

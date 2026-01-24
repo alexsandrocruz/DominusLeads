@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+<!-- Top Navigation (iOS Style) -->
+<header class="flex items-center justify-between px-6 pt-12 pb-4">
+<button class="text-white hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-[28px]">chevron_left</span>
+</button>
+<div class="text-primary font-bold text-sm tracking-widest uppercase">Dominus Leads</div>
+<div class="w-7"></div> <!-- Spacer for balance -->
+</header>
+<!-- Illustration Section -->
+<main class="flex-grow flex flex-col justify-center px-6">
+<div class="relative w-full aspect-square max-w-[320px] mx-auto mb-8 flex items-center justify-center">
+<!-- Decorative background glow -->
+<div class="absolute inset-0 bg-primary/20 blur-[60px] rounded-full"></div>
+<!-- Growth Illustration Representation -->
+<div class="relative w-full h-full flex items-end justify-center gap-3 p-8 border border-white/10 rounded-3xl bg-white/5 backdrop-blur-sm">
+<div class="w-1/5 bg-primary/40 rounded-t-lg h-[30%]" data-alt="Small bar chart indicating early growth"></div>
+<div class="w-1/5 bg-primary/60 rounded-t-lg h-[50%]" data-alt="Medium bar chart indicating steady progress"></div>
+<div class="w-1/5 bg-primary/80 rounded-t-lg h-[75%]" data-alt="Large bar chart indicating high performance"></div>
+<div class="w-1/5 bg-primary rounded-t-lg h-[100%] flex flex-col items-center" data-alt="Tallest bar chart with a star icon on top">
+<span class="material-symbols-outlined text-white text-sm mt-[-24px]">trending_up</span>
+</div>
+<!-- Floating ROI Tag -->
+<div class="absolute top-12 right-6 bg-white dark:bg-zinc-800 p-2 rounded-xl shadow-xl flex items-center gap-2 border border-white/20">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span class="text-xs font-bold text-zinc-800 dark:text-white">ROI +240%</span>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="text-center space-y-4">
+<h1 class="text-white text-3xl font-bold tracking-tight px-4 leading-tight">
+        Previsibilidade e Escala
+      </h1>
+<p class="text-zinc-400 text-base font-normal leading-relaxed px-6">
+        Acompanhe suas conversões em tempo real e pague apenas por leads qualificados entregues no seu CRM.
+      </p>
+</div>
+</main>
+<!-- Bottom Controls -->
+<footer class="px-6 pb-12 pt-6 flex flex-col items-center">
+<!-- Page Indicators (3 of 3) -->
+<div class="flex flex-row items-center justify-center gap-2.5 mb-8">
+<div class="h-1.5 w-1.5 rounded-full bg-zinc-700"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-zinc-700"></div>
+<div class="h-1.5 w-6 rounded-full bg-primary"></div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/25 text-lg">
+      Começar Agora
+    </button>
+<!-- Secondary Action -->
+<button class="mt-4 text-zinc-500 text-sm font-medium hover:text-white transition-colors">
+      Falar com um especialista
+    </button>
+</footer>
+<!-- Safe Area Spacer for iOS -->
+<div class="h-4 bg-transparent"></div>
+</body></html>

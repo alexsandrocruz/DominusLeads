@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0e17",
+                        "card-dark": "#161b26",
+                        "success": "#10b981"
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #232f48;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-md mx-auto">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-slate-600 dark:text-white">arrow_back_ios_new</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">Relatório de Custos e ROI</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-white">calendar_month</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-md mx-auto pb-20">
+<!-- Stats Section -->
+<div class="p-4">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Custo Total Acumulado</p>
+<span class="text-success material-symbols-outlined">trending_up</span>
+</div>
+<p class="text-slate-900 dark:text-white tracking-tight text-3xl font-extrabold leading-tight">R$ 12.450,00</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-xs font-semibold">Últimos 30 dias</span>
+<span class="text-slate-400 text-xs">vs. R$ 10.200 mês ant.</span>
+</div>
+</div>
+</div>
+<!-- SectionHeader -->
+<div class="px-4 pt-4 pb-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Gasto por Canal</h3>
+</div>
+<!-- Charts Section -->
+<div class="px-4 py-2">
+<div class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+<div class="flex flex-col gap-1 mb-6">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Distribuição Operacional</p>
+<div class="flex items-baseline gap-2">
+<p class="text-slate-900 dark:text-white text-2xl font-bold">R$ 415,00/dia</p>
+<span class="text-slate-400 text-sm font-normal">média</span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4 items-end justify-items-center h-48 px-2">
+<div class="w-full flex flex-col items-center gap-2">
+<div class="bg-primary/20 dark:bg-primary/30 w-full rounded-t-lg relative group transition-all" style="height: 85%;">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary rounded-t-lg"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase truncate w-full text-center">Whats</p>
+</div>
+<div class="w-full flex flex-col items-center gap-2">
+<div class="bg-primary/20 dark:bg-primary/30 w-full rounded-t-lg relative" style="height: 45%;">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/60 rounded-t-lg"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase truncate w-full text-center">SMS</p>
+</div>
+<div class="w-full flex flex-col items-center gap-2">
+<div class="bg-primary/20 dark:bg-primary/30 w-full rounded-t-lg relative" style="height: 60%;">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/80 rounded-t-lg"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase truncate w-full text-center">E-mail</p>
+</div>
+<div class="w-full flex flex-col items-center gap-2">
+<div class="bg-primary/20 dark:bg-primary/30 w-full rounded-t-lg relative" style="height: 30%;">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/40 rounded-t-lg"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase truncate w-full text-center">VOIP</p>
+</div>
+</div>
+</div>
+</div>
+<!-- ROI Card -->
+<div class="p-4 @container">
+<div class="flex flex-col items-stretch justify-start rounded-xl shadow-lg border border-primary/20 bg-primary/5 dark:bg-primary/10 overflow-hidden">
+<div class="p-5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<p class="text-primary font-bold text-xs uppercase tracking-widest">Eficiência Financeira</p>
+<p class="text-slate-900 dark:text-white text-3xl font-black">R$ 15,40</p>
+</div>
+<div class="bg-success/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-success">verified</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-snug">Custo Médio por Lead Qualificado (CPL) baseado nas conversões atuais.</p>
+<button class="flex w-full items-center justify-center gap-2 rounded-lg h-11 bg-primary text-white text-sm font-semibold transition-all active:scale-95 shadow-md shadow-primary/20">
+<span>Ver Detalhes ROI</span>
+<span class="material-symbols-outlined text-sm">insights</span>
+</button>
+</div>
+</div>
+<div class="h-1 w-full bg-gradient-to-r from-primary/20 via-primary to-primary/20"></div>
+</div>
+</div>
+<!-- Unit Costs List -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-white text-base font-bold mb-3">Custos Unitários</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-white dark:bg-card-dark p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg">chat</span>
+<span class="text-xs font-medium text-slate-500">WhatsApp</span>
+</div>
+<p class="text-sm font-bold">R$ 0,45 <span class="text-[10px] font-normal text-slate-400">/msg</span></p>
+</div>
+<div class="bg-white dark:bg-card-dark p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg">call</span>
+<span class="text-xs font-medium text-slate-500">VOIP</span>
+</div>
+<p class="text-sm font-bold">R$ 0,12 <span class="text-[10px] font-normal text-slate-400">/min</span></p>
+</div>
+<div class="bg-white dark:bg-card-dark p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg">sms</span>
+<span class="text-xs font-medium text-slate-500">SMS</span>
+</div>
+<p class="text-sm font-bold">R$ 0,08 <span class="text-[10px] font-normal text-slate-400">/un</span></p>
+</div>
+<div class="bg-white dark:bg-card-dark p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg">mail</span>
+<span class="text-xs font-medium text-slate-500">E-mail</span>
+</div>
+<p class="text-sm font-bold">R$ 0,01 <span class="text-[10px] font-normal text-slate-400">/envio</span></p>
+</div>
+</div>
+</div>
+<!-- Consumption Table -->
+<div class="px-4 py-6">
+<h3 class="text-slate-900 dark:text-white text-base font-bold mb-3">Histórico Diário</h3>
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-card-dark">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Data</th>
+<th class="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Créditos</th>
+<th class="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Saldo</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-4 py-3 text-sm font-medium">12 Mai, 2024</td>
+<td class="px-4 py-3 text-sm text-right text-slate-600 dark:text-slate-300">-1.240</td>
+<td class="px-4 py-3 text-sm text-right font-semibold">14.850</td>
+</tr>
+<tr>
+<td class="px-4 py-3 text-sm font-medium">11 Mai, 2024</td>
+<td class="px-4 py-3 text-sm text-right text-slate-600 dark:text-slate-300">-850</td>
+<td class="px-4 py-3 text-sm text-right font-semibold">16.090</td>
+</tr>
+<tr>
+<td class="px-4 py-3 text-sm font-medium">10 Mai, 2024</td>
+<td class="px-4 py-3 text-sm text-right text-slate-600 dark:text-slate-300">-2.100</td>
+<td class="px-4 py-3 text-sm text-right font-semibold">16.940</td>
+</tr>
+<tr class="bg-slate-50/50 dark:bg-slate-900/20">
+<td class="px-4 py-2 text-center" colspan="3">
+<button class="text-primary text-xs font-bold py-1">Ver mais 27 dias</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Navigation Tab Bar (iOS Style) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-2 pb-6 z-50">
+<div class="max-w-md mx-auto flex justify-between items-center">
+<div class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400">home</span>
+<span class="text-[10px] font-medium text-slate-400">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400">group</span>
+<span class="text-[10px] font-medium text-slate-400">Leads</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined fill-1">equalizer</span>
+<span class="text-[10px] font-bold">Relatórios</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400">settings</span>
+<span class="text-[10px] font-medium text-slate-400">Ajustes</span>
+</div>
+</div>
+</nav>
+</body></html>

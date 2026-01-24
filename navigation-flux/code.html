@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dominus Leads - CRM & Sales Automation</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#135bec",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+                "card-dark": "#192233",
+                "accent-green": "#10b981",
+              },
+              fontFamily: {
+                "sans": ["Inter", "sans-serif"],
+                "display": ["Inter", "sans-serif"],
+                "grotesk": ["Space Grotesk", "sans-serif"],
+                "mono": ["JetBrains Mono", "monospace"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "md": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .pulse-blue {
+            box-shadow: 0 0 0 0 rgba(19, 91, 236, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(19, 91, 236, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(19, 91, 236, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(19, 91, 236, 0); }
+        }
+        .sparkline-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 1px;
+            height: 16px;
+        }
+        .sparkline-bar {
+            width: 3px;
+            border-radius: 1px;
+            background-color: currentColor;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+    <div id="root"></div>
+
+    <!-- React Scripts -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        /** 
+         * Components 
+         */
+
+        const BottomNav = ({ activeTab }) => {
+            return (
+                <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center safe-area-bottom">
+                    <Link to="/dashboard" className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-primary' : 'text-slate-400'}`}>
+                        <span className="material-symbols-outlined">home</span>
+                        <span className="text-[10px] font-medium">Início</span>
+                    </Link>
+                    <Link to="/leads" className={`flex flex-col items-center gap-1 ${activeTab === 'crm' ? 'text-primary' : 'text-slate-400'}`}>
+                        <span className="material-symbols-outlined">group</span>
+                        <span className="text-[10px] font-medium">CRM</span>
+                    </Link>
+                    <Link to="/search-leads" className="flex flex-col items-center gap-1 text-slate-400">
+                        <span className="material-symbols-outlined">search</span>
+                        <span className="text-[10px] font-medium">Buscar</span>
+                    </Link>
+                    <Link to="/automation" className={`flex flex-col items-center gap-1 ${activeTab === 'automation' ? 'text-primary' : 'text-slate-400'}`}>
+                        <span className="material-symbols-outlined">bolt</span>
+                        <span className="text-[10px] font-medium">Automação</span>
+                    </Link>
+                    <Link to="/settings" className={`flex flex-col items-center gap-1 ${activeTab === 'settings' ? 'text-primary' : 'text-slate-400'}`}>
+                        <span className="material-symbols-outlined">settings</span>
+                        <span className="text-[10px] font-medium">Ajustes</span>
+                    </Link>
+                </nav>
+            );
+        };
+
+        const Layout = ({ children, activeTab }) => {
+            return (
+                <div className="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto border-x border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
+                    <div className="flex-1 overflow-y-auto pb-24 no-scrollbar">
+                        {children}
+                    </div>
+                    <BottomNav activeTab={activeTab} />
+                </div>
+            );
+        };
+
+        /** 
+         * Primary Screens 
+         */
+
+        const Onboarding1 = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-light dark:bg-background-dark min-h-screen flex flex-col max-w-md mx-auto relative">
+                    <header className="flex items-center justify-end px-6 pt-12 pb-2">
+                        <button onClick={() => navigate('/login')} className="text-primary text-base font-bold">Pular</button>
+                    </header>
+                    <main className="flex-grow flex flex-col items-center justify-center px-6">
+                        <div className="w-full max-w-xs aspect-square flex items-center justify-center mb-10">
+                            <div className="relative w-full h-full bg-primary/5 rounded-full flex items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-3/4 h-3/4 bg-primary/10 rounded-2xl rotate-12 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-primary text-[120px] opacity-20">database</span>
+                                    </div>
+                                    <div className="absolute w-24 h-24 bg-primary rounded-2xl -bottom-2 -right-2 flex items-center justify-center shadow-lg">
+                                        <span className="material-symbols-outlined text-white text-[48px]">search</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-center space-y-4 max-w-sm">
+                            <h1 className="text-slate-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight">Encontre os leads certos</h1>
+                            <p className="text-slate-500 dark:text-slate-400 text-base">Filtre empresas por CNAE, localização e porte usando dados oficiais da Receita Federal.</p>
+                        </div>
+                    </main>
+                    <footer className="px-6 pb-12 pt-6 space-y-8 flex flex-col items-center">
+                        <div className="flex flex-row items-center justify-center gap-3">
+                            <div className="h-2 w-6 rounded-full bg-primary"></div>
+                            <div className="h-2 w-2 rounded-full bg-primary/20"></div>
+                            <div className="h-2 w-2 rounded-full bg-primary/20"></div>
+                        </div>
+                        <button onClick={() => navigate('/onboarding2')} className="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg">Próximo</button>
+                    </footer>
+                </div>
+            );
+        };
+
+        const Onboarding2 = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-dark min-h-screen flex flex-col max-w-md mx-auto text-white">
+                    <div className="flex items-center p-4 justify-between">
+                        <div className="w-10"></div>
+                        <button onClick={() => navigate('/login')} className="text-[#92a4c9] text-base font-medium">Pular</button>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center justify-center px-6">
+                        <div className="w-full max-w-[320px] aspect-square relative flex items-center justify-center mb-8">
+                            <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full"></div>
+                            <div className="relative w-full h-full flex items-center justify-center">
+                                <div className="w-32 h-64 bg-slate-800 rounded-[2.5rem] border-[6px] border-slate-700 shadow-2xl relative">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-700 rounded-b-xl"></div>
+                                </div>
+                                <div className="absolute -top-4 -right-4 bg-primary p-3 rounded-2xl shadow-lg"><span className="material-symbols-outlined">chat</span></div>
+                                <div className="absolute top-1/2 -left-8 bg-[#25D366] p-3 rounded-2xl shadow-lg"><span className="material-symbols-outlined">chat_bubble</span></div>
+                            </div>
+                        </div>
+                        <div className="text-center space-y-3">
+                            <h1 className="text-white text-[32px] font-bold">Automação Inteligente</h1>
+                            <p className="text-[#92a4c9]">Qualificamos seus leads via WhatsApp e SMS automaticamente. Você só fala com quem tem interesse.</p>
+                        </div>
+                    </div>
+                    <div className="px-6 pb-12">
+                        <div className="flex justify-center gap-3 py-8">
+                            <div className="h-2 w-2 rounded-full bg-[#324467]"></div>
+                            <div className="h-2 w-6 rounded-full bg-primary"></div>
+                            <div className="h-2 w-2 rounded-full bg-[#324467]"></div>
+                        </div>
+                        <button onClick={() => navigate('/onboarding3')} className="w-full bg-primary py-4 rounded-xl font-bold">Próximo</button>
+                    </div>
+                </div>
+            );
+        };
+
+        const Onboarding3 = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-dark min-h-screen flex flex-col max-w-md mx-auto text-white">
+                    <header className="flex items-center justify-between px-6 pt-12 pb-4">
+                        <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">chevron_left</span></button>
+                        <div className="text-primary font-bold text-sm tracking-widest uppercase">Dominus Leads</div>
+                        <div className="w-7"></div>
+                    </header>
+                    <main className="flex-grow flex flex-col justify-center px-6">
+                        <div className="relative w-full aspect-square max-w-[320px] mx-auto mb-8 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full"></div>
+                            <div className="relative w-full h-full flex items-end justify-center gap-3 p-8 border border-white/10 rounded-3xl bg-white/5">
+                                <div className="w-1/5 bg-primary/40 rounded-t-lg h-[30%]"></div>
+                                <div className="w-1/5 bg-primary/60 rounded-t-lg h-[50%]"></div>
+                                <div className="w-1/5 bg-primary/80 rounded-t-lg h-[75%]"></div>
+                                <div className="w-1/5 bg-primary rounded-t-lg h-[100%] flex flex-col items-center">
+                                    <span className="material-symbols-outlined text-white text-sm mt-[-24px]">trending_up</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-center space-y-4">
+                            <h1 className="text-white text-3xl font-bold leading-tight">Previsibilidade e Escala</h1>
+                            <p className="text-zinc-400">Acompanhe suas conversões em tempo real e pague apenas por leads qualificados.</p>
+                        </div>
+                    </main>
+                    <footer className="px-6 pb-12 pt-6 flex flex-col items-center">
+                        <div className="flex flex-row items-center justify-center gap-2.5 mb-8">
+                            <div className="h-1.5 w-1.5 rounded-full bg-zinc-700"></div>
+                            <div className="h-1.5 w-1.5 rounded-full bg-zinc-700"></div>
+                            <div className="h-1.5 w-6 rounded-full bg-primary"></div>
+                        </div>
+                        <button onClick={() => navigate('/login')} className="w-full bg-primary py-4 rounded-xl font-semibold text-lg">Começar Agora</button>
+                    </footer>
+                </div>
+            );
+        };
+
+        const Login = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-light dark:bg-background-dark min-h-screen flex flex-col max-w-md mx-auto">
+                    <div className="flex items-center p-8 justify-center flex-col gap-4">
+                        <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-white">
+                            <span className="material-symbols-outlined text-4xl">rocket_launch</span>
+                        </div>
+                        <h1 className="text-primary text-2xl font-bold">Dominus Leads</h1>
+                    </div>
+                    <div className="flex-1 px-6">
+                        <div className="mb-8 text-center">
+                            <h2 className="dark:text-white text-xl font-semibold">Bem-vindo de volta</h2>
+                            <p className="text-[#4c669a] dark:text-gray-400 text-sm">Acesse sua conta para gerenciar seus leads</p>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-sm font-medium dark:text-gray-200">E-mail</label>
+                                <div className="flex items-center border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg overflow-hidden mt-1">
+                                    <span className="material-symbols-outlined px-3 text-gray-400">mail</span>
+                                    <input type="email" placeholder="exemplo@empresa.com" className="flex-1 border-none focus:ring-0 bg-transparent py-3 dark:text-white" />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="text-sm font-medium dark:text-gray-200">Senha</label>
+                                <div className="flex items-center border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg overflow-hidden mt-1">
+                                    <span className="material-symbols-outlined px-3 text-gray-400">lock</span>
+                                    <input type="password" placeholder="Sua senha" className="flex-1 border-none focus:ring-0 bg-transparent py-3 dark:text-white" />
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <Link to="/recover-password" title="recuperar" className="text-primary text-sm font-medium">Esqueceu a senha?</Link>
+                            </div>
+                            <button onClick={() => navigate('/dashboard')} className="w-full bg-primary text-white py-4 rounded-xl font-semibold shadow-lg">Entrar</button>
+                        </div>
+                        <div className="relative flex py-8 items-center">
+                            <div className="flex-grow border-t dark:border-gray-700"></div>
+                            <span className="mx-4 text-xs uppercase text-gray-400">ou</span>
+                            <div className="flex-grow border-t dark:border-gray-700"></div>
+                        </div>
+                        <button className="w-full bg-white dark:bg-gray-800 border dark:border-gray-700 py-3 rounded-xl flex items-center justify-center gap-3">
+                            <svg className="w-5 h-5" viewbox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path></svg>
+                            <span className="dark:text-white">Google</span>
+                        </button>
+                    </div>
+                    <div className="p-8 text-center">
+                        <p className="text-gray-500 text-sm">Não tem uma conta? <Link to="/register" className="text-primary font-bold">Cadastre-se</Link></p>
+                    </div>
+                </div>
+            );
+        };
+
+        const Dashboard = () => {
+            const navigate = useNavigate();
+            return (
+                <Layout activeTab="home">
+                    <header className="p-4 flex items-center justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-primary rounded-lg size-10 flex items-center justify-center text-white">
+                                <span className="material-symbols-outlined">rocket_launch</span>
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold leading-none">Dominus Leads</h2>
+                                <p className="text-xs text-slate-500">Olá, Especialista</p>
+                            </div>
+                        </div>
+                        <button className="p-2 bg-slate-200 dark:bg-slate-800 rounded-full"><span className="material-symbols-outlined">notifications</span></button>
+                    </header>
+                    <div className="p-4 space-y-4">
+                        <div className="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex justify-between">
+                            <div className="flex flex-col justify-between">
+                                <div>
+                                    <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Créditos Ativos</p>
+                                    <p className="text-3xl font-extrabold mt-1">1.250</p>
+                                </div>
+                                <button onClick={() => navigate('/billing')} className="bg-primary text-white rounded-lg py-2 px-4 text-sm font-bold mt-4 shadow-lg shadow-primary/20">Comprar Mais</button>
+                            </div>
+                            <div className="bg-primary/10 rounded-lg p-6 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary text-5xl">database</span>
+                            </div>
+                        </div>
+                        
+                        <h3 className="text-lg font-bold">Busca Rápida</h3>
+                        <div className="relative">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <input placeholder="Buscar por Empresa ou CNPJ..." className="w-full pl-10 pr-4 py-3 bg-white dark:bg-[#232f48] border dark:border-slate-800 rounded-xl outline-none" />
+                        </div>
+                        <button onClick={() => navigate('/search-leads')} className="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-[#232f48] text-sm font-semibold border dark:border-slate-700 rounded-lg">
+                            <span className="material-symbols-outlined text-[20px]">tune</span>
+                            Filtrar por CNAE / Localização
+                        </button>
+
+                        <h3 className="text-lg font-bold pt-4">Atividade Recente</h3>
+                        <div className="space-y-3">
+                            {[
+                                { name: "Tech Solutions Ltda", cnae: "6201-5/00", status: "Validado", date: "há 2h", color: "green" },
+                                { name: "Green Energy Corp", cnae: "3511-5/01", status: "Novo Lead", date: "há 5h", color: "primary" },
+                                { name: "Logistics Pro", cnae: "4930-2/02", status: "Validado", date: "há 8h", color: "green" }
+                            ].map((lead, i) => (
+                                <div key={i} className="bg-white dark:bg-[#192233] p-4 rounded-xl border dark:border-slate-800 flex flex-col gap-2">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="font-bold text-sm">{lead.name}</h4>
+                                            <p className="text-xs text-slate-500">CNAE: {lead.cnae}</p>
+                                        </div>
+                                        <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight ${lead.color === 'green' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-primary/10 text-primary'}`}>{lead.status}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className={`material-symbols-outlined text-sm ${lead.color === 'green' ? 'text-green-500' : 'text-primary'}`}>{lead.color === 'green' ? 'check_circle' : 'schedule'}</span>
+                                        <span className="text-[11px] text-slate-500 dark:text-slate-400 italic">{lead.status} há {lead.date}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </Layout>
+            );
+        };
+
+        const LeadsList = () => {
+            const navigate = useNavigate();
+            return (
+                <Layout activeTab="crm">
+                    <header className="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+                        <div className="flex items-center p-4 justify-between">
+                            <button onClick={() => navigate(-1)} className="size-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800"><span className="material-symbols-outlined">chevron_left</span></button>
+                            <h2 className="text-lg font-bold">Leads Qualificados</h2>
+                            <button className="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary"><span className="material-symbols-outlined">filter_list</span></button>
+                        </div>
+                        <div className="px-4 py-3">
+                            <div className="flex items-center bg-slate-200 dark:bg-card-dark rounded-xl h-11 px-4">
+                                <span className="material-symbols-outlined text-slate-400 mr-2">search</span>
+                                <input placeholder="Buscar por empresa ou CNAE..." className="bg-transparent border-none focus:ring-0 flex-1 text-sm" />
+                            </div>
+                        </div>
+                        <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
+                            {['Todos', 'Quente', 'Respondeu', 'Validado'].map((f, i) => (
+                                <button key={i} className={`h-8 px-4 rounded-full text-xs font-semibold whitespace-nowrap ${i === 0 ? 'bg-primary text-white' : 'bg-slate-200 dark:bg-card-dark text-slate-700 dark:text-slate-300'}`}>{f}</button>
+                            ))}
+                        </div>
+                    </header>
+                    <main className="px-4 space-y-4 pt-2">
+                        {[
+                            { name: "TechFlow Solutions", sub: "6201-5: Dev de Software • 24 Out", status: "Lead Quente • Validado", color: "bg-accent-green", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAw8FLBaS4O0eWiPqKmzjuXo1iMYvcb0n5cMXAv3xr79PSbceifNSgniBEgqKtge2AltboMQaGa7-rPLALkIbzNlf05_u_Tg1uCIykV31JxHhjyogJkZnWI_kCC1-PdQEvz4cPBD4BZguHOiQqOyWSmsnzNX6DOaBJkCaFRpVbYOjYK99hgCAKNMuqeWiNTX41x12PeuZpwVXkIIlRWlgPEFTJmZdmYdoB630Hjhdv1qgwpCQEji1WKOhUgicMCQuUa-_V5OaGrfhUY" },
+                            { name: "Green Horizon Ltda", sub: "4611-7: Atacado • 22 Out", status: "Respondeu", color: "bg-blue-400", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBWmCCDqKe_TTKC1JcOvf_IGlbP589b_4ZQE6PQkLBJafaT5kkP1vhso2aOUEzo9008GEmvSN5J9kpWmFSNEntwBBBySALiq8kibWVCI-vvhfyj3H0nq9LDrJdNA176CUlgM5UUe1mzAHhrusKkOyhOPY3JcwHPwtbvFw15hFdpxqOAzHEqKx9LsABX7BON2QKPyQVtxt4IwxlzIYJ5cLPi2wWBN2ZqDGsIMyFVORuyZ1VgI9DHL_KgdNmeVauzyglRBxLcj54hGPjS" },
+                            { name: "Nexus Analytics", sub: "7020-2: Consultoria • 20 Out", status: "Validado", color: "bg-accent-green", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4hd7tpBxTtcqwhPQ5REt4lX0n99D-KxofW0WxSfEJPlWs-M6IW6tRgbmZt-PBAhd3YbrW9RagjRe35SREfFZEqzbLHmPfB-etOM7CFvmmRTuLDM-wzC0barXLGt654lywL3iFE6Phn0cMDokAOMQkwmRc96lQuybkiorEsOkylvtOWbQlGBIVIrXgGgiO_W4F9wd_7N1lF1iT4toYcmPa_J25KO8aMZdpxBzNFfvb5W6tDI_aCjPk4RCfbey3CY14KsZMjkymyY3O" }
+                        ].map((lead, i) => (
+                            <div key={i} className="bg-white dark:bg-card-dark p-4 rounded-xl border dark:border-slate-800 shadow-sm flex flex-col gap-3">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`h-2 w-2 rounded-full ${lead.color}`}></span>
+                                            <p className="text-accent-green text-[10px] font-bold uppercase tracking-wider">{lead.status}</p>
+                                        </div>
+                                        <h3 className="font-bold">{lead.name}</h3>
+                                        <p className="text-slate-500 text-xs">{lead.sub}</p>
+                                    </div>
+                                    <div className="h-12 w-12 rounded-lg bg-center bg-cover border dark:border-slate-700" style={{ backgroundImage: `url(${lead.img})` }}></div>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex -space-x-2">
+                                        <div className="w-6 h-6 rounded-full border-2 dark:border-card-dark bg-slate-300 flex items-center justify-center text-[10px] font-bold">JD</div>
+                                        <div className="w-6 h-6 rounded-full border-2 dark:border-card-dark bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">AS</div>
+                                    </div>
+                                    <button onClick={() => navigate('/lead-detail')} className="flex items-center gap-1 rounded-lg h-8 px-3 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
+                                        <span>Detalhes</span>
+                                        <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </main>
+                    <button className="absolute bottom-24 right-4 h-14 w-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center">
+                        <span className="material-symbols-outlined text-3xl">add</span>
+                    </button>
+                </Layout>
+            );
+        };
+
+        const LeadDetail = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="max-w-md mx-auto bg-background-light dark:bg-background-dark min-h-screen text-white relative">
+                    <header className="p-4 flex items-center justify-between sticky top-0 bg-background-light dark:bg-background-dark/80 backdrop-blur-md z-20">
+                        <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                        <h2 className="text-lg font-bold">Detalhes do Lead</h2>
+                        <button><span className="material-symbols-outlined">more_vert</span></button>
+                    </header>
+                    <div className="p-4 flex gap-4 items-center">
+                        <div className="h-24 w-24 rounded-xl bg-primary/20 bg-cover bg-center border-2 border-primary/30" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuALOk4mKBgiWMB258xV5h_aQDYmdnffngscmabejOOjCd6gWzBmAO7kdGuvSbO1y4ewC3QGVSRxsiV3kpLkVSYOv8H1DfIMKBAknK7wbTKsBiua_pEMyCwEA_PZb9ZQy-JYxC5QBkr13lKGRKNujvND7llkHHeeUnrsrceYsBLbqkXSU654o7zI4C70qcdk-Ie20FwI3poppsB-cE9Qs0nqd3npOK8lsLc8RFlMrORDbxT652nSw7-QCR-mHwXYcC-wVHdH-CHEG_Z9")' }}></div>
+                        <div>
+                            <span className="bg-green-500/20 text-green-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Lead Quente</span>
+                            <h3 className="text-xl font-bold dark:text-white text-slate-900 mt-1">Tecnologia Avançada Ltda</h3>
+                            <p className="text-slate-500 text-sm">CNAE: 6201-5/01</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 px-4 py-4">
+                        <div className="flex flex-col items-center gap-2 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer">
+                            <div className="bg-primary p-3 rounded-full text-white"><span className="material-symbols-outlined">chat</span></div>
+                            <p className="text-xs font-medium text-slate-700 dark:text-white">WhatsApp</p>
+                        </div>
+                        <div className="flex flex-col items-center gap-2 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer">
+                            <div className="bg-slate-200 dark:bg-[#232f48] p-3 rounded-full text-slate-700 dark:text-white"><span className="material-symbols-outlined">call</span></div>
+                            <p className="text-xs font-medium text-slate-700 dark:text-white">Ligar</p>
+                        </div>
+                        <div className="flex flex-col items-center gap-2 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer">
+                            <div className="bg-slate-200 dark:bg-[#232f48] p-3 rounded-full text-slate-700 dark:text-white"><span className="material-symbols-outlined">edit_square</span></div>
+                            <p className="text-xs font-medium text-slate-700 dark:text-white">Status</p>
+                        </div>
+                    </div>
+                    <div className="px-4 space-y-2 mt-4">
+                        <h4 className="font-bold text-slate-900 dark:text-white">Informações de Contato</h4>
+                        <div className="bg-white/50 dark:bg-[#111722]/50 p-4 rounded-xl flex items-center justify-between border dark:border-slate-800">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-primary/10 rounded-lg text-primary"><span className="material-symbols-outlined">mail</span></div>
+                                <div>
+                                    <p className="text-sm font-medium text-slate-900 dark:text-white">contato@tecavancada.com.br</p>
+                                    <p className="text-xs text-slate-500">E-mail Corporativo</p>
+                                </div>
+                            </div>
+                            <span className="material-symbols-outlined text-slate-400 text-sm">content_copy</span>
+                        </div>
+                    </div>
+                    <div className="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark/95 border-t dark:border-white/10 flex gap-3 z-50">
+                        <button className="flex-1 bg-primary text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2">
+                            <span className="material-symbols-outlined">chat</span> Abrir no WhatsApp
+                        </button>
+                    </div>
+                    <div className="h-24"></div>
+                </div>
+            );
+        };
+
+        const AutomationList = () => {
+            const navigate = useNavigate();
+            return (
+                <Layout activeTab="automation">
+                    <header className="sticky top-0 z-50 bg-background-light dark:bg-background-dark border-b dark:border-slate-800">
+                        <div className="flex items-center p-4 justify-between">
+                            <button onClick={() => navigate(-1)} className="size-12 flex items-center justify-center"><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                            <h2 className="text-lg font-bold">Automações</h2>
+                            <button className="size-12 flex items-center justify-center"><span className="material-symbols-outlined">search</span></button>
+                        </div>
+                        <div className="px-4 border-b dark:border-slate-800 flex">
+                            <button className="flex-1 pb-3 pt-4 border-b-2 border-primary text-primary font-bold text-sm">Minhas Automações</button>
+                            <button className="flex-1 pb-3 pt-4 border-b-2 border-transparent text-slate-500 font-bold text-sm">Logs de Erro</button>
+                        </div>
+                    </header>
+                    <main className="p-4 space-y-6">
+                        <h3 className="font-bold">Automações Ativas</h3>
+                        {[
+                            { title: "Prospecção Advogados SP", count: "45 leads hoje", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC3a8d8ytIUO6r5SVnCbk9oRctG1AbIgXwhNWZKMDtk0ZKnghDzMZ9DqC8GgFG__BE5d-NIctABiZLAtl0A3l8S6zjy02pWWw4B7M0FRVOHOFNDhP0z2d7V1CbdJGE702VxkIFhVgfsAuXRnE8_K8nINP4HxwPhUevEwn2fxyscvwAC2_T45gaImJ5K_oUookO7pmsmuB86vXpziszo6-8q5mnhdFNhgPSqZ7PMA_6zkYbcbEO3o_okZTzJZ21a_Iq2VSm2n1Qpd0y5" },
+                            { title: "Leads Imobiliárias RJ", count: "12 leads hoje", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDzuK3qzNT8lB_2niRH4fF6J2JcgDEwIyRGN-NnmyWQWuykmgpNBMi4G1va8rQ-2uCojNeBY4Fx9WGalIhnOWTYYuexxIP9_okAeScOqcoYLLi46Km9xochsB2l-8cxFlbFS3pLVz8OcMIeqmGRTDQGuS-fTpyyyImVh6F2Mi0G0cvvWMnvlEywi4VtMQ8_JilfPIYx-zE-gtLNGFgSddrh2uG2-Gs7eC39QA7oeOig_j_aOPrdkRVuOoqth6an4NAFayq4xswSPlrE" }
+                        ].map((aut, i) => (
+                            <div key={i} onClick={() => navigate('/automation-config')} className="bg-white dark:bg-[#192233] p-4 rounded-xl border dark:border-slate-800 flex gap-4 cursor-pointer">
+                                <div className="flex-1 flex flex-col gap-4">
+                                    <div className="flex flex-col gap-1">
+                                        <p className="text-primary text-xs font-bold uppercase">{aut.count}</p>
+                                        <p className="font-bold">{aut.title}</p>
+                                        <div className="flex items-center gap-1.5 text-sm text-slate-500">
+                                            <span className="material-symbols-outlined text-green-500 text-sm">chat</span>
+                                            <span>Canal: WhatsApp</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full w-fit">
+                                        <span className="material-symbols-outlined text-primary text-sm">toggle_on</span>
+                                        <span className="text-xs font-bold text-primary">Ativado</span>
+                                    </div>
+                                </div>
+                                <div className="w-24 h-24 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${aut.img})` }}></div>
+                            </div>
+                        ))}
+                    </main>
+                    <button onClick={() => navigate('/automation-config')} className="fixed bottom-24 right-6 h-14 w-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center z-40">
+                        <span className="material-symbols-outlined text-3xl">add</span>
+                    </button>
+                </Layout>
+            );
+        };
+
+        const AutomationConfig = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="max-w-md mx-auto bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+                    <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 border-b dark:border-slate-800">
+                        <div className="flex items-center p-4 justify-between">
+                            <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                            <h1 className="text-lg font-bold">Configuração de Campanhas</h1>
+                            <button><span className="material-symbols-outlined">more_horiz</span></button>
+                        </div>
+                    </header>
+                    <main className="flex-1 overflow-y-auto pb-32">
+                        <section className="p-4 space-y-6">
+                            <div>
+                                <p className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-2">Nome da Campanha</p>
+                                <input placeholder="Ex: Prospecção Outbound - Q3" className="w-full bg-white dark:bg-[#192233] border dark:border-slate-800 rounded-xl h-14 px-4 dark:text-white" defaultValue="Campanha de Leads Qualificados" />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-3">Seleção de Canal</h3>
+                                <div className="flex bg-slate-200 dark:bg-[#232f48] p-1 rounded-xl">
+                                    <button className="flex-1 h-12 flex items-center justify-center gap-2 rounded-lg bg-white dark:bg-background-dark shadow-sm text-primary">
+                                        <span className="material-symbols-outlined text-[20px]">chat</span>
+                                        <span className="text-sm font-medium">WhatsApp</span>
+                                    </button>
+                                    <button className="flex-1 h-12 flex items-center justify-center gap-2 text-slate-500">
+                                        <span className="material-symbols-outlined text-[20px]">sms</span>
+                                        <span className="text-sm font-medium">SMS</span>
+                                    </button>
+                                    <button className="flex-1 h-12 flex items-center justify-center gap-2 text-slate-500">
+                                        <span className="material-symbols-outlined text-[20px]">mail</span>
+                                        <span className="text-sm font-medium">E-mail</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Editor de Template</h3>
+                                    <span className="text-xs text-primary font-medium">Dicas de IA ativas</span>
+                                </div>
+                                <div className="bg-white dark:bg-[#192233] border dark:border-slate-800 rounded-xl overflow-hidden">
+                                    <div className="flex gap-2 p-2 border-b dark:border-slate-800 overflow-x-auto no-scrollbar">
+                                        {['{nome_contato}', '{nome_empresa}', '{cnae}'].map((tag, i) => (
+                                            <button key={i} className="whitespace-nowrap bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-semibold">{tag}</button>
+                                        ))}
+                                    </div>
+                                    <textarea className="w-full min-h-[160px] p-4 bg-transparent border-none focus:ring-0 text-base resize-none" defaultValue="Olá {nome_contato}, vi que a {nome_empresa} atua no setor de {cnae} e gostaria de apresentar uma solução personalizada..." />
+                                </div>
+                            </div>
+                            <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-4 space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-primary text-white p-2 rounded-lg"><span className="material-symbols-outlined text-[20px]">input</span></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-primary uppercase">Gatilho</span>
+                                        <span className="text-sm font-medium dark:text-white text-slate-900">Se o prospect responder à mensagem</span>
+                                    </div>
+                                </div>
+                                <div className="ml-4 h-6 border-l-2 border-dashed border-primary/30"></div>
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-emerald-500 text-white p-2 rounded-lg"><span className="material-symbols-outlined text-[20px]">assignment_turned_in</span></div>
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-emerald-500 uppercase">Ação Automática</span>
+                                        <span className="text-sm font-medium dark:text-white text-slate-900">Marcar como Lead Qualificado</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                    <footer className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 border-t dark:border-slate-800 p-4 pb-8">
+                        <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
+                            <button className="h-14 bg-slate-100 dark:bg-[#232f48] rounded-xl font-bold text-slate-700 dark:text-white">Salvar Template</button>
+                            <button onClick={() => navigate('/automation')} className="h-14 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/30">Ativar Campanha</button>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const SearchLeads = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-light dark:bg-background-dark min-h-screen flex flex-col max-w-md mx-auto relative pb-32">
+                    <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b dark:border-slate-800 p-4 flex items-center justify-between">
+                        <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                        <h2 className="text-lg font-bold">Encontrar Novos Leads</h2>
+                        <button><span className="material-symbols-outlined">help_outline</span></button>
+                    </header>
+                    <main className="p-4 space-y-6">
+                        <div className="bg-white dark:bg-[#192233] border dark:border-slate-800 rounded-xl h-12 flex items-center px-4">
+                            <span className="material-symbols-outlined text-slate-400 mr-2">search</span>
+                            <input placeholder="Buscar por nome da empresa" className="bg-transparent border-none focus:ring-0 flex-1" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold">Critérios de Filtro</h3>
+                            <span className="text-primary text-sm font-semibold">Limpar tudo</span>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-sm font-medium pb-2">Atividade Econômica (CNAE)</p>
+                                <select className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border dark:border-slate-800 rounded-xl px-4">
+                                    <option>Tecnologia da Informação</option>
+                                    <option>Varejo</option>
+                                    <option>Serviços</option>
+                                </select>
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="w-24">
+                                    <p className="text-sm font-medium pb-2">Estado</p>
+                                    <input placeholder="UF" className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border dark:border-slate-800 rounded-xl text-center" />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-medium pb-2">Cidade</p>
+                                    <input placeholder="Ex: São Paulo" className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border dark:border-slate-800 rounded-xl px-4" />
+                                </div>
+                            </div>
+                            <div>
+                                <div className="flex justify-between mb-4">
+                                    <p className="text-sm font-medium">Quantidade de Leads</p>
+                                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">5.000</span>
+                                </div>
+                                <input type="range" className="w-full accent-primary" />
+                            </div>
+                        </div>
+                        <div className="bg-white dark:bg-[#192233]/50 p-4 rounded-2xl border dark:border-slate-800 space-y-3">
+                            <p className="text-xs uppercase font-bold text-slate-500">Prévia dos Resultados</p>
+                            <p className="text-2xl font-bold">4.230 <span className="text-sm text-slate-400 font-normal">empresas</span></p>
+                            {[1, 2].map(i => (
+                                <div key={i} className="bg-slate-50 dark:bg-[#111722] p-3 rounded-xl border dark:border-slate-800 flex items-center gap-3">
+                                    <div className="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary"><span className="material-symbols-outlined">corporate_fare</span></div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-bold">TechFlow Solutions Ltda</p>
+                                        <p className="text-xs text-slate-500">São Paulo, SP</p>
+                                    </div>
+                                    <span className="text-[10px] bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded">Software</span>
+                                </div>
+                            ))}
+                        </div>
+                    </main>
+                    <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t dark:from-background-dark from-background-light pt-8">
+                        <button onClick={() => navigate('/automation-config')} className="w-full bg-primary text-white font-bold py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2">
+                            <span className="material-symbols-outlined">rocket_launch</span> Iniciar Campanha
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const Settings = () => {
+            const navigate = useNavigate();
+            return (
+                <Layout activeTab="settings">
+                    <header className="p-4 border-b dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-10">
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                            <h2 className="text-lg font-bold">Perfil e Ajustes</h2>
+                        </div>
+                    </header>
+                    <div className="p-6 flex flex-col items-center gap-4">
+                        <div className="relative">
+                            <div className="size-28 rounded-full bg-cover bg-center border-4 border-primary/20" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDMsrhnHKlHBB2FSqv0Vi1DQytsT_j8gGo-7Npua3xzMWZ-kXw0Xdrc0kkeNjgoWeZTpqGdC0g9QHrckCMUkPLBuJbfxChnfosPpHtbEL_oC2fZb5e8KH6iGvrYL5MNCEqub7B-wZBu1ankITspM_84-0yJD19NKpama9lzByfQCB_K8fv6PxrNUKzea9_-j7TUu91EkC-ZCZWggorGxdI6yQvbzkdGJEzQUs6Hp4pclfJpCe7sShy7YW70Og79jC2QA_x4LxUUTKSv")' }}></div>
+                            <div className="absolute bottom-0 right-0 bg-primary p-1.5 rounded-full border-2 dark:border-background-dark text-white"><span className="material-symbols-outlined text-sm">edit</span></div>
+                        </div>
+                        <div className="text-center">
+                            <h3 className="text-2xl font-bold leading-none">João Silva</h3>
+                            <p className="text-slate-500 mt-1">Gerente Comercial</p>
+                            <span className="text-primary text-xs font-bold uppercase tracking-widest mt-2 block">Dominus Leads Pro</span>
+                        </div>
+                    </div>
+                    <div className="p-4 space-y-6">
+                        <div>
+                            <p className="text-xs font-bold uppercase text-slate-500 mb-2 px-2">Minha Conta</p>
+                            <div className="bg-white dark:bg-[#1a2235] rounded-xl overflow-hidden divide-y dark:divide-slate-800">
+                                <div className="p-4 flex items-center justify-between cursor-pointer">
+                                    <div className="flex items-center gap-3"><div className="bg-primary/10 text-primary p-1.5 rounded-lg"><span className="material-symbols-outlined">person</span></div><span className="font-medium">Editar Perfil</span></div>
+                                    <span className="material-symbols-outlined text-slate-400">chevron_right</span>
+                                </div>
+                                <div className="p-4 flex items-center justify-between cursor-pointer">
+                                    <div className="flex items-center gap-3"><div className="bg-primary/10 text-primary p-1.5 rounded-lg"><span className="material-symbols-outlined">lock</span></div><span className="font-medium">Alterar Senha</span></div>
+                                    <span className="material-symbols-outlined text-slate-400">chevron_right</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold uppercase text-slate-500 mb-2 px-2">Suporte e Info</p>
+                            <div className="bg-white dark:bg-[#1a2235] rounded-xl overflow-hidden divide-y dark:divide-slate-800">
+                                <Link to="/help" className="p-4 flex items-center justify-between cursor-pointer">
+                                    <div className="flex items-center gap-3"><div className="bg-primary/10 text-primary p-1.5 rounded-lg"><span className="material-symbols-outlined">help_center</span></div><span className="font-medium">Central de Ajuda</span></div>
+                                    <span className="material-symbols-outlined text-slate-400">chevron_right</span>
+                                </Link>
+                                <Link to="/billing" className="p-4 flex items-center justify-between cursor-pointer">
+                                    <div className="flex items-center gap-3"><div className="bg-primary/10 text-primary p-1.5 rounded-lg"><span className="material-symbols-outlined">payments</span></div><span className="font-medium">Créditos e Faturamento</span></div>
+                                    <span className="material-symbols-outlined text-slate-400">chevron_right</span>
+                                </Link>
+                            </div>
+                        </div>
+                        <button onClick={() => navigate('/login')} className="w-full bg-red-500/10 text-red-600 font-bold py-4 rounded-xl border border-red-500/20">Sair da Conta</button>
+                    </div>
+                </Layout>
+            );
+        };
+
+        const Billing = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="bg-background-light dark:bg-background-dark min-h-screen max-w-md mx-auto relative pb-32">
+                    <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b dark:border-slate-800 p-4 flex items-center justify-between">
+                        <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">chevron_left</span></button>
+                        <h2 className="text-lg font-bold">Faturamento</h2>
+                        <button className="text-primary font-bold">Ajuda</button>
+                    </header>
+                    <main className="p-4 space-y-6">
+                        <div className="bg-white dark:bg-[#192233] p-5 rounded-xl border dark:border-slate-800 shadow-lg">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Saldo Atual</p>
+                                    <p className="text-3xl font-black text-slate-900 dark:text-white mt-1">1.250 <span className="text-sm font-medium text-slate-400">créditos</span></p>
+                                </div>
+                                <div className="bg-primary/10 p-2 rounded-lg text-primary"><span className="material-symbols-outlined">account_balance_wallet</span></div>
+                            </div>
+                            <div className="mt-6 space-y-2">
+                                <div className="flex justify-between text-sm"><span>Consumo do mês</span><span>800/1000</span></div>
+                                <div className="h-2 rounded-full bg-slate-200 dark:bg-[#324467] overflow-hidden">
+                                    <div className="h-full bg-primary" style={{ width: '80%' }}></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-bold">Planos e Recargas</h3>
+                        <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar">
+                            <div className="min-w-[280px] bg-white dark:bg-[#192233] p-6 rounded-xl border-2 border-primary relative overflow-hidden">
+                                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase">Popular</div>
+                                <h4 className="font-bold text-lg">Pro Plan</h4>
+                                <p className="text-3xl font-black mt-2">R$ 399 <span className="text-xs text-slate-400">/mês</span></p>
+                                <div className="mt-4 space-y-3">
+                                    <div className="flex items-center gap-2 text-sm"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> 500 créditos/mês</div>
+                                    <div className="flex items-center gap-2 text-sm"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Suporte Prioritário</div>
+                                </div>
+                                <button className="w-full bg-primary text-white font-bold py-3 rounded-lg mt-6">Assinar Agora</button>
+                            </div>
+                            <div className="min-w-[280px] bg-white dark:bg-[#192233] p-6 rounded-xl border dark:border-slate-800">
+                                <h4 className="font-bold text-lg">Basic Plan</h4>
+                                <p className="text-3xl font-black mt-2">R$ 99 <span className="text-xs text-slate-400">/mês</span></p>
+                                <div className="mt-4 space-y-3">
+                                    <div className="flex items-center gap-2 text-sm"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> 100 créditos/mês</div>
+                                </div>
+                                <button className="w-full bg-slate-100 dark:bg-slate-800 font-bold py-3 rounded-lg mt-6">Adquirir</button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const HelpCenter = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="max-w-md mx-auto bg-background-light dark:bg-background-dark min-h-screen text-white">
+                    <header className="p-4 border-b dark:border-slate-800 flex items-center justify-between">
+                        <button onClick={() => navigate(-1)}><span className="material-symbols-outlined">arrow_back_ios</span></button>
+                        <h2 className="text-lg font-bold">Central de Ajuda</h2>
+                        <div className="w-6"></div>
+                    </header>
+                    <main className="p-4 space-y-6">
+                        <h1 className="text-2xl font-bold dark:text-white text-slate-900">Olá! Como podemos ajudar hoje?</h1>
+                        <div className="flex items-center bg-white dark:bg-[#232f48] border dark:border-slate-800 rounded-xl h-14 px-4">
+                            <span className="material-symbols-outlined text-slate-400 mr-2">search</span>
+                            <input placeholder="Busque por termos, dúvidas ou guias..." className="bg-transparent border-none focus:ring-0 flex-1 dark:text-white text-slate-900" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            {['Primeiros Passos', 'Gestão de Créditos', 'Configuração Zap', 'Dúvidas CNAE'].map((cat, i) => (
+                                <div key={i} className="bg-white dark:bg-[#192233] p-5 rounded-xl border dark:border-slate-800 flex flex-col gap-3 cursor-pointer">
+                                    <div className="bg-primary/10 text-primary p-2 rounded-lg w-fit"><span className="material-symbols-outlined">rocket_launch</span></div>
+                                    <h3 className="font-bold text-sm text-slate-900 dark:text-white">{cat}</h3>
+                                </div>
+                            ))}
+                        </div>
+                    </main>
+                    <footer className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-background-dark border-t dark:border-slate-800 space-y-2">
+                        <button className="w-full bg-primary py-3.5 rounded-xl font-bold flex items-center justify-center gap-2">
+                            <span className="material-symbols-outlined text-lg">forum</span> Chat via WhatsApp
+                        </button>
+                    </footer>
+                </div>
+            );
+        };
+
+        /** 
+         * App Router 
+         */
+        const App = () => {
+            const location = useLocation();
+            
+            // Log analytics-like hit on screen change (mock)
+            useEffect(() => {
+                console.log("Navigated to:", location.pathname);
+            }, [location]);
+
+            return (
+                <Routes>
+                    <Route path="/" element={<Onboarding1 />} />
+                    <Route path="/onboarding2" element={<Onboarding2 />} />
+                    <Route path="/onboarding3" element={<Onboarding3 />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/leads" element={<LeadsList />} />
+                    <Route path="/lead-detail" element={<LeadDetail />} />
+                    <Route path="/automation" element={<AutomationList />} />
+                    <Route path="/automation-config" element={<AutomationConfig />} />
+                    <Route path="/search-leads" element={<SearchLeads />} />
+                    <Route path="/billing" element={<Billing />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/help" element={<HelpCenter />} />
+                    
+                    {/* Catch all to avoid broken links during development */}
+                    <Route path="*" element={<Dashboard />} />
+                </Routes>
+            );
+        };
+
+        const container = document.getElementById('root');
+        const root = createRoot(container);
+        root.render(
+            <MemoryRouter>
+                <App />
+            </MemoryRouter>
+        );
+    </script>
+</body>
+</html>
