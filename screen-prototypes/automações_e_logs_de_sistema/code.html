@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Dominus Leads - Automações</title>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-white flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined cursor-pointer">arrow_back_ios</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Automações</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-12 bg-transparent text-slate-900 dark:text-white p-0">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Tabs -->
+<div class="px-4">
+<div class="flex border-b border-slate-200 dark:border-slate-800 justify-between">
+<button class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-[13px] pt-4 flex-1">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Minhas Automações</p>
+</button>
+<button class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-[#92a4c9] pb-[13px] pt-4 flex-1">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Logs de Erro</p>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 pb-20">
+<!-- SectionHeader -->
+<section>
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Automações Ativas</h3>
+<!-- Card 1 -->
+<div class="p-4">
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-[#192233] p-4 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex flex-[2_2_0px] flex-col gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">45 leads hoje</p>
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight">Prospecção Advogados SP</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-green-500 text-sm">chat</span>
+<p class="text-slate-500 dark:text-[#92a4c9] text-sm font-normal">Canal: WhatsApp</p>
+</div>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 flex-row-reverse bg-primary/10 dark:bg-[#232f48] text-primary dark:text-white gap-2 text-sm font-bold leading-normal w-fit">
+<span class="material-symbols-outlined fill-icon text-primary dark:text-white">toggle_on</span>
+<span class="truncate">Ativado</span>
+</button>
+</div>
+<div class="w-24 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-none" data-alt="Abstract legal documents and icons" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3a8d8ytIUO6r5SVnCbk9oRctG1AbIgXwhNWZKMDtk0ZKnghDzMZ9DqC8GgFG__BE5d-NIctABiZLAtl0A3l8S6zjy02pWWw4B7M0FRVOHOFNDhP0z2d7V1CbdJGE702VxkIFhVgfsAuXRnE8_K8nINP4HxwPhUevEwn2fxyscvwAC2_T45gaImJ5K_oUookO7pmsmuB86vXpziszo6-8q5mnhdFNhgPSqZ7PMA_6zkYbcbEO3o_okZTzJZ21a_Iq2VSm2n1Qpd0y5");'></div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-4 pt-0">
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-[#192233] p-4 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex flex-[2_2_0px] flex-col gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">12 leads hoje</p>
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight">Leads Imobiliárias RJ</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-green-500 text-sm">chat</span>
+<p class="text-slate-500 dark:text-[#92a4c9] text-sm font-normal">Canal: WhatsApp</p>
+</div>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 flex-row-reverse bg-primary/10 dark:bg-[#232f48] text-primary dark:text-white gap-2 text-sm font-bold leading-normal w-fit">
+<span class="material-symbols-outlined fill-icon text-primary dark:text-white">toggle_on</span>
+<span class="truncate">Ativado</span>
+</button>
+</div>
+<div class="w-24 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-none" data-alt="Aerial view of coastal real estate" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDzuK3qzNT8lB_2niRH4fF6J2JcgDEwIyRGN-NnmyWQWuykmgpNBMi4G1va8rQ-2uCojNeBY4Fx9WGalIhnOWTYYuexxIP9_okAeScOqcoYLLi46Km9xochsB2l-8cxFlbFS3pLVz8OcMIeqmGRTDQGuS-fTpyyyImVh6F2Mi0G0cvvWMnvlEywi4VtMQ8_JilfPIYx-zE-gtLNGFgSddrh2uG2-Gs7eC39QA7oeOig_j_aOPrdkRVuOoqth6an4NAFayq4xswSPlrE");'></div>
+</div>
+</div>
+</section>
+<!-- Logs Section -->
+<section class="mt-4">
+<div class="flex items-center justify-between px-4 pb-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Logs de Sistema</h3>
+<span class="text-primary text-xs font-bold cursor-pointer">Ver tudo</span>
+</div>
+<div class="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Log Item 1: Erro -->
+<div class="flex gap-4 p-4 items-start bg-white dark:bg-background-dark/50">
+<div class="p-2 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-base">error</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<p class="text-slate-900 dark:text-white text-sm font-medium leading-tight">
+<span class="font-bold">Erro:</span> Número inválido em <span class="text-primary underline">12.345.678/0001-99</span>
+</p>
+<p class="text-slate-400 text-xs">há 2 minutos • Workflow n8n #552</p>
+</div>
+</div>
+<!-- Log Item 2: Sucesso -->
+<div class="flex gap-4 p-4 items-start bg-white dark:bg-background-dark/50">
+<div class="p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-base">check_circle</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<p class="text-slate-900 dark:text-white text-sm font-medium leading-tight">
+<span class="font-bold">Sucesso:</span> Mensagem enviada para <span class="text-primary underline">98.765.432/0001-21</span>
+</p>
+<p class="text-slate-400 text-xs">há 5 minutos • Prospecção Advogados SP</p>
+</div>
+</div>
+<!-- Log Item 3: Aviso -->
+<div class="flex gap-4 p-4 items-start bg-white dark:bg-background-dark/50">
+<div class="p-2 rounded-full bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400">
+<span class="material-symbols-outlined text-base">warning</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<p class="text-slate-900 dark:text-white text-sm font-medium leading-tight">
+<span class="font-bold">Aviso:</span> API n8n demorando a responder
+                            </p>
+<p class="text-slate-400 text-xs">há 12 minutos • Latência de 5.4s detectada</p>
+</div>
+</div>
+<!-- Log Item 4: Sucesso -->
+<div class="flex gap-4 p-4 items-start bg-white dark:bg-background-dark/50">
+<div class="p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-base">check_circle</span>
+</div>
+<div class="flex flex-col flex-1 gap-1">
+<p class="text-slate-900 dark:text-white text-sm font-medium leading-tight">
+<span class="font-bold">Sucesso:</span> Novo lead capturado via Landing Page
+                            </p>
+<p class="text-slate-400 text-xs">há 15 minutos • Leads Imobiliárias RJ</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-6 right-6 z-50">
+<button class="flex items-center justify-center size-14 rounded-full bg-primary text-white shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<!-- Tab Bar iOS Style -->
+<nav class="fixed bottom-0 w-full max-w-md bg-white/80 dark:bg-[#101622]/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-6 py-2">
+<div class="flex justify-between items-center">
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px]">Dashboard</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined fill-icon">smart_toy</span>
+<span class="text-[10px] font-bold">Automações</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px]">Leads</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Ajustes</span>
+</div>
+</div>
+<div class="h-6"></div> <!-- Safe area spacing -->
+</nav>
+</div>
+</body></html>

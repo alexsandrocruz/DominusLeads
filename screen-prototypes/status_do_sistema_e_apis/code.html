@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Status do Sistema | Dominus Leads</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-lg mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">arrow_back_ios</span>
+<h1 class="text-lg font-bold leading-tight tracking-tight">Status do Sistema</h1>
+</div>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</header>
+<main class="max-w-lg mx-auto pb-32">
+<!-- Critical Alert Notification -->
+<div class="p-4 @container">
+<div class="flex flex-col gap-4 rounded-xl border border-red-500/30 bg-red-50 dark:bg-red-950/20 p-5">
+<div class="flex items-start gap-3">
+<div class="p-2 bg-red-500 rounded-lg text-white">
+<span class="material-symbols-outlined leading-none">warning</span>
+</div>
+<div class="flex flex-col gap-1">
+<p class="text-red-700 dark:text-red-400 text-base font-bold leading-tight">Serviços instáveis detectados</p>
+<p class="text-red-600 dark:text-red-400/80 text-sm font-normal leading-normal">
+                            A latência da API de IA e WhatsApp está acima do limite de 500ms.
+                        </p>
+</div>
+</div>
+<button class="w-full flex cursor-pointer items-center justify-center rounded-lg h-10 bg-red-600 text-white text-sm font-semibold transition-all hover:bg-red-700">
+<span class="truncate">Ver logs de erro</span>
+</button>
+</div>
+</div>
+<!-- Section: Status Cards -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight mb-4">Monitor de Saúde</h3>
+<div class="grid grid-cols-2 gap-3">
+<!-- WhatsApp Card -->
+<div class="bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">WhatsApp API</span>
+<div class="flex items-center gap-1.5">
+<div class="h-2 w-2 rounded-full bg-emerald-500 status-pulse"></div>
+</div>
+</div>
+<div>
+<p class="text-2xl font-bold font-display">140<span class="text-sm font-medium text-slate-500 ml-1">ms</span></p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Uptime</span>
+<span class="text-xs font-semibold text-emerald-500">99.9%</span>
+</div>
+</div>
+</div>
+<!-- SMS Card -->
+<div class="bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">SMS Gateway</span>
+<div class="flex items-center gap-1.5">
+<div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+</div>
+</div>
+<div>
+<p class="text-2xl font-bold font-display">85<span class="text-sm font-medium text-slate-500 ml-1">ms</span></p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Uptime</span>
+<span class="text-xs font-semibold text-emerald-500">100%</span>
+</div>
+</div>
+</div>
+<!-- n8n Card -->
+<div class="bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">n8n Instance</span>
+<div class="flex items-center gap-1.5">
+<div class="h-2 w-2 rounded-full bg-amber-500 status-pulse"></div>
+</div>
+</div>
+<div>
+<p class="text-2xl font-bold font-display text-amber-500">210<span class="text-sm font-medium text-slate-500 ml-1">ms</span></p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Uptime</span>
+<span class="text-xs font-semibold text-amber-500">98.5%</span>
+</div>
+</div>
+</div>
+<!-- PostgreSQL Card -->
+<div class="bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">PostgreSQL</span>
+<div class="flex items-center gap-1.5">
+<div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+</div>
+</div>
+<div>
+<p class="text-2xl font-bold font-display">12<span class="text-sm font-medium text-slate-500 ml-1">ms</span></p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs text-slate-500 dark:text-slate-400">Uptime</span>
+<span class="text-xs font-semibold text-emerald-500">100%</span>
+</div>
+</div>
+</div>
+<!-- AI Engine Card (Full Width for emphasis) -->
+<div class="col-span-2 bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">IA Engine (OpenAI &amp; Anthropic)</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-red-500 font-bold uppercase">Critical Latency</span>
+<div class="h-2 w-2 rounded-full bg-red-500 status-pulse"></div>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-3xl font-bold font-display text-red-500">4.2<span class="text-sm font-medium text-slate-500 ml-1">s</span></p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Tempo médio de resposta (30min)</p>
+</div>
+<div class="text-right">
+<span class="text-xs text-slate-500 dark:text-slate-400">SLA Diário</span>
+<p class="text-sm font-bold text-red-500">95.2%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Incident Log -->
+<div class="mt-4 px-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Incidentes Recentes</h3>
+<span class="text-xs text-primary font-semibold">Ver histórico completo</span>
+</div>
+<div class="space-y-3">
+<!-- Log Item 1 -->
+<div class="flex items-center gap-4 p-3 bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 rounded-lg">
+<div class="h-10 w-10 flex shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">cloud_off</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Falha de Conexão: IA Engine</p>
+<p class="text-xs text-slate-500">Hoje às 14:22 • Timeout detectado</p>
+</div>
+<div class="px-2 py-1 rounded bg-amber-100 dark:bg-amber-900/30 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-tighter">
+                        Investigando
+                    </div>
+</div>
+<!-- Log Item 2 -->
+<div class="flex items-center gap-4 p-3 bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 rounded-lg">
+<div class="h-10 w-10 flex shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">dns</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Instabilidade n8n Cluster B</p>
+<p class="text-xs text-slate-500">Hoje às 09:15 • 12 min de duração</p>
+</div>
+<div class="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900/30 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">
+                        Resolvido
+                    </div>
+</div>
+<!-- Log Item 3 -->
+<div class="flex items-center gap-4 p-3 bg-white dark:bg-[#1a2233] border border-slate-200 dark:border-slate-800 rounded-lg opacity-60">
+<div class="h-10 w-10 flex shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">database</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Manutenção PostgreSQL</p>
+<p class="text-xs text-slate-500">Ontem às 23:00 • Backup agendado</p>
+</div>
+<div class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-tighter">
+                        Concluído
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Fixed Action Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/95 dark:via-background-dark/95 to-transparent pb-8 max-w-lg mx-auto">
+<button class="w-full flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">analytics</span>
+<span>Simular Teste de Ponta a Ponta</span>
+</button>
+</div>
+</body></html>
