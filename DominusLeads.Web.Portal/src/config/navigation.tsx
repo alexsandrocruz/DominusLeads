@@ -28,7 +28,9 @@ import {
     Search,
     Zap,
     CreditCard,
-    LayoutTemplate
+    LayoutTemplate,
+    BarChart3,
+    History
 } from "lucide-react";
 import React from "react";
 
@@ -40,7 +42,12 @@ import LeadDetailPage from "@/pages/leads/LeadDetailPage";
 import DominusAutomationPage from "@/pages/automation/DominusAutomationPage";
 import AutomationFlowPage from "@/pages/automation/AutomationFlowPage";
 import AiTrainingPage from "@/pages/automation/AiTrainingPage";
+import AiLogsPage from "@/pages/automation/AiLogsPage";
+import CampaignListPage from "@/pages/campaigns/CampaignListPage";
 import CampaignConfigPage from "@/pages/campaigns/CampaignConfigPage";
+import CompanySettingsPage from "@/pages/settings/CompanySettingsPage";
+import BillingDashboardPage from "@/pages/billing/BillingDashboardPage";
+import RoiReportPage from "@/pages/reports/RoiReportPage";
 import DominusBillingPage from "@/pages/billing/DominusBillingPage";
 // Core Layout & Settings (Keeping for reference/template)
 import HostUsersPage from "@/pages/host/users";
@@ -86,8 +93,13 @@ export const routes: RouteConfig[] = [
     { path: "/automation", component: DominusAutomationPage },
     { path: "/automation/flow", component: AutomationFlowPage },
     { path: "/automation/training", component: AiTrainingPage },
+    { path: "/automation/logs", component: AiLogsPage },
+    { path: "/campaigns", component: CampaignListPage },
     { path: "/campaigns/config", component: CampaignConfigPage },
-    { path: "/billing", component: DominusBillingPage },
+    { path: "/settings/company", component: CompanySettingsPage },
+    { path: "/reports/roi", component: RoiReportPage },
+    { path: "/billing", component: BillingDashboardPage },
+    { path: "/billing/legacy", component: DominusBillingPage },
     { path: "/auth/login", component: LoginPage },
     { path: "/auth/register", component: RegisterPage },
     { path: "/auth/forgot-password", component: ForgotPasswordPage },
@@ -109,8 +121,11 @@ export const menuItems: NavItem[] = [
     { label: "Gestão de Leads", href: "/leads", icon: Users, section: "main" },
     { label: "Busca e Filtros", href: "/search", icon: Search, section: "main" },
     { label: "Automações", href: "/automation", icon: Zap, section: "main" },
-    { label: "Campanhas", href: "/campaigns/config", icon: LayoutTemplate, section: "main" },
+    { label: "Logs de IA", href: "/automation/logs", icon: History, section: "main" },
+    { label: "Campanhas", href: "/campaigns", icon: LayoutTemplate, section: "main" },
     { label: "Faturamento", href: "/billing", icon: CreditCard, section: "main" },
+    { label: "Relatórios ROI", href: "/reports/roi", icon: BarChart3, section: "main" },
+    { label: "Dados da Empresa", href: "/settings/company", icon: Building2, section: "main" },
     { label: "Configurações", href: "/host/settings", icon: Settings, section: "main" },
     // <GEN-MENU>
 ];

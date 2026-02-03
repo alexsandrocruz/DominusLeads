@@ -39,10 +39,10 @@ export default function CampaignConfigPage() {
             <div className="max-w-xl mx-auto space-y-8 pb-32 relative min-h-[calc(100vh-100px)]">
                 {/* Header Navigation */}
                 <div className="flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md py-2 z-50">
-                    <Button variant="ghost" size="sm" onClick={() => setLocation("/automation")} className="gap-2 -ml-2">
+                    <Button variant="ghost" size="sm" onClick={() => setLocation("/campaigns")} className="gap-2 -ml-2">
                         <ArrowLeft className="size-4" />
                     </Button>
-                    <h1 className="text-lg font-black tracking-tight text-center flex-1">Configuração de Campanhas</h1>
+                    <h1 className="text-lg font-black tracking-tight text-center flex-1">Nova Campanha</h1>
                     <div className="w-8" />
                 </div>
 

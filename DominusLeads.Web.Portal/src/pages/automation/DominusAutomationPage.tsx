@@ -49,7 +49,7 @@ export default function DominusAutomationPage() {
                     </div>
                     <Button
                         className="gap-2 font-bold shadow-lg shadow-primary/20 h-11 px-6"
-                        onClick={() => setLocation("/campaigns/config")}
+                        onClick={() => setLocation("/automation/flow")}
                     >
                         <Plus className="h-4 w-4" />
                         Nova Automação
