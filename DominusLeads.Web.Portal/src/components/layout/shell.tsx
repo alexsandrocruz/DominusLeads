@@ -22,7 +22,7 @@ interface ShellProps {
     appName?: string;
 }
 
-export function AppShell({ children, appName = "Fabio Ribeiro" }: ShellProps) {
+export function AppShell({ children, appName = "Dominus Leads" }: ShellProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user, logout } = useAuth();
     const { hasPermission } = useAbpPermissions();

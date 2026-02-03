@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="abp-react-theme">
+    <ThemeProvider defaultTheme="system" storageKey="dominus-leads-theme">
       <QueryClientProvider client={queryClient}>
         <AbpProvider>
           <Switch>

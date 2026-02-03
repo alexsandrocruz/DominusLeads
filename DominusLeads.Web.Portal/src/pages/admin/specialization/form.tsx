@@ -19,10 +19,10 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Save, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { 
-  useSpecialization, 
-  useCreateSpecialization, 
-  useUpdateSpecialization 
+import {
+  useSpecialization,
+  useCreateSpecialization,
+  useUpdateSpecialization
 } from "@/lib/abp/hooks/useSpecializations";
 
 import { useLawyerSpecializations } from "@/lib/abp/hooks/useLawyerSpecializations";
@@ -30,11 +30,11 @@ import { useLawyerSpecializations } from "@/lib/abp/hooks/useLawyerSpecializatio
 
 
 const formSchema = z.object({
-  
+
   name: z.any(),
-  
+
   description: z.any(),
-  
+
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -42,11 +42,10 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface LawyerSpecializationItem {
   id?: string;
-  
-  lawyerId: ;
-  
-  specializationId: ;
-  
+
+  lawyerId: string;
+  specializationId: string;
+
 }
 
 
@@ -59,14 +58,14 @@ export default function SpecializationFormPage() {
   const createMutation = useCreateSpecialization();
   const updateMutation = useUpdateSpecialization();
 
-  
-  const { data: lawyerSpecializations } = useLawyerSpecializations({ maxResultCount: 1000 });
-  
-  
 
-  
+  const { data: lawyerSpecializations } = useLawyerSpecializations({ maxResultCount: 1000 });
+
+
+
+
   const [lawyerSpecializationItems, setLawyerSpecializationItems] = useState<LawyerSpecializationItem[]>([]);
-  
+
 
   const {
     register,
@@ -83,22 +82,21 @@ export default function SpecializationFormPage() {
   useEffect(() => {
     if (existing) {
       reset(existing);
-      
+
       if (existing.lawyerSpecializations) {
         setLawyerSpecializationItems(existing.lawyerSpecializations);
       }
-      
+
     }
   }, [existing, reset]);
 
-  
+
   const addLawyerSpecialization = () => {
-    setLawyerSpecializationItems([...lawyerSpecializationItems, { 
-      
-      lawyerId: ,
-      
-      specializationId: ,
-      
+    setLawyerSpecializationItems([...lawyerSpecializationItems, {
+
+      lawyerId: "",
+      specializationId: "",
+
     }]);
   };
 
@@ -111,22 +109,22 @@ export default function SpecializationFormPage() {
     updated[index] = { ...updated[index], [field]: value };
     setLawyerSpecializationItems(updated);
   };
-  
+
 
   const onSubmit = async (data: FormValues) => {
     try {
       const payload = {
         ...data,
-        
-        lawyerSpecializations: lawyerSpecializationItems.filter(item => 
-          
+
+        lawyerSpecializations: lawyerSpecializationItems.filter(item =>
+
           item.lawyerId &&
-          
+
           item.specializationId &&
-          
+
           true
         ),
-        
+
       };
 
       if (isEditing) {
@@ -160,8 +158,8 @@ export default function SpecializationFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="icon"
               onClick={() => setLocation("/admin/specialization")}
             >
@@ -189,41 +187,41 @@ export default function SpecializationFormPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    
-                    
+
+
                     <div className="space-y-2">
                       <Label htmlFor="name">
                         Name *
                       </Label>
-                      
-                      <Input 
-                        id="name" 
+
+                      <Input
+                        id="name"
                         placeholder=""
-                        {...register("name")} 
+                        {...register("name")}
                       />
-                      
+
                     </div>
-                    
-                    
+
+
                     <div className="space-y-2">
                       <Label htmlFor="description">
                         Description
                       </Label>
-                      
-                      <Textarea 
-                        id="description" 
+
+                      <Textarea
+                        id="description"
                         rows={4}
                         placeholder=""
-                        {...register("description")} 
+                        {...register("description")}
                       />
-                      
+
                     </div>
-                    
+
                   </div>
                 </CardContent>
               </Card>
 
-              
+
               {/* Child Entity Card */}
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -235,17 +233,17 @@ export default function SpecializationFormPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    { (lawyerSpecializationItems || []).map((item, index) => (
+                    {(lawyerSpecializationItems || []).map((item, index) => (
                       <div key={index} className="p-4 border rounded-lg space-y-3 bg-muted/30">
                         <div className="flex gap-3 items-start">
                           <div className="flex-1 grid grid-cols-2 md:grid-cols-1 gap-3">
-                            
+
                           </div>
-                          { lawyerSpecializationItems.length > 1 && (
-                            <Button 
-                              type="button" 
-                              variant="ghost" 
-                              size="icon" 
+                          {lawyerSpecializationItems.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
                               onClick={() => removeLawyerSpecialization(index)}
                             >
                               <Trash2 className="h-4 w-4 text-destructive" />
@@ -254,7 +252,7 @@ export default function SpecializationFormPage() {
                         </div>
                       </div>
                     ))}
-                    { lawyerSpecializationItems.length === 0 && (
+                    {lawyerSpecializationItems.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         No items yet. Click "Add Item" to start.
                       </div>
@@ -262,16 +260,16 @@ export default function SpecializationFormPage() {
                   </div>
                 </CardContent>
               </Card>
-              
 
-              
+
+
               <Card>
                 <CardHeader>
                   <CardTitle>Lawyers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    { (lawyerSpecializations as any)?.items?.map((item: any) => (
+                    {(lawyerSpecializations as any)?.items?.map((item: any) => (
                       <div key={item.id} className="flex items-center space-x-2">
                         <Checkbox
                           id={`rel-${item.id}`}
@@ -296,7 +294,7 @@ export default function SpecializationFormPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
             </div>
 
             {/* Sidebar - 1 column */}
@@ -311,9 +309,9 @@ export default function SpecializationFormPage() {
                     <Save className="mr-2 h-4 w-4" />
                     {isEditing ? "Save Changes" : "Create Specialization"}
                   </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     className="w-full"
                     onClick={() => setLocation("/admin/specialization")}
                   >

@@ -20,7 +20,7 @@ interface SidebarProps {
     appName?: string;
 }
 
-export function Sidebar({ isOpen = true, onClose, appName = "Fabio Ribeiro" }: SidebarProps) {
+export function Sidebar({ isOpen = true, onClose, appName = "Dominus Leads" }: SidebarProps) {
     const [location] = useLocation();
     const { currentTenant } = useAbpPermissions();
     const isHost = !currentTenant?.id || currentTenant?.id === null;
