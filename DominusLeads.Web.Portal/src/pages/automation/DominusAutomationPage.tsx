@@ -47,7 +47,10 @@ export default function DominusAutomationPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Automações de Prospecção</h1>
                         <p className="text-muted-foreground font-medium italic">Seus robôs trabalhando 24/7 na extração de leads qualificados.</p>
                     </div>
-                    <Button className="gap-2 font-bold shadow-lg shadow-primary/20 h-11 px-6">
+                    <Button
+                        className="gap-2 font-bold shadow-lg shadow-primary/20 h-11 px-6"
+                        onClick={() => setLocation("/campaigns/config")}
+                    >
                         <Plus className="h-4 w-4" />
                         Nova Automação
                     </Button>

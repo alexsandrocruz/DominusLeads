@@ -27,7 +27,8 @@ import {
     Archive,
     Search,
     Zap,
-    CreditCard
+    CreditCard,
+    LayoutTemplate
 } from "lucide-react";
 import React from "react";
 
@@ -39,6 +40,7 @@ import LeadDetailPage from "@/pages/leads/LeadDetailPage";
 import DominusAutomationPage from "@/pages/automation/DominusAutomationPage";
 import AutomationFlowPage from "@/pages/automation/AutomationFlowPage";
 import AiTrainingPage from "@/pages/automation/AiTrainingPage";
+import CampaignConfigPage from "@/pages/campaigns/CampaignConfigPage";
 import DominusBillingPage from "@/pages/billing/DominusBillingPage";
 // Core Layout & Settings (Keeping for reference/template)
 import HostUsersPage from "@/pages/host/users";
@@ -84,6 +86,7 @@ export const routes: RouteConfig[] = [
     { path: "/automation", component: DominusAutomationPage },
     { path: "/automation/flow", component: AutomationFlowPage },
     { path: "/automation/training", component: AiTrainingPage },
+    { path: "/campaigns/config", component: CampaignConfigPage },
     { path: "/billing", component: DominusBillingPage },
     { path: "/auth/login", component: LoginPage },
     { path: "/auth/register", component: RegisterPage },
@@ -106,6 +109,7 @@ export const menuItems: NavItem[] = [
     { label: "Gestão de Leads", href: "/leads", icon: Users, section: "main" },
     { label: "Busca e Filtros", href: "/search", icon: Search, section: "main" },
     { label: "Automações", href: "/automation", icon: Zap, section: "main" },
+    { label: "Campanhas", href: "/campaigns/config", icon: LayoutTemplate, section: "main" },
     { label: "Faturamento", href: "/billing", icon: CreditCard, section: "main" },
     { label: "Configurações", href: "/host/settings", icon: Settings, section: "main" },
     // <GEN-MENU>
