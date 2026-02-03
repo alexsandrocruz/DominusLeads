@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Upload, FileText, CheckCircle, XCircle, AlertCircle, Info, MoreVertical, Eye } from 'lucide-react';
 import { MOCK_DOCUMENTS, MOCK_CHECKLIST_TEMPLATE, type Document } from '../../mocks/documentMocks';
 import ChecklistSidebar from '@/components/documents/ChecklistSidebar';
-import { AppShell } from "@/components/layout/shell";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { AppShell } from "@/components/layout/Shell";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/Dropdown-menu";
 
 const DocumentIngestionPage: React.FC = () => {
     const [documents, setDocuments] = useState<Document[]>(MOCK_DOCUMENTS);

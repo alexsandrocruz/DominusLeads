@@ -1,7 +1,7 @@
-import { AppShell } from "@/components/layout/shell";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { AppShell } from "@/components/layout/Shell";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import {
     Table,
     TableBody,
@@ -9,8 +9,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/Table";
+import { Separator } from "@/components/ui/Separator";
 import { Crown, Plus, Settings, MoreHorizontal, Check, X } from "lucide-react";
 
 // Mock data for editions

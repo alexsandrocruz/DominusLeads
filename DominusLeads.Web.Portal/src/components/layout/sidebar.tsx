@@ -9,7 +9,7 @@ import {
     Menu,
     ChevronRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { menuItems, type NavItem } from "@/config/navigation";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { useAbpPermissions } from "@/lib/abp/config";

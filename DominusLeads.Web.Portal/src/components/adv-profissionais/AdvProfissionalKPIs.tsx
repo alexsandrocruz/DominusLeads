@@ -5,7 +5,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 import {
     BarChart,
     Bar,
@@ -29,7 +29,7 @@ import {
 import { useAdvProcessoses } from "@/lib/abp/hooks/useAdvProcessoses";
 import { useAdvTarefases } from "@/lib/abp/hooks/useAdvTarefases";
 import { useAdvCompromissoses } from "@/lib/abp/hooks/useAdvCompromissoses";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 interface AdvProfissionalKPIsProps {
     idProfissional?: string;

@@ -1,7 +1,7 @@
-import { AppShell } from "@/components/layout/shell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { AppShell } from "@/components/layout/Shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { Users, MoreVertical, ExternalLink, Mail, Phone, MapPin, Building } from "lucide-react";
 import { cn } from "@/lib/utils";
 

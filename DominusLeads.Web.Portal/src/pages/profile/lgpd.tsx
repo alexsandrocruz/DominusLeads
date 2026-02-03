@@ -1,6 +1,6 @@
-import { AppShell } from "@/components/layout/shell";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/layout/Shell";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import {
     Table,
     TableBody,
@@ -8,7 +8,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/Table";
 import {
     ShieldCheck,
     Download,
@@ -25,7 +25,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogDescription
-} from "@/components/ui/dialog";
+} from "@/components/ui/Dialog";
 import { toast } from "sonner";
 
 // Mock Data for Personal Data Requests

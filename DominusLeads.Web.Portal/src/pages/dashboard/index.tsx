@@ -1,157 +1,130 @@
-import { AppShell } from "@/components/layout/shell";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scale, FileText, CheckSquare, AlertTriangle, Calendar, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useKpiData } from "@/lib/abp/hooks/use-kpi-data";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ProcessesPhaseChart, TasksTimelineChart, ExecutorWorkloadChart, PipelineFunnelChart } from "@/components/dashboard/lexus-charts";
+import { AppShell } from "@/components/layout/Shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Rocket, Search, Database, CheckCircle, Clock, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
+import { cn } from "@/lib/utils";
 
-export default function DashboardPage() {
-    const { data: stats, isLoading } = useKpiData();
-
-    const statConfig = [
-        {
-            key: "activeProcesses",
-            title: "Processos Ativos",
-            description: "Casos em andamento",
-            icon: Scale,
-            color: "text-blue-500",
-            bgColor: "bg-blue-500/10",
-        },
-        {
-            key: "newCasesMonth",
-            title: "Novos Casos",
-            description: "Neste mês",
-            icon: FileText,
-            color: "text-emerald-500",
-            bgColor: "bg-emerald-500/10",
-        },
-        {
-            key: "pendingTasks",
-            title: "Tarefas Pendentes",
-            description: "A aguardar conclusão",
-            icon: CheckSquare,
-            color: "text-purple-500",
-            bgColor: "bg-purple-500/10",
-        },
-        {
-            key: "overdueTasks",
-            title: "Tarefas Atrasadas",
-            description: "Prioridade alta",
-            icon: AlertTriangle,
-            color: "text-red-500",
-            bgColor: "bg-red-500/10",
-        },
+export default function DominusDashboardPage() {
+    const recentActivity = [
+        { name: "Tech Solutions Ltda", cnae: "6201-5/00", status: "Validado", date: "há 2h", type: "success" },
+        { name: "Green Energy Corp", cnae: "3511-5/01", status: "Novo Lead", date: "há 5h", type: "primary" },
+        { name: "Logistics Pro", cnae: "4930-2/02", status: "Validado", date: "há 8h", type: "success" }
     ];
 
     return (
         <AppShell>
             <div className="space-y-6">
-                {/* Page Header */}
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Dashboard Operacional</h1>
-                        <p className="text-muted-foreground">
-                            Visão geral da produtividade e prazos do escritório.
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="gap-2">
-                            <Calendar className="size-4" />
-                            Jan 2026
-                        </Button>
-                        <Button size="sm" className="gap-2">
-                            <Download className="size-4" />
-                            Exportar
-                        </Button>
-                    </div>
+                {/* Header Section */}
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-3xl font-bold tracking-tight">Painel de Controle</h1>
+                    <p className="text-muted-foreground italic">
+                        Bem-vindo de volta, Especialista em Leads.
+                    </p>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    {statConfig.map((stat) => (
-                        <Card key={stat.key} className="hover:shadow-lg transition-shadow duration-300">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">
-                                    {stat.title}
-                                </CardTitle>
-                                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                                    <stat.icon className={`size-4 ${stat.color}`} />
-                                </div >
-                            </CardHeader>
-                            <CardContent>
-                                {isLoading ? (
-                                    <div className="space-y-2">
-                                        <Skeleton className="h-8 w-20" />
-                                        <Skeleton className="h-3 w-28" />
+                {/* Top Grid: Credits & Quick Stats */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <Card className="relative overflow-hidden bg-primary/5 border-primary/20 hover:shadow-md transition-shadow">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                                Créditos Ativos
+                            </CardTitle>
+                            <Database className="h-4 w-4 text-primary" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold">1.250</div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Próxima recarga em 15 dias
+                            </p>
+                            <Button size="sm" className="mt-4 w-full md:w-fit shadow-lg shadow-primary/20">
+                                Comprar Créditos
+                            </Button>
+                        </CardContent>
+                        {/* Subtle background decoration */}
+                        <div className="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+                            <Database className="h-32 w-32" />
+                        </div>
+                    </Card>
+
+                    <Card className="hover:shadow-md transition-shadow">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                                Leads Convertidos
+                            </CardTitle>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold">84</div>
+                            <div className="flex items-center gap-1 text-xs text-emerald-500 mt-1 font-bold">
+                                <TrendingUp className="h-3 w-3" />
+                                +12% este mês
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="hover:shadow-md transition-shadow">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                                Tempo Médio Validação
+                            </CardTitle>
+                            <Clock className="h-4 w-4 text-orange-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold">4.2h</div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Meta: Abaixo de 6h
+                            </p>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Search & Actions */}
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Card className="p-6 space-y-4">
+                        <div className="space-y-2">
+                            <h3 className="text-lg font-bold">Busca Rápida</h3>
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    placeholder="Buscar por Empresa ou CNPJ..."
+                                    className="pl-10 h-11"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                            <Link href="/search" className="flex-1">
+                                <Button variant="secondary" className="w-full">
+                                    Filtros Avançados
+                                </Button>
+                            </Link>
+                            <Button className="flex-1 gap-2">
+                                <Rocket className="h-4 w-4" />
+                                Novo Lead
+                            </Button>
+                        </div>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-lg">Atividade Recente</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {recentActivity.map((lead, i) => (
+                                <div key={i} className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0">
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-bold leading-none">{lead.name}</p>
+                                        <p className="text-xs text-muted-foreground">CNAE: {lead.cnae} • {lead.date}</p>
                                     </div>
-                                ) : (
-                                    <>
-                                        <div className="text-2xl font-bold">
-                                            {stats?.[stat.key as keyof typeof stats]?.toLocaleString() ?? "-"}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            {stat.description}
-                                        </p>
-                                    </>
-                                )}
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-
-                {/* Main Dashboard Content */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-
-                    {/* Processos por Fase */}
-                    <Card className="lg:col-span-3">
-                        <CardHeader>
-                            <CardTitle>Processos por Fase</CardTitle>
-                            <CardDescription>
-                                Distribuição atual dos casos
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            {isLoading ? <Skeleton className="h-[300px] w-full" /> : <ProcessesPhaseChart data={stats?.processesByPhase || []} />}
-                        </CardContent>
-                    </Card>
-
-                    {/* Timeline Tarefas */}
-                    <Card className="lg:col-span-4">
-                        <CardHeader>
-                            <CardTitle>Prazos e Entregas</CardTitle>
-                            <CardDescription>
-                                Volume de tarefas nesta semana
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            {isLoading ? <Skeleton className="h-[300px] w-full" /> : <TasksTimelineChart data={stats?.tasksTimeline || []} />}
-                        </CardContent>
-                    </Card>
-
-                    {/* Carga de Trabalho */}
-                    <Card className="lg:col-span-4">
-                        <CardHeader>
-                            <CardTitle>Carga de Trabalho</CardTitle>
-                            <CardDescription>
-                                Tarefas pendentes por advogado
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            {isLoading ? <Skeleton className="h-[300px] w-full" /> : <ExecutorWorkloadChart data={stats?.tasksByExecutor || []} />}
-                        </CardContent>
-                    </Card>
-
-                    {/* Pipeline Funnel */}
-                    <Card className="lg:col-span-3">
-                        <CardHeader>
-                            <CardTitle>Saúde do Pipeline</CardTitle>
-                            <CardDescription>
-                                Pré-processos e conversão
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            {isLoading ? <Skeleton className="h-[300px] w-full" /> : <PipelineFunnelChart data={stats?.pipelineStats || []} />}
+                                    <span className={cn(
+                                        "px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tight",
+                                        lead.type === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-primary/10 text-primary'
+                                    )}>
+                                        {lead.status}
+                                    </span>
+                                </div>
+                            ))}
                         </CardContent>
                     </Card>
                 </div>

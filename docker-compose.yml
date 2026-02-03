@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
     container_name: dominus-leads-frontend
     ports:
-      - "5173:5173"
+      - "5180:5173"
     environment:
       - VITE_API_URL=http://localhost:8080
     depends_on:

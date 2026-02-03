@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Loader2, UserPlus, CheckCircle2, Building2, Globe, FileText } from "lucide-react";
 import { apiClient } from "@/lib/abp/api-client";
 import { resolveTenantFromHostname, isRootDomain } from "@/lib/abp/tenant";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export default function RegisterPage() {
     const [email, setEmail] = useState("");

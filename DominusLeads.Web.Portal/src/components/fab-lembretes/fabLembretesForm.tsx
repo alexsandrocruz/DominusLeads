@@ -8,11 +8,11 @@ import { useForm } from "react-hook-form";
     DialogFooter,
     DialogHeader,
     DialogTitle,
-  } from "@/components/ui/dialog";
-  import { Button } from "@/components/ui/button";
-  import { Input } from "@/components/ui/input";
-  import { Label } from "@/components/ui/label";
-  import { Checkbox } from "@/components/ui/checkbox";
+  } from "@/components/ui/Dialog";
+  import { Button } from "@/components/ui/Button";
+  import { Input } from "@/components/ui/Input";
+  import { Label } from "@/components/ui/Label";
+  import { Checkbox } from "@/components/ui/Checkbox";
   import { Loader2 } from "lucide-react";
   import { useEffect } from "react";
   import { useCreateFabLembretes, useUpdateFabLembretes } from "@/lib/abp/hooks/useFabLembreteses";

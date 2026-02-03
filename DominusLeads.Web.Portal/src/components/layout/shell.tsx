@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Sidebar, SidebarTrigger } from "./sidebar";
+import { Sidebar, SidebarTrigger } from "./Sidebar";
 import { Bell, Search, Plus, User, ShieldAlert, Monitor, LogOut, ChevronDown, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { ThemeToggle } from "@/components/ui/Theme-toggle";
 import { useAuth } from "@/lib/abp/auth";
 import { useAbpPermissions } from "@/lib/abp/config";
 import {
@@ -13,8 +13,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from "@/components/ui/Dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Link } from "wouter";
 
 interface ShellProps {

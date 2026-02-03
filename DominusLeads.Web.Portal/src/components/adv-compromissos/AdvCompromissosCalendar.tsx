@@ -29,9 +29,9 @@ import {
     History,
     MoreHorizontal
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 
 interface AdvCompromissosCalendarProps {
     data: any[];

@@ -1,15 +1,15 @@
 import { useState, useRef } from "react";
 import { useAuth } from "@/lib/abp/auth";
 import { useAbpConfig } from "@/lib/abp/config";
-import { AppShell } from "@/components/layout/shell";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { AppShell } from "@/components/layout/Shell";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/Card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
+import { Badge } from "@/components/ui/Badge";
 import {
     User,
     Lock,
@@ -75,8 +75,8 @@ export default function ProfilePage() {
             <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
-                        <p className="text-muted-foreground">Gerencie suas informações pessoais e segurança da conta.</p>
+                        <h1 className="text-3xl font-bold tracking-tight">Perfil do Especialista</h1>
+                        <p className="text-muted-foreground font-medium italic">Gerencie suas informações na DominusLeads e acompanhe seu nível de acesso.</p>
                     </div>
                 </div>
 
