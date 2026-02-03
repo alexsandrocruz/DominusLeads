@@ -1,0 +1,37 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy all .csproj files and restore dependencies
+COPY ["src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj", "src/Sapienza.Leads.HttpApi.Host/"]
+COPY ["src/Sapienza.Leads.HttpApi/Sapienza.Leads.HttpApi.csproj", "src/Sapienza.Leads.HttpApi/"]
+COPY ["src/Sapienza.Leads.Application/Sapienza.Leads.Application.csproj", "src/Sapienza.Leads.Application/"]
+COPY ["src/Sapienza.Leads.Application.Contracts/Sapienza.Leads.Application.Contracts.csproj", "src/Sapienza.Leads.Application.Contracts/"]
+COPY ["src/Sapienza.Leads.Domain/Sapienza.Leads.Domain.csproj", "src/Sapienza.Leads.Domain/"]
+COPY ["src/Sapienza.Leads.Domain.Shared/Sapienza.Leads.Domain.Shared.csproj", "src/Sapienza.Leads.Domain.Shared/"]
+COPY ["src/Sapienza.Leads.EntityFrameworkCore/Sapienza.Leads.EntityFrameworkCore.csproj", "src/Sapienza.Leads.EntityFrameworkCore/"]
+COPY ["src/Sapienza.Leads.HttpApi.Client/Sapienza.Leads.HttpApi.Client.csproj", "src/Sapienza.Leads.HttpApi.Client/"]
+
+RUN dotnet restore "src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj"
+
+# Copy the rest of the source code
+COPY . .
+
+# Generate dev certificates for OpenIddict
+RUN dotnet dev-certs https -v -ep src/Sapienza.Leads.HttpApi.Host/openiddict.pfx -p 07b8a9ce-def5-4583-8f6d-5c3a419fbe2b
+RUN chmod 644 src/Sapienza.Leads.HttpApi.Host/openiddict.pfx
+
+# Build and publish
+WORKDIR "/src/src/Sapienza.Leads.HttpApi.Host"
+RUN dotnet publish "Sapienza.Leads.HttpApi.Host.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+COPY --from=build /src/src/Sapienza.Leads.HttpApi.Host/openiddict.pfx .
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+EXPOSE 8081
+
+ENTRYPOINT ["dotnet", "Sapienza.Leads.HttpApi.Host.dll"]
