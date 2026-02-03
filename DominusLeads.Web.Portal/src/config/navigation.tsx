@@ -38,6 +38,7 @@ import LeadsListPage from "@/pages/leads/LeadsListPage";
 import LeadDetailPage from "@/pages/leads/LeadDetailPage";
 import DominusAutomationPage from "@/pages/automation/DominusAutomationPage";
 import AutomationFlowPage from "@/pages/automation/AutomationFlowPage";
+import AiTrainingPage from "@/pages/automation/AiTrainingPage";
 import DominusBillingPage from "@/pages/billing/DominusBillingPage";
 // Core Layout & Settings (Keeping for reference/template)
 import HostUsersPage from "@/pages/host/users";
@@ -82,6 +83,7 @@ export const routes: RouteConfig[] = [
     { path: "/search", component: SearchLeadsPage },
     { path: "/automation", component: DominusAutomationPage },
     { path: "/automation/flow", component: AutomationFlowPage },
+    { path: "/automation/training", component: AiTrainingPage },
     { path: "/billing", component: DominusBillingPage },
     { path: "/auth/login", component: LoginPage },
     { path: "/auth/register", component: RegisterPage },

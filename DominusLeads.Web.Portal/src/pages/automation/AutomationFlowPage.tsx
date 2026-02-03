@@ -115,7 +115,12 @@ export default function AutomationFlowPage() {
                         <div className="flex-1 pb-10 pt-4 space-y-4">
                             <div className="flex items-center gap-2">
                                 <h4 className="font-black text-sm">3. Processamento IA</h4>
-                                <Badge className="bg-purple-500/10 text-purple-600 hover:bg-purple-500/10 border-purple-500/20 text-[9px] font-bold uppercase">n8n Workflow</Badge>
+                                <Badge
+                                    className="bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 border-purple-500/20 text-[9px] font-bold uppercase cursor-pointer"
+                                    onClick={() => setLocation("/automation/training")}
+                                >
+                                    Treinar IA (Prompt)
+                                </Badge>
                             </div>
 
                             <div className="space-y-4">
