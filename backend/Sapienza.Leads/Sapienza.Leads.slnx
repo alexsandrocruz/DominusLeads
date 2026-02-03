@@ -1,0 +1,23 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+    <Folder Name="/src/">
+        <Project Path="src/Sapienza.Leads.Domain/Sapienza.Leads.Domain.csproj" />
+        <Project Path="src/Sapienza.Leads.Application/Sapienza.Leads.Application.csproj" />
+        <Project Path="src/Sapienza.Leads.EntityFrameworkCore/Sapienza.Leads.EntityFrameworkCore.csproj" />
+        <Project Path="src/Sapienza.Leads.Domain.Shared/Sapienza.Leads.Domain.Shared.csproj" />
+        <Project Path="src/Sapienza.Leads.Application.Contracts/Sapienza.Leads.Application.Contracts.csproj" />
+        <Project Path="src/Sapienza.Leads.HttpApi/Sapienza.Leads.HttpApi.csproj" />
+        <Project Path="src/Sapienza.Leads.HttpApi.Client/Sapienza.Leads.HttpApi.Client.csproj" />
+        <Project Path="src/Sapienza.Leads.DbMigrator/Sapienza.Leads.DbMigrator.csproj" />
+        <Project Path="src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/Sapienza.Leads.Application.Tests/Sapienza.Leads.Application.Tests.csproj" />
+        <Project Path="test/Sapienza.Leads.EntityFrameworkCore.Tests/Sapienza.Leads.EntityFrameworkCore.Tests.csproj" />
+        <Project Path="test/Sapienza.Leads.TestBase/Sapienza.Leads.TestBase.csproj" />
+        <Project Path="test/Sapienza.Leads.Domain.Tests/Sapienza.Leads.Domain.Tests.csproj" />
+        <Project Path="test/Sapienza.Leads.HttpApi.Client.ConsoleTestApp/Sapienza.Leads.HttpApi.Client.ConsoleTestApp.csproj" />
+    </Folder>
+</Solution>
