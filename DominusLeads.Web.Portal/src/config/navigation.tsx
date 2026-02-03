@@ -35,7 +35,9 @@ import React from "react";
 import DashboardPage from "@/pages/dashboard";
 import SearchLeadsPage from "@/pages/search/SearchLeadsPage";
 import LeadsListPage from "@/pages/leads/LeadsListPage";
+import LeadDetailPage from "@/pages/leads/LeadDetailPage";
 import DominusAutomationPage from "@/pages/automation/DominusAutomationPage";
+import AutomationFlowPage from "@/pages/automation/AutomationFlowPage";
 import DominusBillingPage from "@/pages/billing/DominusBillingPage";
 // Core Layout & Settings (Keeping for reference/template)
 import HostUsersPage from "@/pages/host/users";
@@ -76,8 +78,10 @@ export interface RouteConfig {
 export const routes: RouteConfig[] = [
     { path: "/dashboard", component: DashboardPage },
     { path: "/leads", component: LeadsListPage },
+    { path: "/leads/:id", component: LeadDetailPage },
     { path: "/search", component: SearchLeadsPage },
     { path: "/automation", component: DominusAutomationPage },
+    { path: "/automation/flow", component: AutomationFlowPage },
     { path: "/billing", component: DominusBillingPage },
     { path: "/auth/login", component: LoginPage },
     { path: "/auth/register", component: RegisterPage },

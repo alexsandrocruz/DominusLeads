@@ -14,8 +14,10 @@ import {
     BarChart2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLocation } from "wouter";
 
 export default function DominusAutomationPage() {
+    const [, setLocation] = useLocation();
     const automations = [
         {
             id: 1,
@@ -62,7 +64,11 @@ export default function DominusAutomationPage() {
 
                     <div className="grid gap-4 md:grid-cols-2">
                         {automations.map((bot) => (
-                            <Card key={bot.id} className="hover:border-primary/50 transition-colors overflow-hidden group">
+                            <Card
+                                key={bot.id}
+                                className="hover:border-primary/50 transition-colors overflow-hidden group cursor-pointer"
+                                onClick={() => setLocation("/automation/flow")}
+                            >
                                 <CardHeader className="flex flex-row items-start justify-between pb-2 bg-muted/30">
                                     <div className="flex items-center gap-3">
                                         <div className={cn(

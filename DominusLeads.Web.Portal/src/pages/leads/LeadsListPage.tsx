@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Users, MoreVertical, ExternalLink, Mail, Phone, MapPin, Building } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link, useLocation } from "wouter";
 
 export default function LeadsListPage() {
+    const [, setLocation] = useLocation();
     const leads = [
         { id: 1, name: "Tech Solutions Ltda", segment: "Tecnologia", location: "São Paulo, SP", status: "Validado", score: 95 },
         { id: 2, name: "Green Energy Corp", segment: "Energia", location: "Curitiba, PR", status: "Novo", score: 82 },
@@ -59,7 +61,10 @@ export default function LeadsListPage() {
                                         <div className="flex items-center gap-2">
                                             <Button variant="outline" size="icon" className="h-10 w-10"><Phone className="h-4 w-4" /></Button>
                                             <Button variant="outline" size="icon" className="h-10 w-10"><Mail className="h-4 w-4" /></Button>
-                                            <Button className="font-bold gap-2">
+                                            <Button
+                                                className="font-bold gap-2"
+                                                onClick={() => setLocation(`/leads/${lead.id}`)}
+                                            >
                                                 Detalhes
                                                 <ExternalLink className="h-3 w-3" />
                                             </Button>
