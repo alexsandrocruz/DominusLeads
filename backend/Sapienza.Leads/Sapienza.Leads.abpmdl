@@ -1,0 +1,109 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "5.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.Account": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.0.2",
+      "isInstalled": true,
+      "creationTime": "02/03/2026 13:14:53 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Sapienza.Leads.Application": {
+      "path": "src/Sapienza.Leads.Application/Sapienza.Leads.Application.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.Application.Tests": {
+      "path": "test/Sapienza.Leads.Application.Tests/Sapienza.Leads.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Sapienza.Leads.Domain.Shared": {
+      "path": "src/Sapienza.Leads.Domain.Shared/Sapienza.Leads.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.Application.Contracts": {
+      "path": "src/Sapienza.Leads.Application.Contracts/Sapienza.Leads.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.HttpApi": {
+      "path": "src/Sapienza.Leads.HttpApi/Sapienza.Leads.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.HttpApi.Client": {
+      "path": "src/Sapienza.Leads.HttpApi.Client/Sapienza.Leads.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.EntityFrameworkCore.Tests": {
+      "path": "test/Sapienza.Leads.EntityFrameworkCore.Tests/Sapienza.Leads.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Sapienza.Leads.EntityFrameworkCore": {
+      "path": "src/Sapienza.Leads.EntityFrameworkCore/Sapienza.Leads.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.TestBase": {
+      "path": "test/Sapienza.Leads.TestBase/Sapienza.Leads.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Sapienza.Leads.Domain.Tests": {
+      "path": "test/Sapienza.Leads.Domain.Tests/Sapienza.Leads.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "Sapienza.Leads.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Sapienza.Leads.HttpApi.Client.ConsoleTestApp/Sapienza.Leads.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "Sapienza.Leads.DbMigrator": {
+      "path": "src/Sapienza.Leads.DbMigrator/Sapienza.Leads.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.HttpApi.Host": {
+      "path": "src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "Sapienza.Leads.Domain": {
+      "path": "src/Sapienza.Leads.Domain/Sapienza.Leads.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

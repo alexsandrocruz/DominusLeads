@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: dominus-leads-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: myPassword
+      POSTGRES_DB: Leads
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d Leads" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend/Sapienza.Leads
+      dockerfile: src/Sapienza.Leads.HttpApi.Host/Dockerfile.local
+    container_name: dominus-leads-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__Default=Host=db;Port=5432;Database=Leads;User ID=root;Password=myPassword;
+      - AuthServer__RequireHttpsMetadata=false
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dominus-leads-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    depends_on:
+      - backend
+
+  landingpage:
+    build:
+      context: ./landingpage
+      dockerfile: Dockerfile
+    container_name: dominus-leads-landingpage
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
