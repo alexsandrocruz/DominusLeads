@@ -335,3 +335,31 @@ Dashboard de mapas de densidade CNAE (fase 3) (3 DU)
 UI para templates de mensagens por tenant (1 DU)
 Resumo e priorização sugerida (MVP mínimo) Sprint 1 (2 semanas): A.1, A.2, B.1..B.3, C.1, D.1, E.1, M.1 Sprint 2 (2 semanas): B.4..B.6, F.1..F.3, E.2, G.1..G.2, H.1 Sprint 3 (2 semanas): G.3..G.5, F.4..F.6, H.2..H.5, I.1..I.3 Sprint 4 (2 semanas): J.1..J.3, K.1..K.4, L.1..L.3, N.1
 
+### Epic O — Implementação Detailada de Entidades (MVP)
+
+Esta seção mapeia as entidades documentais em [/docs/entidades/](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/) para tarefas de desenvolvimento no backend (ABP) e frontend (React).
+
+#### O.1 Entidade: Lead
+- **Backend**: Criar `Lead` (Aggregate Root), `LeadDto`, `CreateUpdateLeadDto`. Implementar `ILeadAppService`.
+- **Frontend**: Tipagem TypeScript em `src/types/lead.ts`. Integrar `LeadsListPage.tsx` com a API.
+- **Docs**: [Lead.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Lead.md)
+- **Est**: 1.5 DU
+
+#### O.2 Entidade: Search (Consulta)
+- **Backend**: Entidade `Search`, registro automático no BFF ao chamar `/search-external`.
+- **Frontend**: Salvar histórico de busca localmente ou via API para exibir em "Buscas Recentes".
+- **Docs**: [Search.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Search.md)
+- **Est**: 0.5 DU
+
+#### O.3 Entidade: Credit & Transaction
+- **Backend**: `Credit` (Aggregate Root por Tenant), `Transaction` (Entity). Implementar lógica ACID para débito.
+- **Frontend**: Integrar `BillingDashboardPage.tsx` com o endpoint de saldo e extrato.
+- **Docs**: [Credit.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Credit.md)
+- **Est**: 1.5 DU
+
+#### O.4 Entidade: Event (Timeline)
+- **Backend**: Entidade `LeadEvent`. Implementar `GetListAsync` com filtro por `LeadId`.
+- **Frontend**: Integrar `LeadDetailPage.tsx` (Timeline) com o histórico real do backend.
+- **Docs**: [Event.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Event.md)
+- **Est**: 1 DU
+
