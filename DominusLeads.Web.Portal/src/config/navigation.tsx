@@ -1,5 +1,6 @@
 import {
     LayoutDashboard,
+    Activity,
     Building2,
     Users,
     Shield,
@@ -30,7 +31,8 @@ import {
     CreditCard,
     LayoutTemplate,
     BarChart3,
-    History
+    History,
+    Share2
 } from "lucide-react";
 import React from "react";
 
@@ -45,9 +47,19 @@ import AiTrainingPage from "@/pages/automation/AiTrainingPage";
 import AiLogsPage from "@/pages/automation/AiLogsPage";
 import CampaignListPage from "@/pages/campaigns/CampaignListPage";
 import CampaignConfigPage from "@/pages/campaigns/CampaignConfigPage";
-import CompanySettingsPage from "@/pages/settings/CompanySettingsPage";
 import BillingDashboardPage from "@/pages/billing/BillingDashboardPage";
 import RoiReportPage from "@/pages/reports/RoiReportPage";
+import CompanySettingsPage from "@/pages/settings/CompanySettingsPage";
+import IntegrationsPage from "@/pages/integrations/IntegrationsPage";
+import SchedulingPage from "@/pages/automation/SchedulingPage";
+import OnboardingPage from "@/pages/onboarding/OnboardingPage";
+import SupportPage from "@/pages/support/SupportPage";
+import HostDashboardPage from "@/pages/host/HostDashboardPage";
+import HostTenantsPage from "@/pages/host/HostTenantsPage";
+import HostStatsPage from "@/pages/host/HostStatsPage";
+import HostSystemHealthPage from "@/pages/host/HostSystemHealthPage";
+import GlobalCostsPage from "@/pages/host/GlobalCostsPage";
+import SecurityDashboardPage from "@/pages/host/SecurityDashboardPage";
 import DominusBillingPage from "@/pages/billing/DominusBillingPage";
 // Core Layout & Settings (Keeping for reference/template)
 import HostUsersPage from "@/pages/host/users";
@@ -97,6 +109,16 @@ export const routes: RouteConfig[] = [
     { path: "/campaigns", component: CampaignListPage },
     { path: "/campaigns/config", component: CampaignConfigPage },
     { path: "/settings/company", component: CompanySettingsPage },
+    { path: "/settings/integrations", component: IntegrationsPage },
+    { path: "/automation/scheduling", component: SchedulingPage },
+    { path: "/onboarding", component: OnboardingPage },
+    { path: "/support", component: SupportPage },
+    { path: "/host/dashboard", component: HostDashboardPage },
+    { path: "/host/tenants", component: HostTenantsPage },
+    { path: "/host/stats", component: HostStatsPage },
+    { path: "/host/health", component: HostSystemHealthPage },
+    { path: "/host/costs", component: GlobalCostsPage },
+    { path: "/host/security", component: SecurityDashboardPage },
     { path: "/reports/roi", component: RoiReportPage },
     { path: "/billing", component: BillingDashboardPage },
     { path: "/billing/legacy", component: DominusBillingPage },
@@ -125,6 +147,10 @@ export const menuItems: NavItem[] = [
     { label: "Campanhas", href: "/campaigns", icon: LayoutTemplate, section: "main" },
     { label: "Faturamento", href: "/billing", icon: CreditCard, section: "main" },
     { label: "Relatórios ROI", href: "/reports/roi", icon: BarChart3, section: "main" },
+    { label: "Integrações", href: "/settings/integrations", icon: Share2, section: "main" },
+    { label: "Status do Sistema", href: "/host/health", icon: Activity, section: "main" },
+    { label: "Gestão de Custos", href: "/host/costs", icon: DollarSign, section: "main" },
+    { label: "Segurança Global", href: "/host/security", icon: ShieldAlert, section: "main" },
     { label: "Dados da Empresa", href: "/settings/company", icon: Building2, section: "main" },
     { label: "Configurações", href: "/host/settings", icon: Settings, section: "main" },
     // <GEN-MENU>
