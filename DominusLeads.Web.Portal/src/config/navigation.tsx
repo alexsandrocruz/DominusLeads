@@ -78,8 +78,6 @@ import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ProfilePage from "@/pages/profile";
 
 // Legal/System
-import TermsPage from "@/pages/legal/terms";
-import PrivacyPage from "@/pages/legal/privacy";
 // <GEN-IMPORTS>
 
 export interface NavItem {
@@ -126,8 +124,6 @@ export const routes: RouteConfig[] = [
     { path: "/auth/register", component: RegisterPage },
     { path: "/auth/forgot-password", component: ForgotPasswordPage },
     { path: "/profile", component: ProfilePage },
-    { path: "/legal/terms", component: TermsPage },
-    { path: "/legal/privacy", component: PrivacyPage },
     { path: "/host/users", component: HostUsersPage, permission: "AbpIdentity.Users" },
     { path: "/host/roles", component: HostRolesPage, permission: "AbpIdentity.Roles" },
     { path: "/host/settings", component: HostSettingsPage, permission: "AbpSettingManagement.Settings" },

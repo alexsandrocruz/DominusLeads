@@ -27,8 +27,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
     DropdownMenuSeparator,
-} from "@/components/ui/Dropdown-menu";
-import { ScrollArea } from "@/components/ui/Scroll-area";
+} from "@/components/ui/DropdownMenu";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import {
     Users,

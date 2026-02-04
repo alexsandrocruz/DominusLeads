@@ -16,16 +16,16 @@ export function useKpiData() {
     return useQuery({
         queryKey: ["dashboard", "kpi"],
         queryFn: async (): Promise<KPIData> => {
-            // Fetch total counts using maxResultCount: 1 to minimize payload
-            const [processesRes, clientsRes, tasksRes] = await Promise.all([
-                apiClient.get("/api/app/adv-processos", { params: { maxResultCount: 1 } }),
-                apiClient.get("/api/app/adv-clientes", { params: { maxResultCount: 1, prospect: false } }),
-                apiClient.get("/api/app/adv-tarefas", { params: { maxResultCount: 1 } }),
+            // Fetch total counts from new DominusLeads entities
+            const [leadsRes, creditsRes] = await Promise.all([
+                apiClient.get("/api/app/lead", { params: { maxResultCount: 1 } }),
+                apiClient.get("/api/app/credit", { params: { maxResultCount: 1 } }),
             ]);
 
-            const activeProcesses = processesRes.data?.totalCount || 0;
-            const pendingTasks = tasksRes.data?.totalCount || 0;
-            const totalClients = clientsRes.data?.totalCount || 0;
+            const activeProcesses = leadsRes.data?.totalCount || 0;
+            const pendingTasks = 0; // Legacy tasks no longer exist
+            const totalClients = leadsRes.data?.totalCount || 0;
+            const credits = creditsRes.data?.totalCount || 0;
 
             // For presentation, we'll keep some distribution mocks but use real totals
             return {
@@ -50,7 +50,8 @@ export function useKpiData() {
                     { date: "Sex", value: 13 },
                 ],
                 pipelineStats: [
-                    { name: "Clientes", value: totalClients },
+                    { name: "Leads", value: activeProcesses },
+                    { name: "Créditos", value: credits },
                 ]
             };
         },
