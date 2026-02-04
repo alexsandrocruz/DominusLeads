@@ -41,8 +41,8 @@ public class CreditAppService : ApplicationService, ICreditAppService
         await _creditRepository.UpdateAsync(credit, autoSave: true);
     }
 
-    // Método interno para débito (pode ser chamado por outros AppServices)
-    internal async Task DebitAsync(DebitCreditDto input)
+    // Método para débito (pode ser chamado por outros AppServices)
+    public async Task DebitAsync(DebitCreditDto input)
     {
         var credit = await GetOrCreateCurrentCreditAsync();
 

@@ -323,11 +323,6 @@ Critérios: iniciar fluxo que chama /qualify e mostrar status job.
 Est: 1 DU
 Dep: F.3, H.2
 M.4 Stitch: Billing & créditos UI
-
-Descrição: mostrar saldo, histórico de transações e alertas de saldo baixo.
-Critérios: histórico consistente com ledger.
-Est: 0.5 DU
-Dep: J.1
 Epic N — Deploy & Rollout N.1 Canary release & small-tenant onboarding
 
 Descrição: deploy canary para 2–3 tenants, monitorar métricas de entrega/reputação.
@@ -366,6 +361,34 @@ Resumo e priorização sugerida (MVP mínimo) Sprint 1 (2 semanas): A.1, A.2, B.
 - **Status**: ✅ Concluído
 - **Backend**: Entidade `Event`, `EventAppService` para Timeline.
 - **Frontend**: Integrar `LeadDetailPage.tsx` (Timeline) com o histórico real do backend.
+
+---
+
+## 🏗️ Epic M — Frontend / React Integration (PRIORITY)
+
+Conectar os componentes de UI existentes aos serviços reais do ABP BFF.
+
+### M.1 Busca de Inteligência de Mercado (CNAE)
+- **Ação**: Integrar `src/pages/MarketIntelligence.tsx` (ou similar) com `MarketAppService`.
+- **Funcionalidades**:
+    - [ ] Listagem de CNPJs via busca externa.
+    - [ ] Filtros por Município e CNAE.
+    - [ ] Botão de "Extrair" que chama `ExtractLeadsAsync`.
+- **Est**: 1 DU
+
+### M.2 CRM: Gerenciamento de Leads & Timeline
+- **Ação**: Integrar `src/pages/Leads.tsx` e `src/pages/LeadDetail.tsx`.
+- **Funcionalidades**:
+    - [ ] Listagem de leads extraídos via `LeadAppService`.
+    - [ ] Visualização da Timeline real via `EventAppService`.
+- **Est**: 1.5 DU
+
+### M.3 Billing: Saldo e Recarga
+- **Ação**: Integrar `src/pages/Billing.tsx`.
+- **Funcionalidades**:
+    - [ ] Exibir saldo real (`CreditAppService.GetAsync`).
+    - [ ] Listagem de transações (Extrato).
+- **Est**: 0.5 DU
 
 ---
 

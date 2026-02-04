@@ -18,6 +18,7 @@ using Sapienza.Leads.Leads;
 using Sapienza.Leads.Credits;
 using Sapienza.Leads.Searches;
 using Sapienza.Leads.Events;
+using Sapienza.Leads.Market;
 
 namespace Sapienza.Leads.EntityFrameworkCore;
 
@@ -35,6 +36,7 @@ public class LeadsDbContext :
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Search> Searches { get; set; }
     public DbSet<Event> Events { get; set; }
+    public DbSet<ConsultedLead> ConsultedLeads { get; set; }
 
 
 
@@ -142,6 +144,14 @@ public class LeadsDbContext :
             b.Property(x => x.Icone).HasMaxLength(EventConsts.MaxIconeLength);
             
             b.HasIndex(x => x.LeadId);
+            b.HasIndex(x => x.TenantId);
+        });
+
+        builder.Entity<ConsultedLead>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "ConsultedLeads", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.RawJson).IsRequired().HasMaxLength(MarketConsts.MaxRawJsonLength);
             b.HasIndex(x => x.TenantId);
         });
     }

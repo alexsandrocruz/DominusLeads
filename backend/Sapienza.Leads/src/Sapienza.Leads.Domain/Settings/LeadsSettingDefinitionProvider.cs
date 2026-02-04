@@ -8,5 +8,8 @@ public class LeadsSettingDefinitionProvider : SettingDefinitionProvider
     {
         //Define your own settings here. Example:
         //context.Add(new SettingDefinition(LeadsSettings.MySetting1));
+
+        context.Add(new SettingDefinition(LeadsSettings.MarketApiBaseUrl, "https://api-cnaes.zensuite.com.br"));
+        context.Add(new SettingDefinition(LeadsSettings.MarketApiKey, ""));
     }
 }
