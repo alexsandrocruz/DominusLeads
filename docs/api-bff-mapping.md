@@ -6,11 +6,11 @@ Este documento descreve o mapeamento da API BFF (Backend for Frontend) baseada e
 
 A aplicação foca em inteligência de mercado e automação de vendas. O BFF atua como orquestrador entre o Frontend React, a base de dados interna (PostgreSQL/SQL Server via ABP) e a API externa de consulta de estabelecimentos.
 
-### Entidades Principais:
--   **Lead**: Empresa ou contato potencial.
--   **Search (Consulta)**: Registro de pesquisas realizadas pelo usuário.
--   **Credit (Crédito)**: Saldo e transações para consumo de serviços (extração/IA).
--   **Event**: Histórico de interações com o Lead (WhatsApp, Automação, Ligação).
+### Entidades Principais (Implementadas):
+-   **Lead**: Empresa ou contato potencial. [Implementado]
+-   **Search (Consulta)**: Registro de pesquisas realizadas pelo usuário. [Implementado]
+-   **Credit (Crédito)**: Saldo e transações para consumo de serviços. [Implementado]
+-   **Event**: Histórico de interações com o Lead (WhatsApp, Automação, Ligação). [Implementado]
 
 ---
 
@@ -35,10 +35,11 @@ Estes endpoints são nativos do framework ABP e integrados à identidade e multi
 Interfaceia com a API externa de estabelecimentos.
 -   **Query Params**: `municipio`, `cnae`, `bairro`.
 -   **Lógica BFF**:
-    1.  Verifica se o usuário possui créditos disponíveis.
-    2.  Consulta a API externa: `http://89.167.29.36:8080/api/v1/estabelecimentos-ativos`.
-    3.  **Cache/Persistence**: Salva os CNPJs retornados na tabela `ConsultedLeads` local (ver seção 4).
-    4.  Debita créditos se for uma "extração" (ver detalhes).
+    1.  Verifica se o usuário possui créditos disponíveis via `CreditAppService`.
+    2.  Consulta a API externa: `https://api-cnaes.zensuite.com.br` (Proxy).
+    3.  **Registro de Busca**: Cria um registro na entidade `Search` (Histórico).
+    4.  **Cache/Persistence**: Salva os CNPJs retornados na tabela `ConsultedLeads` local (Lazy Cache).
+    5.  **Extração**: Ao "Selecionar" leads para o CRM, debita créditos via `CreditAppService.DebitAsync`.
 
 #### `GET /api/app/leads`
 Lista a base de leads salvos/validados do tenant.
@@ -138,6 +139,7 @@ sequenceDiagram
 ```
 
 ### Decisões Técnicas de Design:
-- **Encapsulamento**: O Frontend nunca conhece o IP ou a estrutura da API externa directly.
+- **Encapsulamento**: O Frontend nunca conhece o IP ou a estrutura da API externa diretamente.
 - **Resiliência**: Se a API externa estiver fora do ar, podemos retornar resultados parciais (o que já estiver em cache).
-- **Consistência**: O débito de créditos e a entrega dos dados ocorrem em uma operação atômica controlada pelo `Application Service`.
+- **Consistência**: O débito de créditos e a entrega dos dados ocorrem em uma operação atômica controlada pelo `Application Service` utilizando transações EF Core.
+- **Auditabilidade**: Toda busca é registrada automaticamente na entidade `Search` com o `UserId` do executor.

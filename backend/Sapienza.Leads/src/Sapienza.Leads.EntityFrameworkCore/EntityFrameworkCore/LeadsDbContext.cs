@@ -14,6 +14,10 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Sapienza.Leads.Leads;
+using Sapienza.Leads.Credits;
+using Sapienza.Leads.Searches;
+using Sapienza.Leads.Events;
 
 namespace Sapienza.Leads.EntityFrameworkCore;
 
@@ -26,6 +30,12 @@ public class LeadsDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Lead> Leads { get; set; }
+    public DbSet<Credit> Credits { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Search> Searches { get; set; }
+    public DbSet<Event> Events { get; set; }
+
 
 
     #region Entities from the modules
@@ -81,11 +91,58 @@ public class LeadsDbContext :
         
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(LeadsConsts.DbTablePrefix + "YourEntities", LeadsConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Lead>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Leads", LeadsConsts.DbSchema);
+            b.ConfigureByConvention(); 
+            b.Property(x => x.Cnpj).IsRequired().HasMaxLength(LeadConsts.MaxCnpjLength);
+            b.Property(x => x.CnaePrincipal).IsRequired().HasMaxLength(LeadConsts.MaxCnaeLength);
+            b.Property(x => x.RazaoSocial).IsRequired().HasMaxLength(LeadConsts.MaxRazaoSocialLength);
+            b.Property(x => x.NomeFantasia).HasMaxLength(LeadConsts.MaxNomeFantasiaLength);
+            b.Property(x => x.Email).HasMaxLength(LeadConsts.MaxEmailLength);
+            b.Property(x => x.Telefone).HasMaxLength(LeadConsts.MaxTelefoneLength);
+            b.Property(x => x.Uf).HasMaxLength(LeadConsts.MaxUfLength);
+
+            b.HasIndex(x => new { x.TenantId, x.Cnpj }).IsUnique();
+        });
+
+        builder.Entity<Credit>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Credits", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.SaldoAtual).HasColumnType("decimal(18,2)");
+            
+            b.HasMany(x => x.Transactions).WithOne().HasForeignKey(x => x.CreditId).IsRequired();
+        });
+
+        builder.Entity<Transaction>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Transactions", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Valor).HasColumnType("decimal(18,2)");
+            b.Property(x => x.Descricao).IsRequired().HasMaxLength(CreditConsts.MaxDescricaoLength);
+        });
+
+        builder.Entity<Search>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Searches", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Criterios).IsRequired().HasMaxLength(SearchConsts.MaxCriteriosLength);
+            b.HasIndex(x => x.TenantId);
+            b.HasIndex(x => x.UserId);
+        });
+
+        builder.Entity<Event>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Events", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Titulo).IsRequired().HasMaxLength(EventConsts.MaxTituloLength);
+            b.Property(x => x.Descricao).IsRequired().HasMaxLength(EventConsts.MaxDescricaoLength);
+            b.Property(x => x.Cor).HasMaxLength(EventConsts.MaxCorLength);
+            b.Property(x => x.Icone).HasMaxLength(EventConsts.MaxIconeLength);
+            
+            b.HasIndex(x => x.LeadId);
+            b.HasIndex(x => x.TenantId);
+        });
     }
 }

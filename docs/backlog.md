@@ -1,7 +1,19 @@
+# Backlog do Projeto DominusLeads
 
-Backlog granular pronto para criação de tickets (endpoints, DB migrations, n8n flows, jobs ETL, testes). Cada item inclui título, descrição, critérios de aceite, estimativa e dependências. Recomendo copiar/colar cada item como ticket no seu tracker (Jira, Linear, Trello etc.).
+Este backlog detalha o roteiro de desenvolvimento do **BFF (Backend for Frontend)** e integrações.
 
-Observação: estimativas em dias úteis (DU) para 1 desenvolvedor backend fullstack experiente; ajuste conforme time.
+## ✅ Entidades Base Implementadas (MVP Core)
+
+As seguintes entidades e serviços básicos já foram implementados seguindo os padrões do **ABP Framework 10.x** e **Mapperly**.
+
+- [x] **Lead**: CRUD básico, DTOs e mapeamentos.
+- [x] **Credit & Transaction**: Gestão de saldo e histórico financeiro por Tenant.
+- [x] **Search**: Registro de histórico de consultas de Inteligência de Mercado.
+- [x] **Event**: Timeline de interações e eventos do Lead.
+
+---
+
+## 🚀 Backlog Granular (Tickets)
 
 Epic A — Infra & Preparação A.1 Provisionamento infra inicial
 
@@ -335,31 +347,41 @@ Dashboard de mapas de densidade CNAE (fase 3) (3 DU)
 UI para templates de mensagens por tenant (1 DU)
 Resumo e priorização sugerida (MVP mínimo) Sprint 1 (2 semanas): A.1, A.2, B.1..B.3, C.1, D.1, E.1, M.1 Sprint 2 (2 semanas): B.4..B.6, F.1..F.3, E.2, G.1..G.2, H.1 Sprint 3 (2 semanas): G.3..G.5, F.4..F.6, H.2..H.5, I.1..I.3 Sprint 4 (2 semanas): J.1..J.3, K.1..K.4, L.1..L.3, N.1
 
-### Epic O — Implementação Detailada de Entidades (MVP)
-
-Esta seção mapeia as entidades documentais em [/docs/entidades/](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/) para tarefas de desenvolvimento no backend (ABP) e frontend (React).
-
 #### O.1 Entidade: Lead
-- **Backend**: Criar `Lead` (Aggregate Root), `LeadDto`, `CreateUpdateLeadDto`. Implementar `ILeadAppService`.
+- **Status**: ✅ Concluído
+- **Backend**: `Lead` (Aggregate Root), `LeadDto`, `CreateUpdateLeadDto`. Implementado `LeadAppService`.
 - **Frontend**: Tipagem TypeScript em `src/types/lead.ts`. Integrar `LeadsListPage.tsx` com a API.
-- **Docs**: [Lead.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Lead.md)
-- **Est**: 1.5 DU
 
 #### O.2 Entidade: Search (Consulta)
-- **Backend**: Entidade `Search`, registro automático no BFF ao chamar `/search-external`.
+- **Status**: ✅ Concluído
+- **Backend**: Entidade `Search`, `SearchAppService` para histórico.
 - **Frontend**: Salvar histórico de busca localmente ou via API para exibir em "Buscas Recentes".
-- **Docs**: [Search.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Search.md)
-- **Est**: 0.5 DU
 
 #### O.3 Entidade: Credit & Transaction
-- **Backend**: `Credit` (Aggregate Root por Tenant), `Transaction` (Entity). Implementar lógica ACID para débito.
+- **Status**: ✅ Concluído
+- **Backend**: `Credit` (Aggregate Root), `Transaction` (Entity), `CreditAppService`.
 - **Frontend**: Integrar `BillingDashboardPage.tsx` com o endpoint de saldo e extrato.
-- **Docs**: [Credit.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Credit.md)
-- **Est**: 1.5 DU
 
 #### O.4 Entidade: Event (Timeline)
-- **Backend**: Entidade `LeadEvent`. Implementar `GetListAsync` com filtro por `LeadId`.
+- **Status**: ✅ Concluído
+- **Backend**: Entidade `Event`, `EventAppService` para Timeline.
 - **Frontend**: Integrar `LeadDetailPage.tsx` (Timeline) com o histórico real do backend.
-- **Docs**: [Event.md](file:///Users/alexsandrocruz/dev/DominusLeads/docs/entidades/Event.md)
-- **Est**: 1 DU
+
+---
+
+## 🏗️ Refinamento de Arquitetura (Próximos Passos)
+
+### P.1 Cache de Dados de Mercado (Lazy Cache Strategy)
+- **Objetivo**: Implementar a entidade `ConsultedLead` para armazenar o JSON bruto de CNPJs consultados externamente.
+- **Padrão**: Criar um `ICnaeMarketProxy` que abstrai a API externa e decide entre cache local ou request externa.
+- **Est**: 1.5 DU
+
+### P.2 Orquestração de Automação (n8n Webhooks)
+- **Objetivo**: Definir o contrato de entrada/saída para os webhooks do n8n.
+- **Lógica**: O backend dispara para o n8n -> n8n processa -> n8n chama callback no backend para criar um `Event` e atualizar o `Lead`.
+- **Est**: 2 DU
+
+### P.3 Dashboard de Gestão de Leads (Host)
+- **Objetivo**: Criar indicadores agregados por Tenant (Total de Leads, Créditos Consumidos, Eficiência de Conversão).
+- **Est**: 2 DU
 
