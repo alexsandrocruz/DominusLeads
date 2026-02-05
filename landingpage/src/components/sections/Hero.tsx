@@ -11,7 +11,7 @@ const metrics = [
 
 export default function Hero() {
     return (
-        <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
+        <section id="hero" className="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden">
             {/* Gradient orbs background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
@@ -38,10 +38,10 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight"
+                        className="font-display text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight"
                     >
-                        <span className="text-foreground">Transforme dados do CNPJ em </span>
-                        <span className="text-gradient">Clientes Reais</span>
+                        <span className="text-white">Transforme dados do </span>
+                        <span className="text-gradient drop-shadow-[0_0_30px_rgba(234,88,12,0.3)]">CNPJ em Clientes</span>
                     </motion.h1>
 
                     {/* Subtitle */}

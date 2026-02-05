@@ -11,50 +11,47 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
+
+  /* Sapienza Dark Theme - Colors */
+  --color-background: hsl(222 47% 4%);
+  --color-foreground: hsl(210 40% 98%);
+
+  --color-muted: hsl(215 16% 47%);
+  --color-muted-foreground: hsl(215 20% 65%);
+
+  --color-card: hsl(222 47% 11%);
+  --color-card-foreground: hsl(210 40% 98%);
+
+  --color-accent: hsl(24 95% 47%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-primary: hsl(24 95% 47%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(217 33% 17%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+
+  --color-border: hsl(217 33% 17% / 0.1);
+  --color-ring: hsl(24 95% 47%);
+  --color-success: hsl(158 64% 42%);
 }
 
 :root {
-  /* Sapienza Dark Theme - Core Colors */
   --background: 222 47% 4%;
-  /* #020617 slate-950 */
   --foreground: 210 40% 98%;
-  /* #f8fafc slate-50 */
-
-  /* Muted/Secondary */
   --muted: 215 16% 47%;
-  /* #64748b slate-500 */
   --muted-foreground: 215 20% 65%;
-  /* #94a3b8 slate-400 */
-
-  /* Card - Glassmorphism */
   --card: 222 47% 11%;
-  /* #0f172a slate-900 */
   --card-foreground: 210 40% 98%;
-
-  /* Accent - Orange */
   --accent: 24 95% 47%;
-  /* #ea580c orange-600 */
   --accent-foreground: 0 0% 100%;
-
-  /* Primary - Orange */
   --primary: 24 95% 47%;
-  /* #ea580c orange-600 */
   --primary-foreground: 0 0% 100%;
-
-  /* Secondary */
   --secondary: 217 33% 17%;
-  /* #1e293b slate-800 */
   --secondary-foreground: 210 40% 98%;
-
-  /* Border */
   --border: 217 33% 17%;
-
-  /* Ring */
   --ring: 24 95% 47%;
-
-  /* Success */
   --success: 158 64% 42%;
-  /* #14b8a6 teal-500 */
 }
 
 /* Dark background with grid pattern */

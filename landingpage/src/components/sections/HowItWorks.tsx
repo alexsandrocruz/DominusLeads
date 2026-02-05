@@ -78,38 +78,38 @@ export default function HowItWorks() {
                     className="relative"
                 >
                     {/* Vertical line */}
-                    <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-accent/50 to-transparent hidden md:block" />
+                    <div className="absolute left-6 top-0 bottom-0 w-[2px] bg-gradient-to-b from-accent via-accent/50 to-transparent hidden md:block opacity-30" />
 
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         {steps.map((step, index) => (
                             <motion.div
                                 key={index}
                                 variants={itemVariants}
-                                className="relative md:pl-16"
+                                className="relative md:pl-20"
                             >
                                 {/* Step number - positioned on the line */}
-                                <div className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center rounded-full bg-card border border-muted/20 text-accent font-bold text-lg font-display">
+                                <div className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center rounded-2xl bg-[#0f172a] border border-accent/30 text-accent font-black text-xl font-display shadow-[0_0_20px_rgba(234,88,12,0.2)]">
                                     {step.number}
                                 </div>
 
                                 {/* Card */}
-                                <div className="glass-card p-6 hover:border-muted/20 transition-all duration-300">
-                                    <div className="flex items-start gap-4">
+                                <div className="glass-card p-8 hover:border-accent/30 hover:shadow-[0_0_30px_rgba(234,88,12,0.05)] transition-all duration-500 group">
+                                    <div className="flex items-start gap-6">
                                         {/* Mobile number */}
-                                        <div className="md:hidden flex-shrink-0 w-10 h-10 rounded-full bg-card border border-muted/20 flex items-center justify-center text-accent font-bold text-sm font-display">
+                                        <div className="md:hidden flex-shrink-0 w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-black text-sm font-display">
                                             {step.number}
                                         </div>
 
                                         {/* Icon */}
-                                        <div className="hidden md:flex flex-shrink-0 w-10 h-10 rounded-xl bg-accent/10 items-center justify-center">
-                                            <step.icon className="w-5 h-5 text-accent" />
+                                        <div className="hidden md:flex flex-shrink-0 w-14 h-14 rounded-2xl bg-accent/5 border border-accent/10 items-center justify-center group-hover:bg-accent/10 transition-colors">
+                                            <step.icon className="w-7 h-7 text-accent" />
                                         </div>
 
                                         <div>
-                                            <h3 className="text-lg font-bold text-foreground">
+                                            <h3 className="text-xl font-black text-white tracking-tight group-hover:text-accent transition-colors">
                                                 {step.title}
                                             </h3>
-                                            <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
+                                            <p className="mt-3 text-muted-foreground text-base leading-relaxed font-medium">
                                                 {step.description}
                                             </p>
                                         </div>
