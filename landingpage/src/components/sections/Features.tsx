@@ -105,20 +105,23 @@ export default function Features() {
                         <motion.div
                             key={index}
                             variants={itemVariants}
-                            className="glass-card p-6 hover:border-muted/20 transition-all duration-300 group"
+                            className="glass-card p-8 hover:border-accent/30 hover:shadow-[0_0_30px_rgba(234,88,12,0.05)] transition-all duration-500 group relative overflow-hidden"
                         >
+                            {/* Decorative glow on hover */}
+                            <div className="absolute -right-4 -top-4 w-24 h-24 bg-accent/5 rounded-full blur-2xl group-hover:bg-accent/10 transition-colors" />
+
                             {/* Icon */}
-                            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${feature.color} mb-4`}>
-                                <feature.icon className="w-6 h-6" />
+                            <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${feature.color} mb-6 ring-1 ring-white/5`}>
+                                <feature.icon className="w-7 h-7" />
                             </div>
 
                             {/* Title */}
-                            <h3 className="text-lg font-bold text-foreground group-hover:text-accent transition-colors">
+                            <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors tracking-tight">
                                 {feature.title}
                             </h3>
 
                             {/* Subtitle */}
-                            <p className="text-accent text-sm font-medium mt-1">
+                            <p className="text-accent text-xs font-black uppercase tracking-widest mt-2 opacity-80">
                                 {feature.subtitle}
                             </p>
 
