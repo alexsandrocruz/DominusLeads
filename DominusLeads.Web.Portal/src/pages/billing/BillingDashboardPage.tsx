@@ -1,7 +1,12 @@
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/Shell";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { getCredit, type CreditDto, type TransactionDto } from "@/lib/services/CreditService";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import {
     CreditCard,
     Wallet,
@@ -14,16 +19,49 @@ import {
     Receipt,
     Zap,
     MessageSquare,
-    Coins
+    Coins,
+    Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function BillingDashboardPage() {
-    const transactions = [
-        { id: 1, type: "Recarga", amount: "+ R$ 500,00", date: "02 Fev, 2026", status: "Confirmado" },
-        { id: 2, type: "Uso de Créditos", amount: "- R$ 45,20", date: "01 Fev, 2026", status: "Consumido" },
-        { id: 3, type: "Uso de Créditos", amount: "- R$ 12,80", date: "31 Jan, 2026", status: "Consumido" }
-    ];
+    const [data, setData] = useState<CreditDto | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await getCredit();
+            setData(response.data);
+        } catch (err) {
+            console.error("Erro ao carregar créditos:", err);
+            setError("Não foi possível carregar os dados financeiros.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getTransactionIcon = (type: number) => {
+        return type === 0 ? <ArrowUpRight className="size-5" /> : <ArrowDownRight className="size-5" />;
+    };
+
+    const getTransactionColor = (type: number) => {
+        return type === 0 ? "bg-emerald-100 text-emerald-600" : "bg-slate-100 text-slate-500";
+    };
+
+    const getStatusLabel = (status: number) => {
+        switch (status) {
+            case 0: return "Pendente";
+            case 1: return "Confirmado";
+            case 2: return "Cancelado";
+            default: return "Concluído";
+        }
+    };
 
     return (
         <AppShell>
@@ -51,7 +89,13 @@ export default function BillingDashboardPage() {
                             </div>
                             <div>
                                 <p className="text-sm font-black text-white/70 uppercase tracking-widest">Saldo Atual</p>
-                                <h2 className="text-4xl font-black">R$ 454,80</h2>
+                                <h2 className="text-4xl font-black">
+                                    {loading ? (
+                                        <Skeleton className="h-10 w-32 bg-white/20" />
+                                    ) : (
+                                        new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data?.saldoAtual || 0)
+                                    )}
+                                </h2>
                             </div>
                         </CardContent>
                     </Card>
@@ -63,10 +107,16 @@ export default function BillingDashboardPage() {
                             </div>
                             <div>
                                 <p className="text-sm font-black text-muted-foreground uppercase tracking-widest">Uso (Mês Atual)</p>
-                                <h2 className="text-3xl font-black">R$ 152,40</h2>
+                                <h2 className="text-3xl font-black">
+                                    {loading ? (
+                                        <Skeleton className="h-8 w-24" />
+                                    ) : (
+                                        "R$ 0,00"
+                                    )}
+                                </h2>
                                 <p className="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-1">
                                     <ArrowDownRight className="size-3" />
-                                    -12% que mês anterior
+                                    0% que mês anterior
                                 </p>
                             </div>
                         </CardContent>
@@ -98,31 +148,59 @@ export default function BillingDashboardPage() {
                         </div>
 
                         <div className="space-y-3">
-                            {transactions.map((t) => (
-                                <Card key={t.id} className="border-muted hover:border-primary/20 transition-all rounded-2xl overflow-hidden group">
-                                    <CardContent className="p-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className={cn(
-                                                "size-10 rounded-xl flex items-center justify-center",
-                                                t.type === 'Recarga' ? "bg-emerald-100 text-emerald-600" : "bg-slate-100 text-slate-500"
-                                            )}>
-                                                {t.type === 'Recarga' ? <ArrowUpRight className="size-5" /> : <ArrowDownRight className="size-5" />}
+                            {loading ? (
+                                Array.from({ length: 3 }).map((_, i) => (
+                                    <Card key={i} className="border-muted rounded-2xl overflow-hidden">
+                                        <CardContent className="p-4 flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <Skeleton className="size-10 rounded-xl" />
+                                                <div className="space-y-2">
+                                                    <Skeleton className="h-4 w-24" />
+                                                    <Skeleton className="h-3 w-16" />
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h4 className="text-sm font-black">{t.type}</h4>
-                                                <p className="text-[10px] text-muted-foreground font-medium">{t.date}</p>
+                                            <Skeleton className="h-4 w-20" />
+                                        </CardContent>
+                                    </Card>
+                                ))
+                            ) : data?.transactions.length === 0 ? (
+                                <div className="text-center py-12 bg-muted/20 rounded-[2rem] border-2 border-dashed border-muted">
+                                    <History className="size-12 text-muted-foreground mx-auto mb-4 opacity-20" />
+                                    <p className="text-muted-foreground font-bold">Nenhuma transação encontrada.</p>
+                                </div>
+                            ) : (
+                                data?.transactions.map((t) => (
+                                    <Card key={t.id} className="border-muted hover:border-primary/20 transition-all rounded-2xl overflow-hidden group">
+                                        <CardContent className="p-4 flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <div className={cn(
+                                                    "size-10 rounded-xl flex items-center justify-center",
+                                                    getTransactionColor(t.tipo)
+                                                )}>
+                                                    {getTransactionIcon(t.tipo)}
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-sm font-black">{t.descricao}</h4>
+                                                    <p className="text-[10px] text-muted-foreground font-medium">
+                                                        {format(new Date(t.creationTime), "dd MMM, yyyy", { locale: ptBR })}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center gap-4">
-                                            <span className={cn(
-                                                "text-sm font-black",
-                                                t.type === 'Recarga' ? "text-emerald-600" : "text-slate-900"
-                                            )}>{t.amount}</span>
-                                            <Badge variant="outline" className="text-[9px] font-bold uppercase p-0 opacity-50 border-none">{t.status}</Badge>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                            <div className="flex items-center gap-4">
+                                                <span className={cn(
+                                                    "text-sm font-black",
+                                                    t.tipo === 0 ? "text-emerald-600" : "text-slate-900"
+                                                )}>
+                                                    {t.tipo === 0 ? "+" : "-"} {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(t.valor)}
+                                                </span>
+                                                <Badge variant="outline" className="text-[9px] font-bold uppercase p-0 opacity-50 border-none">
+                                                    {getStatusLabel(t.status)}
+                                                </Badge>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))
+                            )}
                         </div>
                     </div>
 

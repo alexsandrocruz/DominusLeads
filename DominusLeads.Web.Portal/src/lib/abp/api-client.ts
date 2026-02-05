@@ -39,6 +39,17 @@ apiClient.interceptors.request.use(
             config.headers["Accept-Language"] = culture;
         }
 
+        // ABP XSRF Token for POST/PUT/DELETE requests
+        if (config.method && ["post", "put", "delete", "patch"].includes(config.method.toLowerCase())) {
+            const xsrfToken = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("XSRF-TOKEN="))
+                ?.split("=")[1];
+            if (xsrfToken && config.headers) {
+                config.headers["RequestVerificationToken"] = decodeURIComponent(xsrfToken);
+            }
+        }
+
         return config;
     },
     (error) => Promise.reject(error)

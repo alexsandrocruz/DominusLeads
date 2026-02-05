@@ -1,7 +1,7 @@
 import { Route, Switch, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "@/providers/theme-provider";
-import { AbpProvider } from "@/providers/abp-provider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { AbpProvider } from "@/providers/AbpProvider";
 import { Toaster } from "@/components/ui/Toaster";
 import { routes } from "@/config/navigation";
 import LoginPage from "@/pages/auth/login";
