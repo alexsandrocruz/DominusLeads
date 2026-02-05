@@ -18,7 +18,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://localhost:44322',
+        target: process.env.VITE_API_URL || 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
         configure: (proxy, options) => {
@@ -40,17 +40,17 @@ export default defineConfig({
         },
       },
       '/connect': {
-        target: 'https://localhost:44322',
+        target: process.env.VITE_API_URL || 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
       },
       '/Account': {
-        target: 'https://localhost:44322',
+        target: process.env.VITE_API_URL || 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
       },
       '/.well-known': {
-        target: 'https://localhost:44322',
+        target: process.env.VITE_API_URL || 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
       },

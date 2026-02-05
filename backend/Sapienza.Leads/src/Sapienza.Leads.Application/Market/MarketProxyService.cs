@@ -52,9 +52,26 @@ public class MarketProxyService : ApplicationService
     /// Realiza busca por critérios. Esta chamada geralmente não é cacheada integralmente, 
     /// mas os resultados individuais (CNPJs) podem ser atualizados no banco.
     /// </summary>
-    public async Task<string> SearchExternalAsync(string? municipio = null, string? cnae = null, string? bairro = null)
+    public async Task<string> SearchExternalAsync(MarketSearchInputDto input)
     {
-        var rawJson = await _marketProxy.GetEstabelecimentosAtivosAsync(municipio, cnae, bairro);
+        if (input == null)
+        {
+            throw new Volo.Abp.UserFriendlyException("Input cannot be null.");
+        }
+
+        if (string.IsNullOrWhiteSpace(input.Cnae))
+        {
+             // TODO: In the future, we might want to return a user-friendly error or specific error code
+             throw new Volo.Abp.UserFriendlyException("You must provide a CNAE code to search.");
+        }
+
+        var rawJson = await _marketProxy.GetEstabelecimentosAtivosAsync(input.Municipio, input.Cnae, input.Bairro);
+        
+        // The external API might return "null" (string) or empty content if no results found
+        if (string.IsNullOrWhiteSpace(rawJson) || rawJson.Trim() == "null")
+        {
+            return "[]"; // Return empty JSON array
+        }
         
         // TODO: Poderíamos processar o JSON retornado para atualizar o cache de CNPJs individuais em batch
         

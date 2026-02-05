@@ -40,7 +40,7 @@ public class MarketAppService : ApplicationService, IMarketAppService
 
     public async Task<List<MarketLeadDto>> SearchExternalAsync(MarketSearchInputDto input)
     {
-        var rawJson = await _marketProxyService.SearchExternalAsync(input.Municipio, input.Cnae, input.Bairro);
+        var rawJson = await _marketProxyService.SearchExternalAsync(input);
         
         // Parse do JSON bruto da API externa
         var results = ParseExternalJson(rawJson);

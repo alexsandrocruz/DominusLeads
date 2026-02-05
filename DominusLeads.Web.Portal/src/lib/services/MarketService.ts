@@ -27,9 +27,7 @@ export interface ExtractLeadsInput {
 }
 
 export const searchExternalLeads = async (input: MarketSearchInput) => {
-    return apiClient.get<MarketLeadDto[]>("/api/app/market/search-external", {
-        params: input,
-    });
+    return apiClient.post<MarketLeadDto[]>("/api/app/market/search-external", input);
 };
 
 export const extractLeads = async (input: ExtractLeadsInput) => {

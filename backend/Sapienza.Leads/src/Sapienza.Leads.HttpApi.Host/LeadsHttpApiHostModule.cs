@@ -183,10 +183,14 @@ public class LeadsHttpApiHostModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<LeadsDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<LeadsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Domain"));
-                options.FileSets.ReplaceEmbeddedByPhysical<LeadsApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Application.Contracts"));
-                options.FileSets.ReplaceEmbeddedByPhysical<LeadsApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Application"));
+                var sharedPath = Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Domain.Shared");
+                if (Directory.Exists(sharedPath))
+                {
+                    options.FileSets.ReplaceEmbeddedByPhysical<LeadsDomainSharedModule>(sharedPath);
+                    options.FileSets.ReplaceEmbeddedByPhysical<LeadsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<LeadsApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Application.Contracts"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<LeadsApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Sapienza.Leads.Application"));
+                }
             });
         }
     }

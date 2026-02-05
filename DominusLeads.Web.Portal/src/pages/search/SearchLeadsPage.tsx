@@ -18,8 +18,13 @@ export default function SearchLeadsPage() {
     });
 
     const handleSearch = async () => {
-        if (!filters.municipio && !filters.cnae && !filters.bairro) {
-            toast.error("Por favor, preencha ao menos um filtro para buscar.");
+        if (!filters.cnae || !filters.cnae.trim()) {
+            toast.error("O campo CNAE (Setor) é obrigatório para realizar a busca.");
+            return;
+        }
+
+        if (!filters.municipio && !filters.bairro) {
+            toast.error("Por favor, preencha ao menos um filtro de localização (Cidade ou Bairro).");
             return;
         }
 
