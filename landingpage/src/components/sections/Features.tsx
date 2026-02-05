@@ -1,53 +1,134 @@
-import styles from './Features.module.css';
+'use client';
+
+import { motion } from 'framer-motion';
+import {
+    Database,
+    Filter,
+    MessageCircle,
+    Users,
+    FileText,
+    Workflow,
+    Wallet
+} from 'lucide-react';
 
 const features = [
     {
+        icon: Database,
+        color: 'bg-orange-500/10 text-orange-500',
         title: 'Base de Dados RFB',
-        description: 'Acesse milhões de empresas ativas com dados atualizados mensalmente da Receita Federal.',
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-        )
+        subtitle: 'Dados Oficiais',
+        description: 'Acesse mais de 55 milhões de empresas ativas com dados atualizados mensalmente da Receita Federal.',
     },
     {
-        title: 'Filtro por CNAE e Região',
-        description: 'Segmente seus leads por código de atividade, cidade, estado ou faturamento presumido.',
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>
-        )
+        icon: Filter,
+        color: 'bg-purple-500/10 text-purple-500',
+        title: 'Filtros Avançados',
+        subtitle: 'Segmentação Inteligente',
+        description: 'Segmente por CNAE, região, porte, faturamento e +20 critérios para encontrar seu ICP exato.',
     },
     {
-        title: 'Automação no WhatsApp',
-        description: 'Qualifique leads automaticamente via WhatsApp com fluxos inteligentes de conversa.',
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.5 8.5 0 0 1 4.7 1.4L22 3.5l-1.5 4.7c.6 1 1 2.2 1 3.3z" /></svg>
-        )
+        icon: MessageCircle,
+        color: 'bg-green-500/10 text-green-500',
+        title: 'Automação WhatsApp',
+        subtitle: 'Prospecção Ativa',
+        description: 'Qualifique leads automaticamente via WhatsApp com fluxos de conversa personalizados.',
     },
     {
-        title: 'Integração CRM Dominus',
-        description: 'Receba leads qualificados diretamente no seu funil de vendas, prontos para o fechamento.',
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-        )
-    }
+        icon: Users,
+        color: 'bg-teal-500/10 text-teal-500',
+        title: 'CRM Integrado',
+        subtitle: 'Governança Comercial',
+        description: 'Receba leads qualificados diretamente no funil de vendas com timeline unificada.',
+    },
+    {
+        icon: FileText,
+        color: 'bg-blue-500/10 text-blue-500',
+        title: 'Propostas & Contratos',
+        subtitle: 'Fluxo Comercial',
+        description: 'Visual Builder profissional para criar propostas e converter em contratos automaticamente.',
+    },
+    {
+        icon: Wallet,
+        color: 'bg-emerald-500/10 text-emerald-500',
+        title: 'Financeiro Integrado',
+        subtitle: 'Governança Financeira',
+        description: 'Faturas automáticas, transações recorrentes e fluxo de caixa em tempo real.',
+    },
 ];
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+};
 
 export default function Features() {
     return (
-        <section className={styles.features}>
-            <div className="container">
-                <div className={styles.header}>
-                    <h2 className={styles.subtitle}>Funcionalidades</h2>
-                    <h3 className={styles.title}>Tudo o que você precisa para <br /> escalar suas vendas B2B</h3>
-                </div>
-                <div className={styles.grid}>
+        <section id="features" className="py-24 relative">
+            <div className="container mx-auto max-w-7xl px-4 md:px-6">
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-16"
+                >
+                    <span className="text-accent text-sm font-semibold uppercase tracking-wider">
+                        Arquitetura Modular
+                    </span>
+                    <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground">
+                        Módulos que Trabalham em Sinergia
+                    </h2>
+                    <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
+                        Cada módulo foi projetado para resolver um problema específico, mas a
+                        verdadeira potência está na integração nativa entre todos eles.
+                    </p>
+                </motion.div>
+
+                {/* Features Grid */}
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
                     {features.map((feature, index) => (
-                        <div key={index} className={styles.card}>
-                            <div className={styles.iconWrapper}>{feature.icon}</div>
-                            <h4 className={styles.cardTitle}>{feature.title}</h4>
-                            <p className={styles.cardDescription}>{feature.description}</p>
-                        </div>
+                        <motion.div
+                            key={index}
+                            variants={itemVariants}
+                            className="glass-card p-6 hover:border-muted/20 transition-all duration-300 group"
+                        >
+                            {/* Icon */}
+                            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${feature.color} mb-4`}>
+                                <feature.icon className="w-6 h-6" />
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="text-lg font-bold text-foreground group-hover:text-accent transition-colors">
+                                {feature.title}
+                            </h3>
+
+                            {/* Subtitle */}
+                            <p className="text-accent text-sm font-medium mt-1">
+                                {feature.subtitle}
+                            </p>
+
+                            {/* Description */}
+                            <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
+                                {feature.description}
+                            </p>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

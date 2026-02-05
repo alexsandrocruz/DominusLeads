@@ -1,3 +1,4 @@
+import Header from '@/components/layout/Header';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import ICP from '@/components/sections/ICP';
@@ -7,13 +8,16 @@ import Footer from '@/components/layout/Footer';
 
 export default function Home() {
     return (
-        <main>
-            <Hero />
-            <Features />
-            <ICP />
-            <HowItWorks />
-            <Pricing />
+        <>
+            <Header />
+            <main>
+                <Hero />
+                <Features />
+                <ICP />
+                <HowItWorks />
+                <Pricing />
+            </main>
             <Footer />
-        </main>
+        </>
     );
 }
