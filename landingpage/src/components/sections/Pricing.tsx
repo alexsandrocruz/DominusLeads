@@ -110,14 +110,14 @@ export default function Pricing() {
                             key={index}
                             variants={itemVariants}
                             className={cn(
-                                'glass-card p-6 flex flex-col relative',
-                                plan.popular && 'border-accent/30'
+                                'glass-card p-8 flex flex-col relative transition-all duration-500',
+                                plan.popular && 'border-accent shadow-[0_0_40px_rgba(234,88,12,0.2)] ring-1 ring-accent/20'
                             )}
                         >
                             {/* Popular Badge */}
                             {plan.popular && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                    <span className="inline-block px-4 py-1 bg-accent text-white text-xs font-semibold rounded-full">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30">
+                                    <span className="inline-flex items-center px-4 py-1.5 bg-[#ea580c] text-white text-[11px] font-black uppercase tracking-[0.15em] rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.4)] border border-white/20 whitespace-nowrap">
                                         Mais Escolhido
                                     </span>
                                 </div>
@@ -125,26 +125,26 @@ export default function Pricing() {
 
                             {/* Plan Header */}
                             <div className="text-center pt-2">
-                                <h3 className="text-xl font-bold text-foreground">{plan.name}</h3>
-                                <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
+                                <h3 className="text-2xl font-black text-white tracking-tight">{plan.name}</h3>
+                                <p className="text-sm text-muted-foreground mt-2 font-medium">{plan.description}</p>
                             </div>
 
                             {/* Price */}
                             <div className="text-center mt-6">
-                                <span className="text-4xl font-extrabold text-foreground font-display">
+                                <span className="text-4xl font-extrabold text-white font-display">
                                     {plan.price}
                                 </span>
-                                <span className="text-muted-foreground text-sm ml-1">
+                                <span className="text-muted-foreground text-sm ml-1 font-medium">
                                     {plan.period}
                                 </span>
                             </div>
 
                             {/* Features */}
-                            <ul className="mt-8 space-y-3 flex-grow">
+                            <ul className="mt-8 space-y-3.5 flex-grow">
                                 {plan.features.map((feature, featureIndex) => (
                                     <li key={featureIndex} className="flex items-start gap-3">
-                                        <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
-                                        <span className="text-sm text-muted-foreground">{feature}</span>
+                                        <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                                        <span className="text-[14px] text-muted-foreground leading-snug font-medium">{feature}</span>
                                     </li>
                                 ))}
                             </ul>
