@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { ScrollArea } from "@/components/ui/Scroll-area";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Badge } from "@/components/ui/Badge";
 import {
     Table,

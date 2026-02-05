@@ -11,7 +11,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "@/components/ui/Dropdown-menu";
+} from "@/components/ui/DropdownMenu";
 
 const DocumentIngestionPage: React.FC = () => {
     const [documents, setDocuments] = useState<Document[]>(MOCK_DOCUMENTS);

@@ -21,7 +21,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/Dropdown-menu";
+} from "@/components/ui/DropdownMenu";
 
 interface AutoFTPListProps {
   onEdit: (item: any) => void;

@@ -3,7 +3,7 @@ import { Sidebar, SidebarTrigger } from "./Sidebar";
 import { Bell, Search, Plus, User, ShieldAlert, Monitor, LogOut, ChevronDown, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { ThemeToggle } from "@/components/ui/Theme-toggle";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/lib/abp/auth";
 import { useAbpPermissions } from "@/lib/abp/config";
 import {
@@ -13,7 +13,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/Dropdown-menu";
+} from "@/components/ui/DropdownMenu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Link } from "wouter";
 

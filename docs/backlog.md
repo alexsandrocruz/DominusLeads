@@ -1,7 +1,19 @@
+# Backlog do Projeto DominusLeads
 
-Backlog granular pronto para criação de tickets (endpoints, DB migrations, n8n flows, jobs ETL, testes). Cada item inclui título, descrição, critérios de aceite, estimativa e dependências. Recomendo copiar/colar cada item como ticket no seu tracker (Jira, Linear, Trello etc.).
+Este backlog detalha o roteiro de desenvolvimento do **BFF (Backend for Frontend)** e integrações.
 
-Observação: estimativas em dias úteis (DU) para 1 desenvolvedor backend fullstack experiente; ajuste conforme time.
+## ✅ Entidades Base Implementadas (MVP Core)
+
+As seguintes entidades e serviços básicos já foram implementados seguindo os padrões do **ABP Framework 10.x** e **Mapperly**.
+
+- [x] **Lead**: CRUD básico, DTOs e mapeamentos.
+- [x] **Credit & Transaction**: Gestão de saldo e histórico financeiro por Tenant.
+- [x] **Search**: Registro de histórico de consultas de Inteligência de Mercado.
+- [x] **Event**: Timeline de interações e eventos do Lead.
+
+---
+
+## 🚀 Backlog Granular (Tickets)
 
 Epic A — Infra & Preparação A.1 Provisionamento infra inicial
 
@@ -311,11 +323,6 @@ Critérios: iniciar fluxo que chama /qualify e mostrar status job.
 Est: 1 DU
 Dep: F.3, H.2
 M.4 Stitch: Billing & créditos UI
-
-Descrição: mostrar saldo, histórico de transações e alertas de saldo baixo.
-Critérios: histórico consistente com ledger.
-Est: 0.5 DU
-Dep: J.1
 Epic N — Deploy & Rollout N.1 Canary release & small-tenant onboarding
 
 Descrição: deploy canary para 2–3 tenants, monitorar métricas de entrega/reputação.
@@ -334,4 +341,70 @@ Tradução automática CNAE -> segmento (mapa CNAE para “Advogados”) (1 DU)
 Dashboard de mapas de densidade CNAE (fase 3) (3 DU)
 UI para templates de mensagens por tenant (1 DU)
 Resumo e priorização sugerida (MVP mínimo) Sprint 1 (2 semanas): A.1, A.2, B.1..B.3, C.1, D.1, E.1, M.1 Sprint 2 (2 semanas): B.4..B.6, F.1..F.3, E.2, G.1..G.2, H.1 Sprint 3 (2 semanas): G.3..G.5, F.4..F.6, H.2..H.5, I.1..I.3 Sprint 4 (2 semanas): J.1..J.3, K.1..K.4, L.1..L.3, N.1
+
+#### O.1 Entidade: Lead
+- **Status**: ✅ Concluído
+- **Backend**: `Lead` (Aggregate Root), `LeadDto`, `CreateUpdateLeadDto`. Implementado `LeadAppService`.
+- **Frontend**: Tipagem TypeScript em `src/types/lead.ts`. Integrar `LeadsListPage.tsx` com a API.
+
+#### O.2 Entidade: Search (Consulta)
+- **Status**: ✅ Concluído
+- **Backend**: Entidade `Search`, `SearchAppService` para histórico.
+- **Frontend**: Salvar histórico de busca localmente ou via API para exibir em "Buscas Recentes".
+
+#### O.3 Entidade: Credit & Transaction
+- **Status**: ✅ Concluído
+- **Backend**: `Credit` (Aggregate Root), `Transaction` (Entity), `CreditAppService`.
+- **Frontend**: Integrar `BillingDashboardPage.tsx` com o endpoint de saldo e extrato.
+
+#### O.4 Entidade: Event (Timeline)
+- **Status**: ✅ Concluído
+- **Backend**: Entidade `Event`, `EventAppService` para Timeline.
+- **Frontend**: Integrar `LeadDetailPage.tsx` (Timeline) com o histórico real do backend.
+
+---
+
+## 🏗️ Epic M — Frontend / React Integration (PRIORITY)
+
+Conectar os componentes de UI existentes aos serviços reais do ABP BFF.
+
+### M.1 Busca de Inteligência de Mercado (CNAE)
+- **Ação**: Integrar `src/pages/MarketIntelligence.tsx` (ou similar) com `MarketAppService`.
+- **Funcionalidades**:
+    - [ ] Listagem de CNPJs via busca externa.
+    - [ ] Filtros por Município e CNAE.
+    - [ ] Botão de "Extrair" que chama `ExtractLeadsAsync`.
+- **Est**: 1 DU
+
+### M.2 CRM: Gerenciamento de Leads & Timeline
+- **Ação**: Integrar `src/pages/Leads.tsx` e `src/pages/LeadDetail.tsx`.
+- **Funcionalidades**:
+    - [ ] Listagem de leads extraídos via `LeadAppService`.
+    - [ ] Visualização da Timeline real via `EventAppService`.
+- **Est**: 1.5 DU
+
+### M.3 Billing: Saldo e Recarga
+- **Ação**: Integrar `src/pages/Billing.tsx`.
+- **Funcionalidades**:
+    - [ ] Exibir saldo real (`CreditAppService.GetAsync`).
+    - [ ] Listagem de transações (Extrato).
+- **Est**: 0.5 DU
+
+---
+
+## 🏗️ Refinamento de Arquitetura (Próximos Passos)
+
+### P.1 Cache de Dados de Mercado (Lazy Cache Strategy)
+- **Objetivo**: Implementar a entidade `ConsultedLead` para armazenar o JSON bruto de CNPJs consultados externamente.
+- **Padrão**: Criar um `ICnaeMarketProxy` que abstrai a API externa e decide entre cache local ou request externa.
+- **Est**: 1.5 DU
+
+### P.2 Orquestração de Automação (n8n Webhooks)
+- **Objetivo**: Definir o contrato de entrada/saída para os webhooks do n8n.
+- **Lógica**: O backend dispara para o n8n -> n8n processa -> n8n chama callback no backend para criar um `Event` e atualizar o `Lead`.
+- **Est**: 2 DU
+
+### P.3 Dashboard de Gestão de Leads (Host)
+- **Objetivo**: Criar indicadores agregados por Tenant (Total de Leads, Créditos Consumidos, Eficiência de Conversão).
+- **Est**: 2 DU
 
