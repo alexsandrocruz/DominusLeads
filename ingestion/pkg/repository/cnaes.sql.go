@@ -29,3 +29,49 @@ func (q *Queries) CreateCnae(ctx context.Context, arg CreateCnaeParams) error {
 	_, err := q.db.Exec(ctx, createCnae, arg.Codigo, arg.Descricao)
 	return err
 }
+
+const getCnaeByCodigo = `-- name: GetCnaeByCodigo :one
+SELECT
+    codigo,
+    descricao
+FROM cnaes
+WHERE
+    codigo = $1::text
+`
+
+func (q *Queries) GetCnaeByCodigo(ctx context.Context, codigo string) (Cnae, error) {
+	row := q.db.QueryRow(ctx, getCnaeByCodigo, codigo)
+	var i Cnae
+	err := row.Scan(&i.Codigo, &i.Descricao)
+	return i, err
+}
+
+const getCnaesByDescricao = `-- name: GetCnaesByDescricao :many
+SELECT
+    codigo,
+    descricao
+FROM cnaes
+WHERE
+    $1::text='' OR
+    to_tsvector('portuguese', descricao) @@ to_tsquery('portuguese', $1::text)
+`
+
+func (q *Queries) GetCnaesByDescricao(ctx context.Context, nome string) ([]Cnae, error) {
+	rows, err := q.db.Query(ctx, getCnaesByDescricao, nome)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Cnae
+	for rows.Next() {
+		var i Cnae
+		if err := rows.Scan(&i.Codigo, &i.Descricao); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

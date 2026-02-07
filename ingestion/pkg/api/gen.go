@@ -27,6 +27,12 @@ const (
 	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
+// Cnae defines model for Cnae.
+type Cnae struct {
+	Codigo    *string `json:"codigo,omitempty"`
+	Descricao *string `json:"descricao,omitempty"`
+}
+
 // Error defines model for Error.
 type Error struct {
 	Message string `json:"message"`
@@ -65,6 +71,11 @@ type EstabelecimentosAtivo struct {
 	Uf                        *string             `json:"uf,omitempty"`
 }
 
+// GetCnaesParams defines parameters for GetCnaes.
+type GetCnaesParams struct {
+	Nome *string `form:"nome,omitempty" json:"nome,omitempty"`
+}
+
 // GetEstabelecimentosAtivosParams defines parameters for GetEstabelecimentosAtivos.
 type GetEstabelecimentosAtivosParams struct {
 	Municipio string `form:"municipio" json:"municipio"`
@@ -73,6 +84,12 @@ type GetEstabelecimentosAtivosParams struct {
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Get CNAEs
+	// (GET /cnaes)
+	GetCnaes(w http.ResponseWriter, r *http.Request, params GetCnaesParams)
+	// Get CNAE by code
+	// (GET /cnaes/{codigo})
+	GetCnaesCodigo(w http.ResponseWriter, r *http.Request, codigo string)
 	// Get establishments
 	// (GET /estabelecimentos-ativos)
 	GetEstabelecimentosAtivos(w http.ResponseWriter, r *http.Request, params GetEstabelecimentosAtivosParams)
@@ -86,6 +103,70 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetCnaes operation middleware
+func (siw *ServerInterfaceWrapper) GetCnaes(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCnaesParams
+
+	// ------------- Optional query parameter "nome" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "nome", r.URL.Query(), &params.Nome)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "nome", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCnaes(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCnaesCodigo operation middleware
+func (siw *ServerInterfaceWrapper) GetCnaesCodigo(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "codigo" -------------
+	var codigo string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "codigo", r.PathValue("codigo"), &codigo, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "codigo", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, BearerAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCnaesCodigo(w, r, codigo)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetEstabelecimentosAtivos operation middleware
 func (siw *ServerInterfaceWrapper) GetEstabelecimentosAtivos(w http.ResponseWriter, r *http.Request) {
@@ -262,9 +343,72 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
+	m.HandleFunc("GET "+options.BaseURL+"/cnaes", wrapper.GetCnaes)
+	m.HandleFunc("GET "+options.BaseURL+"/cnaes/{codigo}", wrapper.GetCnaesCodigo)
 	m.HandleFunc("GET "+options.BaseURL+"/estabelecimentos-ativos", wrapper.GetEstabelecimentosAtivos)
 
 	return m
+}
+
+type GetCnaesRequestObject struct {
+	Params GetCnaesParams
+}
+
+type GetCnaesResponseObject interface {
+	VisitGetCnaesResponse(w http.ResponseWriter) error
+}
+
+type GetCnaes200JSONResponse []Cnae
+
+func (response GetCnaes200JSONResponse) VisitGetCnaesResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetCnaes500JSONResponse Error
+
+func (response GetCnaes500JSONResponse) VisitGetCnaesResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetCnaesCodigoRequestObject struct {
+	Codigo string `json:"codigo"`
+}
+
+type GetCnaesCodigoResponseObject interface {
+	VisitGetCnaesCodigoResponse(w http.ResponseWriter) error
+}
+
+type GetCnaesCodigo200JSONResponse Cnae
+
+func (response GetCnaesCodigo200JSONResponse) VisitGetCnaesCodigoResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetCnaesCodigo404JSONResponse Error
+
+func (response GetCnaesCodigo404JSONResponse) VisitGetCnaesCodigoResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetCnaesCodigo500JSONResponse Error
+
+func (response GetCnaesCodigo500JSONResponse) VisitGetCnaesCodigoResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
 }
 
 type GetEstabelecimentosAtivosRequestObject struct {
@@ -295,6 +439,12 @@ func (response GetEstabelecimentosAtivos500JSONResponse) VisitGetEstabelecimento
 
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
+	// Get CNAEs
+	// (GET /cnaes)
+	GetCnaes(ctx context.Context, request GetCnaesRequestObject) (GetCnaesResponseObject, error)
+	// Get CNAE by code
+	// (GET /cnaes/{codigo})
+	GetCnaesCodigo(ctx context.Context, request GetCnaesCodigoRequestObject) (GetCnaesCodigoResponseObject, error)
 	// Get establishments
 	// (GET /estabelecimentos-ativos)
 	GetEstabelecimentosAtivos(ctx context.Context, request GetEstabelecimentosAtivosRequestObject) (GetEstabelecimentosAtivosResponseObject, error)
@@ -329,6 +479,58 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
+// GetCnaes operation middleware
+func (sh *strictHandler) GetCnaes(w http.ResponseWriter, r *http.Request, params GetCnaesParams) {
+	var request GetCnaesRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCnaes(ctx, request.(GetCnaesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCnaes")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCnaesResponseObject); ok {
+		if err := validResponse.VisitGetCnaesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCnaesCodigo operation middleware
+func (sh *strictHandler) GetCnaesCodigo(w http.ResponseWriter, r *http.Request, codigo string) {
+	var request GetCnaesCodigoRequestObject
+
+	request.Codigo = codigo
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCnaesCodigo(ctx, request.(GetCnaesCodigoRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCnaesCodigo")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCnaesCodigoResponseObject); ok {
+		if err := validResponse.VisitGetCnaesCodigoResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetEstabelecimentosAtivos operation middleware
 func (sh *strictHandler) GetEstabelecimentosAtivos(w http.ResponseWriter, r *http.Request, params GetEstabelecimentosAtivosParams) {
 	var request GetEstabelecimentosAtivosRequestObject
@@ -358,17 +560,19 @@ func (sh *strictHandler) GetEstabelecimentosAtivos(w http.ResponseWriter, r *htt
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"H4sIAAAAAAAC/9xWTW8bNxD9K8K0RzVy3PSyN8NIirRAekiBHgxjMSJnpTF2OcxwVohq7H8vuGtZbsWN",
+	"5QIp0Jy04nyS7/EN78FJFyVQsATVPSS3pQ7Hz+uAlH+jSiQ1pnHVieeN5C/bR4IKkimHDQxL8JScssOS",
+	"dVgeVmR9R86y/1tV0dMKHaWEGyonUfrUs5KH6ubR8baUOxmuqSXHHQWTdGW8k9Naa2TV8m4cxfJ6wCmW",
+	"jbpUdHlYQFXcTyHxrl5jYjdTKtv9bt4m6qkrm6WLLY17nLGrEktNLZlKmOvAo2HNgR1LjcY79uhHBBrR",
+	"Dg2q7EGwnIlMbD06lNqhx2SK7b+IpRTJ8bmh3tevy1vxvr6ctTT4uWibW2dPwbhhh1607tCU/6wbbh/6",
+	"PPFvZaPopZ8hVSeZhzPnderdZ0Qil3MF6ah2I1I1fTZSnm5T2bHBYJgYyx59RzMdR+Qyyc/cQxHe0xtD",
+	"LTUSaAbTR3MZWOMo9TMn3zdnqVLumFyvbPuPWQofZIJQSa962x7/vTtQ9Jc/foflJJw502Q9cnZrFmHI",
+	"iTk0AlXo23YJEilgZKjgx1cXry4hH7Rtx2KrR4XZkOWfLFhoLOG9hwp+JrseHXKIYkdGmqC6uQcOUMGn",
+	"nnQPSwg4dpOxP3RXwn64zZqaooQ01by8uJhkPhiFsTzG2LIbG1jdJQnHMfE3FfxeqYEKvlsdB8rqYZqs",
+	"xlFyIozD48yIOTlU8Nuv2eunF7bwpcrTjCmUeh+MNGC7+Ei6I10cHI/4j2f6FPmb23xaqe861P2ExOL6",
+	"w9XbNIZNsK3upwE5PIvf9TRIyyhmMhxBdAfX4/Qz7elrwvo8mnPovbl48/XR+yC2eCd98P9HvizW+4UT",
+	"TxNt6B8vlR/y/JUv3v/i4+ZMQTjOlJfQaVlOlin/clo+ecE9aWbM9Z+oUflt+E3K00iultO2Gx/4w5Qg",
+	"Z5wY0msLFaww8mr3Gobb4a8AAAD///AUuZgQDAAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

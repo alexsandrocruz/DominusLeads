@@ -36,6 +36,61 @@ paths:
                 $ref: "#/components/schemas/Error"
       security:
         - bearerAuth: []
+  /cnaes:
+    get:
+      summary: Get CNAEs
+      parameters:
+        - name: nome
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cnae"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
+  /cnaes/{codigo}:
+    get:
+      summary: Get CNAE by code
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cnae"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
 components:
   schemas:
     Error:
@@ -111,6 +166,13 @@ components:
         data_situacao_especial:
           type: string
           format: date
+    Cnae:
+      type: object
+      properties:
+        codigo:
+          type: string
+        descricao:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
