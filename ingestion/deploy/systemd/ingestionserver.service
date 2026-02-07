@@ -1,0 +1,21 @@
+[Unit]
+Description=Ingestion Service
+After=network.target
+
+[Service]
+# The user and group the service will run as
+User=fernando
+Group=fernando
+
+# The directory where the binary expects to run (important for relative paths/configs)
+WorkingDirectory=/home/fernando/ingestion
+
+# Path to the binary and any arguments
+ExecStart=/home/fernando/ingestion/server
+
+# Restart policy: always restart the service if it crashes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

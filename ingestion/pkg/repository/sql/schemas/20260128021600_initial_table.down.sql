@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS estabelecimentos;
+DROP TABLE IF EXISTS empresas;
+DROP TABLE IF EXISTS socios;
+DROP TABLE IF EXISTS simples;
+DROP TABLE IF EXISTS paises;
+DROP TABLE IF EXISTS municipios;
+DROP TABLE IF EXISTS qualificacoes_de_socios;
+DROP TABLE IF EXISTS naturezas_juridicas;
+DROP TABLE IF EXISTS cnaes;
+DROP TABLE IF EXISTS motivos;
