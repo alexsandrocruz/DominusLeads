@@ -11,7 +11,7 @@ import (
 	"github.com/alexsandrocruz/DominusLeads/ingestion/pkg/api"
 	"github.com/alexsandrocruz/DominusLeads/ingestion/pkg/repository"
 	"github.com/getkin/kin-openapi/openapi3filter"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 	"github.com/swaggest/swgui/v5emb"
@@ -33,12 +33,12 @@ func main() {
 	potsgresDb := os.Getenv("POSTGRES_DB")
 	databaseUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", potsgresUser, potsgresPassword, potsgresHost, potsgresPort, potsgresDb)
 
-	conn, err := pgx.Connect(ctx, databaseUrl)
+	dbpool, err := pgxpool.New(ctx, databaseUrl)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
-	defer conn.Close(ctx)
-	r := repository.New(conn)
+	defer dbpool.Close()
+	r := repository.New(dbpool)
 
 	server := api.NewServer(r)
 
