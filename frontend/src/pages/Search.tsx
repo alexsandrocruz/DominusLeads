@@ -1,11 +1,38 @@
+import { useState, useEffect } from 'react';
 import { Layout } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { ChevronLeft, HelpCircle, Search as SearchIcon, Building, Rocket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { marketApi } from '../lib/api';
+import type { CnaeDto, MunicipalityDto } from '../lib/api';
 
 export const Search = () => {
     const navigate = useNavigate();
+
+    const [cnaes, setCnaes] = useState<CnaeDto[]>([]);
+    const [municipios, setMunicipios] = useState<MunicipalityDto[]>([]);
+    const [selectedCnae, setSelectedCnae] = useState('');
+    const [selectedMunicipio, setSelectedMunicipio] = useState('');
+    const [selectedUf, setSelectedUf] = useState('');
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const [cnaesData, municipiosData] = await Promise.all([
+                    marketApi.getCnaes(),
+                    marketApi.getMunicipios()
+                ]);
+                setCnaes(cnaesData);
+                setMunicipios(municipiosData);
+            } catch (error) {
+                console.error('Failed to load market data', error);
+            }
+        };
+        loadData();
+    }, []);
+
+    const filteredMunicipios = municipios.filter(m => !selectedUf || m.uf === selectedUf);
 
     return (
         <Layout>
@@ -26,20 +53,44 @@ export const Search = () => {
                 <div className="space-y-4">
                     <div>
                         <p className="text-sm font-medium pb-2 dark:text-white">Atividade Econômica (CNAE)</p>
-                        <select className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl px-4 outline-none">
-                            <option>Tecnologia da Informação</option>
-                            <option>Varejo</option>
-                            <option>Serviços</option>
+                        <select
+                            className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl px-4 outline-none"
+                            value={selectedCnae}
+                            onChange={(e) => setSelectedCnae(e.target.value)}
+                        >
+                            <option value="">Selecione um CNAE</option>
+                            {cnaes.map(cnae => (
+                                <option key={cnae.codigo} value={cnae.codigo}>
+                                    {cnae.codigo} - {cnae.descricao}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="flex gap-4">
                         <div className="w-24">
                             <p className="text-sm font-medium pb-2 dark:text-white">Estado</p>
-                            <Input placeholder="UF" className="text-center" />
+                            <Input
+                                placeholder="UF"
+                                className="text-center"
+                                value={selectedUf}
+                                onChange={(e) => setSelectedUf(e.target.value.toUpperCase())}
+                                maxLength={2}
+                            />
                         </div>
                         <div className="flex-1">
                             <p className="text-sm font-medium pb-2 dark:text-white">Cidade</p>
-                            <Input placeholder="Ex: São Paulo" />
+                            <input
+                                list="municipios-list"
+                                placeholder="Ex: São Paulo"
+                                className="w-full h-14 bg-white dark:bg-[#192233] dark:text-white border border-slate-200 dark:border-slate-800 rounded-xl px-4 outline-none"
+                                value={selectedMunicipio}
+                                onChange={(e) => setSelectedMunicipio(e.target.value)}
+                            />
+                            <datalist id="municipios-list">
+                                {filteredMunicipios.map(m => (
+                                    <option key={m.codigoIbge} value={m.nome} />
+                                ))}
+                            </datalist>
                         </div>
                     </div>
                     <div>

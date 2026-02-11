@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Sapienza.Leads.Market;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -10,13 +11,40 @@ public class MarketProxyService : ApplicationService
 {
     private readonly ICnaeMarketProxy _marketProxy;
     private readonly IRepository<ConsultedLead, string> _consultedLeadRepository;
+    private readonly Volo.Abp.Caching.IDistributedCache<string> _cache;
 
     public MarketProxyService(
         ICnaeMarketProxy marketProxy,
-        IRepository<ConsultedLead, string> consultedLeadRepository)
+        IRepository<ConsultedLead, string> consultedLeadRepository,
+        Volo.Abp.Caching.IDistributedCache<string> cache)
     {
         _marketProxy = marketProxy;
         _consultedLeadRepository = consultedLeadRepository;
+        _cache = cache;
+    }
+
+    public async Task<string> GetCnaesAsync()
+    {
+        return await _cache.GetOrAddAsync(
+            "AllCnaes", // Cache Key
+            async () => await _marketProxy.GetCnaesAsync(),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Cache for 24 hours
+            }
+        );
+    }
+
+    public async Task<string> GetMunicipiosAsync()
+    {
+        return await _cache.GetOrAddAsync(
+            "AllMunicipios", // Cache Key
+            async () => await _marketProxy.GetMunicipiosAsync(),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Cache for 24 hours
+            }
+        );
     }
 
     /// <summary>

@@ -15,4 +15,8 @@ public interface IMarketAppService : IApplicationService
     /// Extrai leads selecionados para o CRM e debita créditos.
     /// </summary>
     Task ExtractLeadsAsync(ExtractLeadsDto input);
+
+    Task<List<CnaeDto>> GetCnaesAsync();
+    
+    Task<List<MunicipalityDto>> GetMunicipiosAsync();
 }

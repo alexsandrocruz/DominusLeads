@@ -65,6 +65,18 @@ public class MarketAppService : ApplicationService, IMarketAppService
         return results;
     }
 
+    public async Task<List<CnaeDto>> GetCnaesAsync()
+    {
+        var rawJson = await _marketProxyService.GetCnaesAsync();
+        return ParseCnaesJson(rawJson);
+    }
+
+    public async Task<List<MunicipalityDto>> GetMunicipiosAsync()
+    {
+        var rawJson = await _marketProxyService.GetMunicipiosAsync();
+        return ParseMunicipiosJson(rawJson);
+    }
+
     public async Task ExtractLeadsAsync(ExtractLeadsDto input)
     {
         foreach (var cnpj in input.Cnpjs)
@@ -189,5 +201,56 @@ public class MarketAppService : ApplicationService, IMarketAppService
     private string? GetProp(JsonElement el, string name)
     {
         return el.TryGetProperty(name, out var p) ? p.GetString() : null;
+    }
+
+    private List<CnaeDto> ParseCnaesJson(string json)
+    {
+        var list = new List<CnaeDto>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in doc.RootElement.EnumerateArray())
+                {
+                    list.Add(new CnaeDto
+                    {
+                        Codigo = GetProp(item, "codigo"),
+                        Descricao = GetProp(item, "descricao")
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Failed to parse CNAEs JSON: " + ex.Message);
+        }
+        return list;
+    }
+
+    private List<MunicipalityDto> ParseMunicipiosJson(string json)
+    {
+        var list = new List<MunicipalityDto>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in doc.RootElement.EnumerateArray())
+                {
+                    list.Add(new MunicipalityDto
+                    {
+                        Nome = GetProp(item, "nome"),
+                        Uf = GetProp(item, "uf") ?? (GetProp(item, "microrregiao") != null ? "BR" : ""),
+                        CodigoIbge = GetProp(item, "id") ?? GetProp(item, "codigo_ibge") 
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Failed to parse Municipios JSON: " + ex.Message);
+        }
+        return list;
     }
 }
