@@ -38,6 +38,7 @@ public class MarketAppService : ApplicationService, IMarketAppService
         _eventRepository = eventRepository;
     }
 
+    [AllowAnonymous]
     public async Task<List<MarketLeadDto>> SearchExternalAsync(MarketSearchInputDto input)
     {
         var rawJson = await _marketProxyService.SearchExternalAsync(input);
@@ -45,32 +46,48 @@ public class MarketAppService : ApplicationService, IMarketAppService
         // Parse do JSON bruto da API externa
         var results = ParseExternalJson(rawJson);
 
-        // Registrar a consulta no histórico
-        await _searchAppService.CreateAsync(new CreateSearchDto
+        // Registrar a consulta no histórico (skip if not authenticated)
+        try
         {
-            Criterios = JsonSerializer.Serialize(input),
-            ResultadosContagem = results.Count
-        });
+            await _searchAppService.CreateAsync(new CreateSearchDto
+            {
+                Criterios = JsonSerializer.Serialize(input),
+                ResultadosContagem = results.Count
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning("Could not save search history: " + ex.Message);
+        }
 
         // Verificar quais CNPJs já existem como Leads no tenant
-        var cnpjs = results.Select(x => x.Cnpj).ToList();
-        var existingLeads = await _leadRepository.GetListAsync(x => cnpjs.Contains(x.Cnpj));
-        var existingCnpjs = existingLeads.Select(x => x.Cnpj).ToHashSet();
-
-        foreach (var lead in results)
+        try
         {
-            lead.IsExtracted = existingCnpjs.Contains(lead.Cnpj);
+            var cnpjs = results.Select(x => x.Cnpj).ToList();
+            var existingLeads = await _leadRepository.GetListAsync(x => cnpjs.Contains(x.Cnpj));
+            var existingCnpjs = existingLeads.Select(x => x.Cnpj).ToHashSet();
+
+            foreach (var lead in results)
+            {
+                lead.IsExtracted = existingCnpjs.Contains(lead.Cnpj);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning("Could not check existing leads: " + ex.Message);
         }
 
         return results;
     }
 
+    [AllowAnonymous]
     public async Task<List<CnaeDto>> GetCnaesAsync()
     {
         var rawJson = await _marketProxyService.GetCnaesAsync();
         return ParseCnaesJson(rawJson);
     }
 
+    [AllowAnonymous]
     public async Task<List<MunicipalityDto>> GetMunicipiosAsync()
     {
         var rawJson = await _marketProxyService.GetMunicipiosAsync();
@@ -105,8 +122,8 @@ public class MarketAppService : ApplicationService, IMarketAppService
             var lead = new Lead(
                 GuidGenerator.Create(),
                 cnpj,
-                marketData.CnaePrincipal ?? "",
-                marketData.RazaoSocial,
+                marketData.Cnaes?.FirstOrDefault() ?? "",
+                marketData.RazaoSocial ?? marketData.NomeFantasia ?? "Sem Razão Social",
                 marketData.NomeFantasia,
                 LeadStatus.Novo,
                 0,
@@ -114,12 +131,12 @@ public class MarketAppService : ApplicationService, IMarketAppService
                 CurrentTenant.Id
             );
 
-            lead.SetContactInfo(marketData.Email, marketData.Telefone);
+            lead.SetContactInfo(marketData.CorreioEletronico, marketData.TelefoneFormatado);
             lead.SetAddress(
                 marketData.Logradouro,
                 marketData.Numero,
                 marketData.Bairro,
-                marketData.Cidade,
+                marketData.Municipio,
                 marketData.Uf,
                 marketData.Cep
             );
@@ -181,20 +198,69 @@ public class MarketAppService : ApplicationService, IMarketAppService
 
     private MarketLeadDto MapElementToDto(JsonElement element)
     {
+        var cnpjBasico = GetProp(element, "cnpj_basico");
+        var cnpjOrdem = GetProp(element, "cnpj_ordem");
+        var cnpjDv = GetProp(element, "cnpj_dv");
+
+        // Montar CNPJ completo: XX.XXX.XXX/XXXX-XX
+        string? cnpjFormatado = null;
+        if (!string.IsNullOrEmpty(cnpjBasico) && !string.IsNullOrEmpty(cnpjOrdem) && !string.IsNullOrEmpty(cnpjDv))
+        {
+            var raw = cnpjBasico + cnpjOrdem + cnpjDv;
+            if (raw.Length == 14)
+                cnpjFormatado = $"{raw[..2]}.{raw[2..5]}.{raw[5..8]}/{raw[8..12]}-{raw[12..14]}";
+            else
+                cnpjFormatado = raw;
+        }
+
+        var ddd1 = GetProp(element, "ddd_1");
+        var tel1 = GetProp(element, "telefone_1");
+        string? telFormatado = null;
+        if (!string.IsNullOrEmpty(ddd1) && !string.IsNullOrEmpty(tel1))
+            telFormatado = $"({ddd1}) {tel1}";
+        else if (!string.IsNullOrEmpty(tel1))
+            telFormatado = tel1;
+
+        // Parse CNAEs array
+        var cnaes = new List<string>();
+        if (element.TryGetProperty("cnaes", out var cnaesEl) && cnaesEl.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var c in cnaesEl.EnumerateArray())
+            {
+                var v = c.GetString();
+                if (!string.IsNullOrEmpty(v)) cnaes.Add(v);
+            }
+        }
+
         return new MarketLeadDto
         {
-            Cnpj = GetProp(element, "cnpj"),
-            RazaoSocial = GetProp(element, "razao_social") ?? GetProp(element, "nome") ?? "Sem Razão Social",
-            NomeFantasia = GetProp(element, "nome_fantasia") ?? GetProp(element, "fantasia"),
-            CnaePrincipal = GetProp(element, "cnae_principal") ?? GetProp(element, "cnae"),
+            Cnpj = cnpjFormatado,
+            CnpjBasico = cnpjBasico,
+            CnpjOrdem = cnpjOrdem,
+            CnpjDv = cnpjDv,
+            NomeFantasia = GetProp(element, "nome_fantasia"),
+            RazaoSocial = GetProp(element, "razao_social") ?? GetProp(element, "nome"),
+            Cnaes = cnaes,
+            TipoLogradouro = GetProp(element, "tipo_logradouro"),
             Logradouro = GetProp(element, "logradouro"),
             Numero = GetProp(element, "numero"),
+            Complemento = GetProp(element, "complemento"),
             Bairro = GetProp(element, "bairro"),
-            Cidade = GetProp(element, "municipio"),
+            Municipio = GetProp(element, "municipio"),
             Uf = GetProp(element, "uf"),
             Cep = GetProp(element, "cep"),
-            Telefone = GetProp(element, "telefone_1"),
-            Email = GetProp(element, "correio_eletronico")
+            Ddd1 = ddd1,
+            Telefone1 = tel1,
+            Ddd2 = GetProp(element, "ddd_2"),
+            Telefone2 = GetProp(element, "telefone_2"),
+            DddFax = GetProp(element, "ddd_fax"),
+            Fax = GetProp(element, "fax"),
+            CorreioEletronico = GetProp(element, "correio_eletronico"),
+            TelefoneFormatado = telFormatado,
+            SituacaoCadastral = GetProp(element, "situacao_cadastral"),
+            DataSituacaoCadastral = GetProp(element, "data_situacao_cadastral"),
+            DataInicioAtividade = GetProp(element, "data_inicio_atividade"),
+            IdentificadorMatrizFilial = GetProp(element, "identificador_matriz_filial"),
         };
     }
 

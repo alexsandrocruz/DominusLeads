@@ -32,7 +32,7 @@ public class CnaeMarketProxy : ICnaeMarketProxy, ITransientDependency
         using var client = _httpClientFactory.CreateClient();
         if (!string.IsNullOrEmpty(apiKey))
         {
-            client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
         }
 
         var url = $"{baseUrl}/api/v1/estabelecimentos-ativos?";
@@ -88,10 +88,16 @@ public class CnaeMarketProxy : ICnaeMarketProxy, ITransientDependency
         }
 
         var url = $"{baseUrl}/api/v1/cnaes";
-        var response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadAsStringAsync();
+        try
+        {
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException)
+        {
+            return "[]";
+        }
     }
 
     public async Task<string> GetMunicipiosAsync()

@@ -117,6 +117,12 @@ public class LeadsHttpApiHostModule : AbpModule
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureConventionalControllers();
+
+        // Disable ABP antiforgery token validation — our SPA frontend handles CSRF differently
+        Configure<Volo.Abp.AspNetCore.Mvc.AntiForgery.AbpAntiForgeryOptions>(options =>
+        {
+            options.AutoValidate = false;
+        });
         ConfigureHealthChecks(context);
         ConfigureSwagger(context, configuration);
         ConfigureVirtualFileSystem(context);

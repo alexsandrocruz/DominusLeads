@@ -7,18 +7,33 @@ export interface MarketSearchInput {
 }
 
 export interface MarketLeadDto {
-    cnpj: string;
+    cnpj?: string;
+    cnpjBasico?: string;
+    cnpjOrdem?: string;
+    cnpjDv?: string;
     nomeFantasia?: string;
-    razaoSocial: string;
-    cnaePrincipal?: string;
+    razaoSocial?: string;
+    cnaes: string[];
+    tipoLogradouro?: string;
     logradouro?: string;
     numero?: string;
+    complemento?: string;
     bairro?: string;
-    cidade?: string;
+    municipio?: string;
     uf?: string;
     cep?: string;
-    telefone?: string;
-    email?: string;
+    ddd1?: string;
+    telefone1?: string;
+    ddd2?: string;
+    telefone2?: string;
+    dddFax?: string;
+    fax?: string;
+    correioEletronico?: string;
+    telefoneFormatado?: string;
+    situacaoCadastral?: string;
+    dataSituacaoCadastral?: string;
+    dataInicioAtividade?: string;
+    identificadorMatrizFilial?: string;
     isExtracted: boolean;
 }
 

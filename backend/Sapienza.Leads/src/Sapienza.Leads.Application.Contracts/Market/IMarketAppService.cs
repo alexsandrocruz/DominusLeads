@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 
 namespace Sapienza.Leads.Market;
@@ -16,7 +17,9 @@ public interface IMarketAppService : IApplicationService
     /// </summary>
     Task ExtractLeadsAsync(ExtractLeadsDto input);
 
+    [AllowAnonymous]
     Task<List<CnaeDto>> GetCnaesAsync();
     
+    [AllowAnonymous]
     Task<List<MunicipalityDto>> GetMunicipiosAsync();
 }

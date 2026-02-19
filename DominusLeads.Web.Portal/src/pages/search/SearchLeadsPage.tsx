@@ -3,38 +3,85 @@ import { AppShell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Search as SearchIcon, Filter, MapPin, Building, Calendar, Database, CheckCircle2, Loader2 } from "lucide-react";
+import {
+    Search as SearchIcon,
+    MapPin,
+    Building,
+    Phone,
+    Mail,
+    Calendar,
+    Database,
+    CheckCircle2,
+    Loader2,
+    Tag,
+    Hash,
+    ExternalLink,
+} from "lucide-react";
 import { searchExternalLeads, extractLeads, type MarketLeadDto } from "@/lib/services/MarketService";
 import { toast } from "sonner";
+
+/** Mapear código situação cadastral p/ label legível */
+function situacaoLabel(code?: string): string {
+    switch (code) {
+        case "01": return "Nula";
+        case "02": return "Ativa";
+        case "03": return "Suspensa";
+        case "04": return "Inapta";
+        case "08": return "Baixada";
+        default: return code ?? "—";
+    }
+}
+
+function situacaoColor(code?: string): string {
+    switch (code) {
+        case "02": return "text-green-600 bg-green-500/10 border-green-500/20";
+        case "03": return "text-amber-600 bg-amber-500/10 border-amber-500/20";
+        case "04":
+        case "08": return "text-red-600 bg-red-500/10 border-red-500/20";
+        default: return "text-muted-foreground bg-muted/50 border-border";
+    }
+}
+
+function matrizFilialLabel(code?: string): string {
+    return code === "1" ? "Matriz" : code === "2" ? "Filial" : code ?? "";
+}
 
 export default function SearchLeadsPage() {
     const [loading, setLoading] = useState(false);
     const [extracting, setExtracting] = useState<string | null>(null);
     const [results, setResults] = useState<MarketLeadDto[]>([]);
+    const [hasSearched, setHasSearched] = useState(false);
     const [filters, setFilters] = useState({
         municipio: "",
         cnae: "",
-        bairro: ""
+        bairro: "",
     });
 
     const handleSearch = async () => {
         if (!filters.cnae || !filters.cnae.trim()) {
-            toast.error("O campo CNAE (Setor) é obrigatório para realizar a busca.");
+            toast.error("O campo CNAE é obrigatório para realizar a busca.");
             return;
         }
 
-        if (!filters.municipio && !filters.bairro) {
-            toast.error("Por favor, preencha ao menos um filtro de localização (Cidade ou Bairro).");
+        if (!filters.municipio || !filters.municipio.trim()) {
+            toast.error("O campo Município é obrigatório para realizar a busca.");
             return;
         }
 
         setLoading(true);
+        setHasSearched(true);
         try {
-            const response = await searchExternalLeads(filters);
+            const response = await searchExternalLeads({
+                municipio: filters.municipio.trim().toUpperCase(),
+                cnae: filters.cnae.replace(/[^0-9]/g, "").trim(),
+                bairro: filters.bairro.trim() || undefined,
+            });
             const data = response.data;
             setResults(data);
             if (data.length === 0) {
                 toast.info("Nenhum lead encontrado com estes critérios.");
+            } else {
+                toast.success(`${data.length} lead(s) encontrado(s)!`);
             }
         } catch (error) {
             console.error("Erro na busca:", error);
@@ -49,8 +96,7 @@ export default function SearchLeadsPage() {
         try {
             await extractLeads({ cnpjs: [cnpj] });
             toast.success("Lead extraído e adicionado ao CRM!");
-            // Atualiza o estado local para marcar como extraído
-            setResults(prev => prev.map(l => l.cnpj === cnpj ? { ...l, isExtracted: true } : l));
+            setResults((prev) => prev.map((l) => (l.cnpj === cnpj ? { ...l, isExtracted: true } : l)));
         } catch (error) {
             console.error("Erro na extração:", error);
             toast.error("Erro ao extrair lead. Verifique seu saldo.");
@@ -58,51 +104,72 @@ export default function SearchLeadsPage() {
             setExtracting(null);
         }
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") handleSearch();
+    };
+
+    const buildEnderecoCompleto = (lead: MarketLeadDto) => {
+        const parts: string[] = [];
+        if (lead.tipoLogradouro) parts.push(lead.tipoLogradouro);
+        if (lead.logradouro) parts.push(lead.logradouro);
+        if (lead.numero) parts.push(lead.numero);
+        if (lead.complemento) parts.push(`- ${lead.complemento}`);
+        return parts.join(" ") || null;
+    };
+
     return (
         <AppShell>
             <div className="space-y-6">
+                {/* Header */}
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-primary">Inteligência de Mercado</h1>
-                    <p className="text-muted-foreground font-medium italic">Filtre e encontre os melhores leads para seu negócio.</p>
+                    <p className="text-muted-foreground font-medium italic">
+                        Busque estabelecimentos por município e CNAE.
+                    </p>
                 </div>
 
+                {/* Search Card */}
                 <Card className="p-6 border-primary/20 shadow-lg shadow-primary/5">
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                        <div className="space-y-2 lg:col-span-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">BUSCA GERAL</label>
-                            <div className="relative">
-                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                                <Input
-                                    placeholder="Nome da empresa, CNPJ ou palavras-chave..."
-                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary"
-                                    value={filters.bairro} // Using bairro for general search for now or adding a new field
-                                    onChange={(e) => setFilters({ ...filters, bairro: e.target.value })}
-                                />
-                            </div>
-                        </div>
-
+                    <div className="grid gap-6 md:grid-cols-3">
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">LOCALIZAÇÃO</label>
+                            <label className="text-sm font-bold text-muted-foreground px-1">MUNICÍPIO</label>
                             <div className="relative">
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                                 <Input
-                                    placeholder="Cidade ou Estado..."
-                                    className="pl-10 h-11 border-primary/20"
+                                    placeholder="Ex: ARACAJU, SAO PAULO..."
+                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary uppercase"
                                     value={filters.municipio}
                                     onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
+                                    onKeyDown={handleKeyDown}
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">SETOR (CNAE)</label>
+                            <label className="text-sm font-bold text-muted-foreground px-1">CNAE (Código)</label>
                             <div className="relative">
                                 <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                                 <Input
-                                    placeholder="Ex: 6201-5..."
-                                    className="pl-10 h-11 border-primary/20"
+                                    placeholder="Ex: 6201501"
+                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary"
                                     value={filters.cnae}
                                     onChange={(e) => setFilters({ ...filters, cnae: e.target.value })}
+                                    onKeyDown={handleKeyDown}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-muted-foreground px-1">BAIRRO (Opcional)</label>
+                            <div className="relative">
+                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                                <Input
+                                    placeholder="Filtrar por bairro..."
+                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary"
+                                    value={filters.bairro}
+                                    onChange={(e) => setFilters({ ...filters, bairro: e.target.value })}
+                                    onKeyDown={handleKeyDown}
                                 />
                             </div>
                         </div>
@@ -117,95 +184,201 @@ export default function SearchLeadsPage() {
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
                             Pesquisar Leads
                         </Button>
-                        <Button variant="outline" className="h-11 gap-2 font-bold">
-                            <Filter className="h-4 w-4" />
-                            Mais Filtros
-                        </Button>
+                        {results.length > 0 && (
+                            <span className="text-sm text-muted-foreground font-medium">
+                                {results.length} resultado(s) encontrado(s)
+                            </span>
+                        )}
                     </div>
                 </Card>
 
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {loading ? (
-                        [1, 2, 3].map((i) => (
-                            <Card key={i} className="hover:shadow-md transition-shadow">
+                {/* Results */}
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {loading
+                        ? [1, 2, 3, 4, 5, 6].map((i) => (
+                            <Card key={i} className="hover:shadow-md transition-shadow animate-pulse">
                                 <CardHeader className="pb-2">
-                                    <div className="h-4 w-32 bg-muted rounded animate-pulse" />
-                                    <div className="h-3 w-48 bg-muted rounded animate-pulse mt-2" />
+                                    <div className="h-5 w-40 bg-muted rounded" />
+                                    <div className="h-3 w-56 bg-muted rounded mt-2" />
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="h-20 bg-muted/50 rounded animate-pulse" />
+                                    <div className="space-y-2">
+                                        <div className="h-3 w-full bg-muted/50 rounded" />
+                                        <div className="h-3 w-3/4 bg-muted/50 rounded" />
+                                        <div className="h-3 w-1/2 bg-muted/50 rounded" />
+                                    </div>
                                 </CardContent>
                             </Card>
                         ))
-                    ) : results.length > 0 ? (
-                        results.map((lead) => (
-                            <Card key={lead.cnpj} className="hover:shadow-lg transition-all border-primary/10 hover:border-primary/30">
-                                <CardHeader className="pb-2">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <CardTitle className="text-lg font-bold text-primary leading-tight">
-                                                {lead.nomeFantasia || lead.razaoSocial}
-                                            </CardTitle>
-                                            <p className="text-xs text-muted-foreground mt-1 font-mono">{lead.cnpj}</p>
+                        : results.map((lead, idx) => {
+                            const endereco = buildEnderecoCompleto(lead);
+                            const localidade = [lead.bairro, lead.municipio, lead.uf].filter(Boolean).join(", ");
+
+                            return (
+                                <Card
+                                    key={lead.cnpj || idx}
+                                    className="hover:shadow-lg transition-all border-primary/10 hover:border-primary/30 flex flex-col"
+                                >
+                                    <CardHeader className="pb-3">
+                                        <div className="flex justify-between items-start gap-2">
+                                            <div className="min-w-0 flex-1">
+                                                <CardTitle className="text-base font-bold text-primary leading-tight truncate">
+                                                    {lead.nomeFantasia || lead.razaoSocial || "Sem Nome"}
+                                                </CardTitle>
+                                                {lead.cnpj && (
+                                                    <p className="text-xs text-muted-foreground mt-1 font-mono">
+                                                        {lead.cnpj}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-1.5 shrink-0">
+                                                {lead.identificadorMatrizFilial && (
+                                                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded border bg-blue-500/10 text-blue-600 border-blue-500/20">
+                                                        {matrizFilialLabel(lead.identificadorMatrizFilial)}
+                                                    </span>
+                                                )}
+                                                {lead.situacaoCadastral && (
+                                                    <span
+                                                        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${situacaoColor(lead.situacaoCadastral)}`}
+                                                    >
+                                                        {situacaoLabel(lead.situacaoCadastral)}
+                                                    </span>
+                                                )}
+                                                {lead.isExtracted && (
+                                                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-0.5 bg-green-500/10 text-green-600 border-green-500/20">
+                                                        <CheckCircle2 className="h-3 w-3" />
+                                                        CRM
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                        {lead.isExtracted && (
-                                            <div className="bg-green-500/10 text-green-600 px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 border border-green-500/20">
-                                                <CheckCircle2 className="h-3 w-3" />
-                                                NO CRM
+                                    </CardHeader>
+
+                                    <CardContent className="space-y-3 flex-1 flex flex-col">
+                                        {/* Endereço */}
+                                        <div className="space-y-1">
+                                            {endereco && (
+                                                <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                                                    <MapPin className="h-3.5 w-3.5 text-primary/60 mt-0.5 shrink-0" />
+                                                    <span className="break-words">{endereco}</span>
+                                                </div>
+                                            )}
+                                            {localidade && (
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground pl-[22px]">
+                                                    <span>
+                                                        {localidade}
+                                                        {lead.cep && ` — CEP ${lead.cep}`}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Contato */}
+                                        <div className="space-y-1">
+                                            {lead.telefoneFormatado && (
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <Phone className="h-3.5 w-3.5 text-primary/60 shrink-0" />
+                                                    <span>{lead.telefoneFormatado}</span>
+                                                </div>
+                                            )}
+                                            {lead.correioEletronico && (
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <Mail className="h-3.5 w-3.5 text-primary/60 shrink-0" />
+                                                    <a
+                                                        href={`mailto:${lead.correioEletronico}`}
+                                                        className="hover:text-primary transition-colors truncate lowercase"
+                                                    >
+                                                        {lead.correioEletronico.toLowerCase()}
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* CNAEs */}
+                                        {lead.cnaes && lead.cnaes.length > 0 && (
+                                            <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                                                <Tag className="h-3.5 w-3.5 text-primary/60 mt-0.5 shrink-0" />
+                                                <div className="flex flex-wrap gap-1">
+                                                    {lead.cnaes.slice(0, 5).map((c) => (
+                                                        <span
+                                                            key={c}
+                                                            className="text-[11px] font-mono bg-muted px-1.5 py-0.5 rounded"
+                                                        >
+                                                            {c}
+                                                        </span>
+                                                    ))}
+                                                    {lead.cnaes.length > 5 && (
+                                                        <span className="text-[11px] text-muted-foreground/60">
+                                                            +{lead.cnaes.length - 5}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Building className="h-3.5 w-3.5 text-primary/60" />
-                                            <span className="truncate">{lead.cnaePrincipal || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <MapPin className="h-3.5 w-3.5 text-primary/60" />
-                                            <span className="truncate">{lead.cidade}, {lead.uf}</span>
-                                        </div>
-                                    </div>
 
-                                    {!lead.isExtracted ? (
-                                        <Button
-                                            className="w-full gap-2 font-bold"
-                                            size="sm"
-                                            onClick={() => handleExtract(lead.cnpj)}
-                                            disabled={extracting === lead.cnpj}
-                                        >
-                                            {extracting === lead.cnpj ? (
-                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                        {/* Data início */}
+                                        {lead.dataInicioAtividade && (
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <Calendar className="h-3.5 w-3.5 text-primary/60 shrink-0" />
+                                                <span>Início: {lead.dataInicioAtividade}</span>
+                                            </div>
+                                        )}
+
+                                        {/* Ação */}
+                                        <div className="mt-auto pt-3">
+                                            {!lead.isExtracted ? (
+                                                <Button
+                                                    className="w-full gap-2 font-bold"
+                                                    size="sm"
+                                                    onClick={() => lead.cnpj && handleExtract(lead.cnpj)}
+                                                    disabled={!lead.cnpj || extracting === lead.cnpj}
+                                                >
+                                                    {extracting === lead.cnpj ? (
+                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                    ) : (
+                                                        <Database className="h-4 w-4" />
+                                                    )}
+                                                    Extrair Lead
+                                                </Button>
                                             ) : (
-                                                <Database className="h-4 w-4" />
+                                                <Button
+                                                    variant="outline"
+                                                    className="w-full gap-2 font-bold border-green-500/30 text-green-600 hover:bg-green-50"
+                                                    size="sm"
+                                                    disabled
+                                                >
+                                                    <CheckCircle2 className="h-4 w-4" />
+                                                    Já Extraído
+                                                </Button>
                                             )}
-                                            Extrair Lead
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="outline"
-                                            className="w-full gap-2 font-bold border-green-500/30 text-green-600 hover:bg-green-50"
-                                            size="sm"
-                                            disabled
-                                        >
-                                            <CheckCircle2 className="h-4 w-4" />
-                                            Já Extraído
-                                        </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        ))
-                    ) : (
-                        !loading && filters.municipio && (
-                            <div className="col-span-full py-12 text-center border-2 border-dashed border-primary/10 rounded-xl">
-                                <Database className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-                                <h3 className="text-lg font-bold text-muted-foreground">Nenhum resultado para exibir</h3>
-                                <p className="text-sm text-muted-foreground max-w-xs mx-auto">Tente ajustar seus filtros para encontrar novos leads.</p>
-                            </div>
-                        )
-                    )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            );
+                        })}
                 </div>
+
+                {/* Empty state */}
+                {!loading && hasSearched && results.length === 0 && (
+                    <div className="py-12 text-center border-2 border-dashed border-primary/10 rounded-xl">
+                        <Database className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+                        <h3 className="text-lg font-bold text-muted-foreground">Nenhum resultado encontrado</h3>
+                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                            Tente ajustar o município ou código CNAE.
+                        </p>
+                    </div>
+                )}
+
+                {/* Initial state */}
+                {!loading && !hasSearched && (
+                    <div className="py-16 text-center">
+                        <SearchIcon className="h-16 w-16 text-muted-foreground/20 mx-auto mb-4" />
+                        <h3 className="text-lg font-bold text-muted-foreground">Pronto para pesquisar</h3>
+                        <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-1">
+                            Informe o município e o código CNAE para buscar estabelecimentos ativos na base da Receita Federal.
+                        </p>
+                    </div>
+                )}
             </div>
         </AppShell>
     );
