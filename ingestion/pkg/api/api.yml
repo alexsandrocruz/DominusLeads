@@ -1,0 +1,180 @@
+openapi: 3.0.2
+servers:
+  - url: /api/v1
+paths:
+  /estabelecimentos-ativos:
+    get:
+      summary: Get establishments
+      required:
+        - municipio
+        - cnae
+      parameters:
+        - name: municipio
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: cnae
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EstabelecimentosAtivo"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
+  /cnaes:
+    get:
+      summary: Get CNAEs
+      parameters:
+        - name: nome
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cnae"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
+  /cnaes/{codigo}:
+    get:
+      summary: Get CNAE by code
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cnae"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    EstabelecimentosAtivo:
+      type: object
+      properties:
+        cnpj_basico:
+          type: string
+        cnpj_ordem:
+          type: string
+        cnpj_dv:
+          type: string
+        identificador_matriz_filial:
+          type: string
+        nome_fantasia:
+          type: string
+        situacao_cadastral:
+          type: string
+        data_situacao_cadastral:
+          type: string
+          format: date
+        motivo_situacao_cadastral:
+          type: string
+        nome_cidade_exterior:
+          type: string
+        pais:
+          type: string
+        data_inicio_atividade:
+          type: string
+          format: date
+        cnaes:
+          type: array
+          items:
+            type: string
+        tipo_logradouro:
+          type: string
+        logradouro:
+          type: string
+        numero:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cep:
+          type: string
+        uf:
+          type: string
+        municipio:
+          type: string
+        ddd_1:
+          type: string
+        telefone_1:
+          type: string
+        ddd_2:
+          type: string
+        telefone_2:
+          type: string
+        ddd_fax:
+          type: string
+        fax:
+          type: string
+        correio_eletronico:
+          type: string
+        situacao_especial:
+          type: string
+        data_situacao_especial:
+          type: string
+          format: date
+    Cnae:
+      type: object
+      properties:
+        codigo:
+          type: string
+        descricao:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
