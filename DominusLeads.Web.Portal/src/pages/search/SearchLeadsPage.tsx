@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import {
     Search as SearchIcon,
     MapPin,
-    Building,
     Phone,
     Mail,
     Calendar,
@@ -14,11 +13,11 @@ import {
     CheckCircle2,
     Loader2,
     Tag,
-    Hash,
-    ExternalLink,
+    Download,
 } from "lucide-react";
 import { searchExternalLeads, extractLeads, type MarketLeadDto } from "@/lib/services/MarketService";
 import { toast } from "sonner";
+import CnaeTypeahead from "@/components/search/CnaeTypeahead";
 
 /** Mapear código situação cadastral p/ label legível */
 function situacaoLabel(code?: string): string {
@@ -49,17 +48,19 @@ function matrizFilialLabel(code?: string): string {
 export default function SearchLeadsPage() {
     const [loading, setLoading] = useState(false);
     const [extracting, setExtracting] = useState<string | null>(null);
+    const [extractingAll, setExtractingAll] = useState(false);
     const [results, setResults] = useState<MarketLeadDto[]>([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [filters, setFilters] = useState({
         municipio: "",
         cnae: "",
+        cnaeDesc: "",
         bairro: "",
     });
 
     const handleSearch = async () => {
         if (!filters.cnae || !filters.cnae.trim()) {
-            toast.error("O campo CNAE é obrigatório para realizar a busca.");
+            toast.error("Selecione um CNAE para realizar a busca.");
             return;
         }
 
@@ -105,8 +106,31 @@ export default function SearchLeadsPage() {
         }
     };
 
+    const handleExtractAll = async () => {
+        const pendingLeads = results.filter((l) => !l.isExtracted && l.cnpj);
+        if (pendingLeads.length === 0) {
+            toast.info("Todos os leads já foram extraídos.");
+            return;
+        }
+
+        setExtractingAll(true);
+        try {
+            const cnpjs = pendingLeads.map((l) => l.cnpj!);
+            await extractLeads({ cnpjs });
+            toast.success(`${cnpjs.length} lead(s) extraído(s) com sucesso!`);
+            setResults((prev) =>
+                prev.map((l) => (cnpjs.includes(l.cnpj!) ? { ...l, isExtracted: true } : l))
+            );
+        } catch (error) {
+            console.error("Erro na extração em lote:", error);
+            toast.error("Erro ao extrair leads em lote.");
+        } finally {
+            setExtractingAll(false);
+        }
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") handleSearch();
+        if (e.key === "Enter" && filters.cnae) handleSearch();
     };
 
     const buildEnderecoCompleto = (lead: MarketLeadDto) => {
@@ -117,6 +141,8 @@ export default function SearchLeadsPage() {
         if (lead.complemento) parts.push(`- ${lead.complemento}`);
         return parts.join(" ") || null;
     };
+
+    const pendingCount = results.filter((l) => !l.isExtracted && l.cnpj).length;
 
     return (
         <AppShell>
@@ -147,17 +173,14 @@ export default function SearchLeadsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">CNAE (Código)</label>
-                            <div className="relative">
-                                <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                                <Input
-                                    placeholder="Ex: 6201501"
-                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary"
-                                    value={filters.cnae}
-                                    onChange={(e) => setFilters({ ...filters, cnae: e.target.value })}
-                                    onKeyDown={handleKeyDown}
-                                />
-                            </div>
+                            <label className="text-sm font-bold text-muted-foreground px-1">SETOR (CNAE)</label>
+                            <CnaeTypeahead
+                                value={filters.cnae}
+                                onChange={(code, desc) =>
+                                    setFilters({ ...filters, cnae: code, cnaeDesc: desc })
+                                }
+                                onKeyDown={handleKeyDown}
+                            />
                         </div>
 
                         <div className="space-y-2">
@@ -184,6 +207,23 @@ export default function SearchLeadsPage() {
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
                             Pesquisar Leads
                         </Button>
+
+                        {results.length > 0 && pendingCount > 0 && (
+                            <Button
+                                variant="outline"
+                                className="h-11 px-6 gap-2 font-bold border-primary/30 hover:bg-primary/5"
+                                onClick={handleExtractAll}
+                                disabled={extractingAll}
+                            >
+                                {extractingAll ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Download className="h-4 w-4" />
+                                )}
+                                Extrair Todos ({pendingCount})
+                            </Button>
+                        )}
+
                         {results.length > 0 && (
                             <span className="text-sm text-muted-foreground font-medium">
                                 {results.length} resultado(s) encontrado(s)
@@ -331,7 +371,7 @@ export default function SearchLeadsPage() {
                                                     className="w-full gap-2 font-bold"
                                                     size="sm"
                                                     onClick={() => lead.cnpj && handleExtract(lead.cnpj)}
-                                                    disabled={!lead.cnpj || extracting === lead.cnpj}
+                                                    disabled={!lead.cnpj || extracting === lead.cnpj || extractingAll}
                                                 >
                                                     {extracting === lead.cnpj ? (
                                                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -375,7 +415,7 @@ export default function SearchLeadsPage() {
                         <SearchIcon className="h-16 w-16 text-muted-foreground/20 mx-auto mb-4" />
                         <h3 className="text-lg font-bold text-muted-foreground">Pronto para pesquisar</h3>
                         <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-1">
-                            Informe o município e o código CNAE para buscar estabelecimentos ativos na base da Receita Federal.
+                            Informe o município e busque um CNAE pela descrição (ex: "dentista") ou código para encontrar estabelecimentos ativos.
                         </p>
                     </div>
                 )}
