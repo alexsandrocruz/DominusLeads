@@ -4,6 +4,8 @@ export interface MarketSearchInput {
     municipio?: string;
     cnae?: string;
     bairro?: string;
+    verticalId?: string;
+    cnaeCodes?: string[];
 }
 
 export interface MarketLeadDto {
@@ -37,6 +39,19 @@ export interface MarketLeadDto {
     isExtracted: boolean;
 }
 
+export interface CnaeDto {
+    codigo: string;
+    descricao: string;
+}
+
+export interface MarketVerticalDto {
+    id: string;
+    nome: string;
+    descricao?: string;
+    icone?: string;
+    cnaeIds: string[];
+}
+
 export interface ExtractLeadsInput {
     cnpjs: string[];
 }
@@ -47,4 +62,16 @@ export const searchExternalLeads = async (input: MarketSearchInput) => {
 
 export const extractLeads = async (input: ExtractLeadsInput) => {
     return apiClient.post("/api/app/market/extract-leads", input);
+};
+
+export const getCnaes = async (parentId?: string) => {
+    return apiClient.get<CnaeDto[]>("/api/app/market/cnaes", { params: { parentId } });
+};
+
+export const getVerticals = async () => {
+    return apiClient.get<MarketVerticalDto[]>("/api/app/market/verticals");
+};
+
+export const syncCnaes = async () => {
+    return apiClient.post("/api/app/market/sync-cnaes");
 };

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -18,8 +19,20 @@ public interface IMarketAppService : IApplicationService
     Task ExtractLeadsAsync(ExtractLeadsDto input);
 
     [AllowAnonymous]
-    Task<List<CnaeDto>> GetCnaesAsync();
+    Task<List<CnaeDto>> GetCnaesAsync(string? parentId = null);
     
     [AllowAnonymous]
     Task<List<MunicipalityDto>> GetMunicipiosAsync();
+
+    [AllowAnonymous]
+    Task SyncCnaesAsync();
+
+    [AllowAnonymous]
+    Task<List<MarketVerticalDto>> GetVerticalsAsync();
+
+    Task<MarketVerticalDto> CreateVerticalAsync(CreateUpdateMarketVerticalDto input);
+
+    Task<MarketVerticalDto> UpdateVerticalAsync(Guid id, CreateUpdateMarketVerticalDto input);
+
+    Task DeleteVerticalAsync(Guid id);
 }

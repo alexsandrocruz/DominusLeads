@@ -15,9 +15,21 @@ import {
     Tag,
     Download,
 } from "lucide-react";
-import { searchExternalLeads, extractLeads, type MarketLeadDto } from "@/lib/services/MarketService";
+import {
+    searchExternalLeads,
+    extractLeads,
+    getVerticals,
+    type MarketLeadDto,
+    type MarketVerticalDto,
+    type CnaeDto
+} from "@/lib/services/MarketService";
 import { toast } from "sonner";
 import CnaeTypeahead from "@/components/search/CnaeTypeahead";
+import { VerticalSelector } from "@/components/search/VerticalSelector";
+import { CnaeSelectorModal } from "@/components/search/CnaeSelectorModal";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { Filter, Layers, Rocket } from "lucide-react";
+import { useEffect } from "react";
 
 /** Mapear código situação cadastral p/ label legível */
 function situacaoLabel(code?: string): string {
@@ -51,6 +63,12 @@ export default function SearchLeadsPage() {
     const [extractingAll, setExtractingAll] = useState(false);
     const [results, setResults] = useState<MarketLeadDto[]>([]);
     const [hasSearched, setHasSearched] = useState(false);
+    const [searchMode, setSearchMode] = useState<"quick" | "vertical" | "cnae">("quick");
+    const [verticals, setVerticals] = useState<MarketVerticalDto[]>([]);
+    const [selectedVerticalId, setSelectedVerticalId] = useState<string>();
+    const [selectedCnaesList, setSelectedCnaesList] = useState<CnaeDto[]>([]);
+    const [isCnaeModalOpen, setIsCnaeModalOpen] = useState(false);
+
     const [filters, setFilters] = useState({
         municipio: "",
         cnae: "",
@@ -58,9 +76,21 @@ export default function SearchLeadsPage() {
         bairro: "",
     });
 
+    useEffect(() => {
+        getVerticals().then(res => setVerticals(res.data)).catch(console.error);
+    }, []);
+
     const handleSearch = async () => {
-        if (!filters.cnae || !filters.cnae.trim()) {
-            toast.error("Selecione um CNAE para realizar a busca.");
+        const hasCnae = searchMode === 'quick' ? !!filters.cnae?.trim() :
+            searchMode === 'cnae' ? selectedCnaesList.length > 0 :
+                searchMode === 'vertical' ? !!selectedVerticalId : false;
+
+        if (!hasCnae) {
+            toast.error(
+                searchMode === 'vertical' ? "Selecione um segmento para realizar a busca." :
+                    searchMode === 'cnae' ? "Selecione ao menos um CNAE na árvore." :
+                        "Selecione um CNAE para realizar a busca."
+            );
             return;
         }
 
@@ -74,7 +104,9 @@ export default function SearchLeadsPage() {
         try {
             const response = await searchExternalLeads({
                 municipio: filters.municipio.trim().toUpperCase(),
-                cnae: filters.cnae.replace(/[^0-9]/g, "").trim(),
+                cnae: searchMode === 'quick' ? filters.cnae.replace(/[^0-9]/g, "").trim() : undefined,
+                cnaeCodes: searchMode === 'cnae' ? selectedCnaesList.map(c => c.codigo) : undefined,
+                verticalId: searchMode === 'vertical' ? selectedVerticalId : undefined,
                 bairro: filters.bairro.trim() || undefined,
             });
             const data = response.data;
@@ -130,7 +162,7 @@ export default function SearchLeadsPage() {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" && filters.cnae) handleSearch();
+        if (e.key === "Enter") handleSearch();
     };
 
     const buildEnderecoCompleto = (lead: MarketLeadDto) => {
@@ -157,38 +189,89 @@ export default function SearchLeadsPage() {
 
                 {/* Search Card */}
                 <Card className="p-6 border-primary/20 shadow-lg shadow-primary/5">
-                    <div className="grid gap-6 md:grid-cols-3">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">MUNICÍPIO</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-                                <Input
-                                    placeholder="Ex: ARACAJU, SAO PAULO..."
-                                    className="pl-10 h-11 border-primary/20 focus-visible:ring-primary uppercase"
-                                    value={filters.municipio}
-                                    onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
-                                    onKeyDown={handleKeyDown}
-                                />
+                    <div className="space-y-4 md:col-span-3">
+                        <Tabs value={searchMode} onValueChange={(v: any) => setSearchMode(v)} className="w-full">
+                            <TabsList className="grid grid-cols-3 w-full sm:w-[400px]">
+                                <TabsTrigger value="quick" className="gap-2">
+                                    <Rocket className="h-4 w-4" /> Rápida
+                                </TabsTrigger>
+                                <TabsTrigger value="vertical" className="gap-2">
+                                    <Layers className="h-4 w-4" /> Segmentos
+                                </TabsTrigger>
+                                <TabsTrigger value="cnae" className="gap-2">
+                                    <Filter className="h-4 w-4" /> Avançada
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+
+                        <div className="grid gap-6 md:grid-cols-3">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-muted-foreground uppercase px-1">MUNICÍPIO <span className="text-red-500">*</span></label>
+                                <div className="relative">
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+                                    <Input
+                                        placeholder="Ex: ARACAJU, SAO PAULO..."
+                                        className="pl-10 h-11 border-primary/20 focus-visible:ring-primary uppercase font-semibold"
+                                        value={filters.municipio}
+                                        onChange={(e) => setFilters({ ...filters, municipio: e.target.value })}
+                                        onKeyDown={handleKeyDown}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 md:col-span-2">
+                                {searchMode === 'quick' && (
+                                    <>
+                                        <label className="text-xs font-bold text-muted-foreground uppercase px-1">SETOR (CNAE) <span className="text-red-500">*</span></label>
+                                        <CnaeTypeahead
+                                            value={filters.cnae}
+                                            onChange={(code, desc) =>
+                                                setFilters({ ...filters, cnae: code, cnaeDesc: desc })
+                                            }
+                                            onKeyDown={handleKeyDown}
+                                        />
+                                    </>
+                                )}
+
+                                {searchMode === 'vertical' && (
+                                    <>
+                                        <label className="text-xs font-bold text-muted-foreground uppercase px-1">VERTICAL DE MERCADO <span className="text-red-500">*</span></label>
+                                        <VerticalSelector
+                                            verticals={verticals}
+                                            selectedId={selectedVerticalId}
+                                            onSelect={setSelectedVerticalId}
+                                        />
+                                    </>
+                                )}
+
+                                {searchMode === 'cnae' && (
+                                    <>
+                                        <label className="text-xs font-bold text-muted-foreground uppercase px-1">MÚLTIPLOS CNAES <span className="text-red-500">*</span></label>
+                                        <div
+                                            className="w-full min-h-[44px] p-2 bg-background border border-primary/20 rounded-md cursor-pointer hover:border-primary transition-all flex flex-wrap gap-2 items-center"
+                                            onClick={() => setIsCnaeModalOpen(true)}
+                                        >
+                                            {selectedCnaesList.length === 0 ? (
+                                                <span className="text-muted-foreground text-sm pl-2">Clique para selecionar da árvore...</span>
+                                            ) : (
+                                                selectedCnaesList.map(c => (
+                                                    <span key={c.codigo} className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded border border-primary/20">
+                                                        {c.codigo}
+                                                    </span>
+                                                ))
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">SETOR (CNAE)</label>
-                            <CnaeTypeahead
-                                value={filters.cnae}
-                                onChange={(code, desc) =>
-                                    setFilters({ ...filters, cnae: code, cnaeDesc: desc })
-                                }
-                                onKeyDown={handleKeyDown}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-muted-foreground px-1">BAIRRO (Opcional)</label>
-                            <div className="relative">
+                        <div className="space-y-2 pt-2">
+                            <label className="text-xs font-bold text-muted-foreground uppercase px-1">BAIRRO (Opcional)</label>
+                            <div className="relative max-w-md">
                                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
                                 <Input
-                                    placeholder="Filtrar por bairro..."
+                                    placeholder="Filtrar por nome do bairro se desejar algo específico..."
                                     className="pl-10 h-11 border-primary/20 focus-visible:ring-primary"
                                     value={filters.bairro}
                                     onChange={(e) => setFilters({ ...filters, bairro: e.target.value })}
@@ -419,6 +502,12 @@ export default function SearchLeadsPage() {
                         </p>
                     </div>
                 )}
+                <CnaeSelectorModal
+                    isOpen={isCnaeModalOpen}
+                    onClose={() => setIsCnaeModalOpen(false)}
+                    selectedCnaes={selectedCnaesList}
+                    onSelect={setSelectedCnaesList}
+                />
             </div>
         </AppShell>
     );

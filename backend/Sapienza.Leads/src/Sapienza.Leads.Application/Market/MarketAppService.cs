@@ -12,6 +12,7 @@ using Sapienza.Leads.Searches;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using System.Net.Http;
 
 namespace Sapienza.Leads.Market;
 
@@ -23,28 +24,97 @@ public class MarketAppService : ApplicationService, IMarketAppService
     private readonly ICreditAppService _creditAppService;
     private readonly IRepository<Lead, Guid> _leadRepository;
     private readonly IRepository<Event, Guid> _eventRepository;
+    private readonly IRepository<Cnae, string> _cnaeRepository;
+    private readonly IRepository<MarketVertical, Guid> _marketVerticalRepository;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     public MarketAppService(
         MarketProxyService marketProxyService,
         ISearchAppService searchAppService,
         ICreditAppService creditAppService,
         IRepository<Lead, Guid> leadRepository,
-        IRepository<Event, Guid> eventRepository)
+        IRepository<Event, Guid> eventRepository,
+        IRepository<Cnae, string> cnaeRepository,
+        IRepository<MarketVertical, Guid> marketVerticalRepository,
+        IHttpClientFactory httpClientFactory)
     {
         _marketProxyService = marketProxyService;
         _searchAppService = searchAppService;
         _creditAppService = creditAppService;
         _leadRepository = leadRepository;
         _eventRepository = eventRepository;
+        _cnaeRepository = cnaeRepository;
+        _marketVerticalRepository = marketVerticalRepository;
+        _httpClientFactory = httpClientFactory;
     }
 
     [AllowAnonymous]
     public async Task<List<MarketLeadDto>> SearchExternalAsync(MarketSearchInputDto input)
     {
-        var rawJson = await _marketProxyService.SearchExternalAsync(input);
+        var cnaeCodes = new HashSet<string>();
+
+        if (!string.IsNullOrEmpty(input.Cnae))
+            cnaeCodes.Add(input.Cnae);
+
+        if (input.CnaeCodes != null)
+            foreach (var c in input.CnaeCodes) cnaeCodes.Add(c);
+
+        if (input.VerticalId.HasValue)
+        {
+            try
+            {
+                var vertical = await _marketVerticalRepository.GetAsync(input.VerticalId.Value, includeDetails: true);
+                foreach (var vCnae in vertical.Cnaes) cnaeCodes.Add(vCnae.CnaeId);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("Vertical not found or error loading: " + ex.Message);
+            }
+        }
+
+        // Expand specialized codes to full 7-digit subclasses
+        var allSubclasses = await ExpandToSubclassesAsync(cnaeCodes);
+
+        // If no subclasses found (e.g. sync hasn't run), fallback to the original code or return empty
+        if (!allSubclasses.Any() && cnaeCodes.Any())
+        {
+             allSubclasses = cnaeCodes.ToList();
+        }
+
+        var allResults = new List<MarketLeadDto>();
         
-        // Parse do JSON bruto da API externa
-        var results = ParseExternalJson(rawJson);
+        // Parallelizing calls to the external API
+        var tasks = allSubclasses.Select(async cnae =>
+        {
+            try
+            {
+                var searchInput = new MarketSearchInputDto
+                {
+                    Municipio = input.Municipio,
+                    Cnae = cnae,
+                    Bairro = input.Bairro
+                };
+                var rawJson = await _marketProxyService.SearchExternalAsync(searchInput);
+                return ParseExternalJson(rawJson);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Search failed for CNAE {cnae}: {ex.Message}");
+                return new List<MarketLeadDto>();
+            }
+        });
+
+        var resultsArray = await Task.WhenAll(tasks);
+        foreach (var batch in resultsArray)
+        {
+            allResults.AddRange(batch);
+        }
+
+        // Deduplicate by CNPJ
+        var results = allResults
+            .GroupBy(x => x.Cnpj)
+            .Select(g => g.First())
+            .ToList();
 
         // Registrar a consulta no histórico (skip if not authenticated)
         try
@@ -80,11 +150,69 @@ public class MarketAppService : ApplicationService, IMarketAppService
         return results;
     }
 
-    [AllowAnonymous]
-    public async Task<List<CnaeDto>> GetCnaesAsync()
+    private async Task<List<string>> ExpandToSubclassesAsync(IEnumerable<string> codes)
     {
-        var rawJson = await _marketProxyService.GetCnaesAsync();
-        return ParseCnaesJson(rawJson);
+        var result = new HashSet<string>();
+        foreach (var code in codes)
+        {
+            if (code.Length == 7)
+            {
+                result.Add(code);
+                continue;
+            }
+
+            // Recursive expansion from database (syncing needed)
+            var subclasses = await GetSubclassesRecursivelyAsync(code);
+            if (subclasses.Any())
+            {
+                foreach (var s in subclasses) result.Add(s);
+            }
+            else
+            {
+                // If not found in DB, keep as is
+                result.Add(code);
+            }
+        }
+        return result.ToList();
+    }
+
+    private async Task<List<string>> GetSubclassesRecursivelyAsync(string parentId)
+    {
+        var children = await _cnaeRepository.GetListAsync(x => x.ParentId == parentId);
+        var result = new List<string>();
+        foreach (var cnae in children)
+        {
+            if (cnae.Nivel == CnaeLevel.Subclasse)
+            {
+                result.Add(cnae.Id);
+            }
+            else
+            {
+                result.AddRange(await GetSubclassesRecursivelyAsync(cnae.Id));
+            }
+        }
+        return result;
+    }
+
+    [AllowAnonymous]
+    public async Task<List<CnaeDto>> GetCnaesAsync(string? parentId = null)
+    {
+        var query = await _cnaeRepository.GetQueryableAsync();
+        var cnaes = query.Where(x => x.ParentId == parentId).ToList();
+        
+        // If local DB is empty, fallback to the original proxy logic if needed
+        // but ideally the user should run SyncCnaesAsync first.
+        if (!cnaes.Any() && string.IsNullOrEmpty(parentId))
+        {
+            var rawJson = await _marketProxyService.GetCnaesAsync();
+            return ParseCnaesJson(rawJson);
+        }
+
+        return cnaes.Select(x => new CnaeDto
+        {
+            Codigo = x.Id,
+            Descricao = x.Descricao
+        }).ToList();
     }
 
     [AllowAnonymous]
@@ -329,5 +457,111 @@ public class MarketAppService : ApplicationService, IMarketAppService
             Logger.LogError("Failed to parse Municipios JSON: " + ex.Message);
         }
         return list;
+    }
+
+    [AllowAnonymous]
+    public async Task SyncCnaesAsync()
+    {
+        var client = _httpClientFactory.CreateClient();
+        var response = await client.GetAsync("https://servicodados.ibge.gov.br/api/v2/cnae/subclasses");
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+
+        using var doc = JsonDocument.Parse(json);
+        foreach (var element in doc.RootElement.EnumerateArray())
+        {
+            await ProcessSubclassAsync(element);
+        }
+    }
+
+    private async Task ProcessSubclassAsync(JsonElement subclassEl)
+    {
+        var secaoId = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("divisao").GetProperty("secao").GetProperty("id").GetString();
+        var secaoDesc = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("divisao").GetProperty("secao").GetProperty("descricao").GetString();
+        await EnsureCnaeExistsAsync(secaoId, secaoDesc, CnaeLevel.Secao);
+
+        var divisaoId = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("divisao").GetProperty("id").GetString();
+        var divisaoDesc = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("divisao").GetProperty("descricao").GetString();
+        await EnsureCnaeExistsAsync(divisaoId, divisaoDesc, CnaeLevel.Divisao, secaoId);
+
+        var grupoId = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("id").GetString();
+        var grupoDesc = subclassEl.GetProperty("classe").GetProperty("grupo").GetProperty("descricao").GetString();
+        await EnsureCnaeExistsAsync(grupoId, grupoDesc, CnaeLevel.Grupo, divisaoId);
+
+        var classeId = subclassEl.GetProperty("classe").GetProperty("id").GetString();
+        var classeDesc = subclassEl.GetProperty("classe").GetProperty("descricao").GetString();
+        await EnsureCnaeExistsAsync(classeId, classeDesc, CnaeLevel.Classe, grupoId);
+
+        var subclassId = subclassEl.GetProperty("id").GetString();
+        var subclassDesc = subclassEl.GetProperty("descricao").GetString();
+        await EnsureCnaeExistsAsync(subclassId, subclassDesc, CnaeLevel.Subclasse, classeId);
+    }
+
+    private async Task EnsureCnaeExistsAsync(string? id, string? descricao, CnaeLevel nivel, string? parentId = null)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+
+        var existing = await _cnaeRepository.FindAsync(id);
+        if (existing == null)
+        {
+            var cnae = new Cnae(id, descricao ?? "", nivel, parentId);
+            await _cnaeRepository.InsertAsync(cnae, autoSave: true);
+        }
+    }
+
+    [AllowAnonymous]
+    public async Task<List<MarketVerticalDto>> GetVerticalsAsync()
+    {
+        var verticals = await _marketVerticalRepository.GetListAsync(includeDetails: true);
+        return verticals.Select(v => new MarketVerticalDto
+        {
+            Id = v.Id,
+            Nome = v.Nome,
+            Descricao = v.Descricao,
+            Icone = v.Icone,
+            CnaeIds = v.Cnaes.Select(c => c.CnaeId).ToList()
+        }).ToList();
+    }
+
+    public async Task<MarketVerticalDto> CreateVerticalAsync(CreateUpdateMarketVerticalDto input)
+    {
+        var vertical = new MarketVertical(GuidGenerator.Create(), input.Nome, input.Descricao, input.Icone);
+        foreach (var cnaeId in input.CnaeIds)
+        {
+            vertical.AddCnae(cnaeId);
+        }
+        await _marketVerticalRepository.InsertAsync(vertical, autoSave: true);
+        return MapToVerticalDto(vertical);
+    }
+
+    public async Task<MarketVerticalDto> UpdateVerticalAsync(Guid id, CreateUpdateMarketVerticalDto input)
+    {
+        var vertical = await _marketVerticalRepository.GetAsync(id, includeDetails: true);
+        
+        vertical.Cnaes.Clear();
+        foreach (var cnaeId in input.CnaeIds)
+        {
+            vertical.AddCnae(cnaeId);
+        }
+
+        await _marketVerticalRepository.UpdateAsync(vertical, autoSave: true);
+        return MapToVerticalDto(vertical);
+    }
+
+    public async Task DeleteVerticalAsync(Guid id)
+    {
+        await _marketVerticalRepository.DeleteAsync(id);
+    }
+
+    private MarketVerticalDto MapToVerticalDto(MarketVertical v)
+    {
+        return new MarketVerticalDto
+        {
+            Id = v.Id,
+            Nome = v.Nome,
+            Descricao = v.Descricao,
+            Icone = v.Icone,
+            CnaeIds = v.Cnaes.Select(c => c.CnaeId).ToList()
+        };
     }
 }

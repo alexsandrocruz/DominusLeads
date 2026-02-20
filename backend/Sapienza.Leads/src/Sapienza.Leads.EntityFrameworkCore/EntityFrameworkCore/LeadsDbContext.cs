@@ -37,6 +37,8 @@ public class LeadsDbContext :
     public DbSet<Search> Searches { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<ConsultedLead> ConsultedLeads { get; set; }
+    public DbSet<Cnae> Cnaes { get; set; }
+    public DbSet<MarketVertical> MarketVerticals { get; set; }
 
 
 
@@ -153,6 +155,32 @@ public class LeadsDbContext :
             b.ConfigureByConvention();
             b.Property(x => x.RawJson).IsRequired().HasMaxLength(MarketConsts.MaxRawJsonLength);
             b.HasIndex(x => x.TenantId);
+        });
+
+        builder.Entity<Cnae>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Cnaes", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Descricao).IsRequired().HasMaxLength(MarketConsts.MaxCnaeDescricaoLength);
+            b.Property(x => x.ParentId).HasMaxLength(MarketConsts.MaxCnaeIdLength);
+        });
+
+        builder.Entity<MarketVertical>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "MarketVerticals", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Nome).IsRequired().HasMaxLength(MarketConsts.MaxVerticalNomeLength);
+            b.Property(x => x.Descricao).HasMaxLength(MarketConsts.MaxVerticalDescricaoLength);
+            b.Property(x => x.Icone).HasMaxLength(MarketConsts.MaxVerticalIconeLength);
+
+            b.HasMany(x => x.Cnaes).WithOne().HasForeignKey(x => x.MarketVerticalId).IsRequired();
+        });
+
+        builder.Entity<MarketVerticalCnae>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "MarketVerticalCnaes", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasKey(x => new { x.MarketVerticalId, x.CnaeId });
         });
     }
 }
