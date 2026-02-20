@@ -10,10 +10,12 @@
 | Métrica | Valor |
 |:---|:---|
 | **Entidades de Domínio** | 8 implementadas |
-| **Páginas Frontend (Portal)** | 6 implementadas |
-| **Endpoints de API** | ~15 operacionais |
+| **Páginas Frontend (Portal)** | 8 implementadas |
+| **Endpoints de API** | ~20 operacionais |
 | **Infraestrutura** | Docker Compose (local) |
 | **Landing Page** | ✅ Publicável |
+| **Auth & Onboarding** | ✅ Funcional |
+| **CRM Pipeline** | ✅ Kanban + Drag-and-drop |
 
 ---
 
@@ -60,10 +62,15 @@
 - [x] **CnaeTypeahead** — Autocomplete offline com ~1300 CNAEs (arquivo JSON local)
 - [x] **CnaeSelectorModal** — Modal de navegação/seleção hierárquica CNAE
 - [x] **VerticalSelector** — Cards de seleção de segmentos de mercado
-- [x] **LeadsListPage** — Listagem de leads extraídos
-- [x] **LeadDetailPage** — Detalhes do lead + Timeline de eventos
+- [x] **LeadsListPage** — Listagem com toggle Kanban/Lista, busca textual, filtros avançados (CNAE, Cidade)
+- [x] **KanbanBoard** — Pipeline visual com drag-and-drop entre estágios (`@dnd-kit`)
+  - Colunas: Novo → Contatado → Qualificado → Proposta → Fechado
+  - `useDroppable` por coluna, feedback visual no drop, distinção click vs drag
+- [x] **LeadDetailPage** — Detalhes do lead + Timeline de eventos + Labels de status atualizados
 - [x] **BillingDashboardPage** — Saldo e extrato de créditos
-- [x] **Dashboard** — Visão geral (indicadores básicos)
+- [x] **Dashboard** — KPIs reais do backend (leads, créditos, taxa conversão, evolução semanal)
+- [x] **OnboardingPage** — Carrossel de boas-vindas + checklist de configuração
+- [x] **Login/Register** — Autenticação com ABP Identity
 
 ### Landing Page
 
@@ -85,25 +92,28 @@
 ### 🔥 Prioridade Alta (MVP Comercial)
 
 #### P1. Autenticação & Multi-Tenancy
-- [ ] Login/Registro com ABP Identity (email/senha)
+- [x] Login/Registro com ABP Identity (email/senha)
 - [ ] SSO com Google (opcional)
-- [ ] Middleware de isolamento por Tenant
-- [ ] Tela de Login no frontend
-- [ ] Tela de Onboarding (carrossel de boas-vindas)
+- [x] Middleware de isolamento por Tenant
+- [x] Tela de Login no frontend
+- [x] Tela de Onboarding (carrossel de boas-vindas)
 - [ ] Roles: Admin, Vendedor, Viewer
 
 #### P2. Dashboard Real
-- [ ] Conectar indicadores ao backend (total leads, créditos, taxa conversão)
-- [ ] KPIs: Leads extraídos no mês, buscas realizadas, créditos consumidos
-- [ ] Gráfico de evolução de leads por semana
-- [ ] Atividade recente (últimos eventos)
+- [x] Conectar indicadores ao backend (total leads, créditos, taxa conversão)
+- [x] KPIs: Leads extraídos no mês, buscas realizadas, créditos consumidos
+- [x] Gráfico de evolução de leads por semana
+- [x] Atividade recente (últimos eventos)
 
 #### P3. CRM — Pipeline de Vendas
-- [ ] Kanban de Leads (Novo → Contatado → Qualificado → Proposta → Fechado)
-- [ ] Mover lead entre estágios com drag-and-drop
-- [ ] Filtros avançados (por status, CNAE, cidade, score)
-- [ ] Busca textual na lista de leads
-- [ ] Notas e atividades manuais no Lead
+- [x] Kanban de Leads (Novo → Contatado → Qualificado → Proposta → Fechado)
+- [x] Mover lead entre estágios com drag-and-drop (`@dnd-kit` + `useDroppable`)
+- [x] Filtros avançados (por status, CNAE, cidade, score)
+- [x] Busca textual na lista de leads
+- [x] API de atualização de status (`UpdateStatusAsync`) com log de `Event`
+- [x] API de notas manuais (`AddNoteAsync`) com `EventType.Nota`
+- [x] Enum `LeadStatus` atualizado: Novo, Contatado, Qualificado, Proposta, Fechado, Descartado
+- [x] UI de notas e atividades manuais no Lead Detail
 
 #### P4. Billing — Recarga de Créditos
 - [ ] Integração com gateway de pagamento (Stripe ou similar)
@@ -113,9 +123,9 @@
 - [ ] Planos de assinatura com créditos mensais
 
 #### P5. Seed de Verticais de Mercado
-- [ ] Popular banco com verticais relevantes (Saúde, Jurídico, TI, Contábil, etc.)
-- [ ] Associar CNAEs corretos a cada vertical
-- [ ] Ícones e descrições para cada vertical
+- [x] Popular banco com verticais relevantes (Saúde, Jurídico, TI, Contábil, etc.)
+- [x] Associar CNAEs corretos a cada vertical
+- [x] Ícones e descrições para cada vertical
 - [ ] Tela admin para CRUD de verticais
 
 ---
@@ -177,11 +187,11 @@
 
 ## 📋 Sprints Sugeridos (Próximos Passos)
 
-### Sprint 1 — Auth & Dashboard (2 semanas)
+### Sprint 1 — Auth & Dashboard ✅ (concluído)
 `P1` Login/Registro + `P2` Dashboard real + `P5` Seed Verticais
 
-### Sprint 2 — CRM & Pipeline (2 semanas)
-`P3` Kanban + Filtros + Notas
+### Sprint 2 — CRM & Pipeline ✅ (concluído — falta UI de notas no detalhe)
+`P3` Kanban + Filtros + Drag-and-drop + APIs de status/notas
 
 ### Sprint 3 — Billing & Pagamento (2 semanas)
 `P4` Recarga + Webhooks + Alertas

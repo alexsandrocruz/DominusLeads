@@ -512,7 +512,8 @@ public class MarketAppService : ApplicationService, IMarketAppService
     [AllowAnonymous]
     public async Task<List<MarketVerticalDto>> GetVerticalsAsync()
     {
-        var verticals = await _marketVerticalRepository.GetListAsync(includeDetails: true);
+        var queryable = await _marketVerticalRepository.WithDetailsAsync(v => v.Cnaes);
+        var verticals = await AsyncExecuter.ToListAsync(queryable);
         return verticals.Select(v => new MarketVerticalDto
         {
             Id = v.Id,
