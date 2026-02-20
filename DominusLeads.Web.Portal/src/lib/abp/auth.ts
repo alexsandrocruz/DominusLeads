@@ -52,7 +52,7 @@ export const useAuth = create<AuthState>()(
 
                 try {
                     const clientId = import.meta.env.VITE_OIDC_CLIENT_ID || "Leads_App";
-                    const scope = import.meta.env.VITE_OIDC_SCOPE || "openid profile email offline_access Sapienza.Lexus";
+                    const scope = import.meta.env.VITE_OIDC_SCOPE || "openid profile email offline_access Leads";
 
                     // Request token from OpenIddict
                     const params = new URLSearchParams();

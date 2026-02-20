@@ -76,7 +76,7 @@ apiClient.interceptors.response.use(
                     const response = await axios.post(`${API_BASE_URL}/connect/token`, {
                         grant_type: "refresh_token",
                         refresh_token: refreshToken,
-                        client_id: import.meta.env.VITE_OIDC_CLIENT_ID || "Sapienza.Lexus_App",
+                        client_id: import.meta.env.VITE_OIDC_CLIENT_ID || "Leads_App",
                     });
 
                     const { access_token, refresh_token } = response.data;
@@ -87,7 +87,7 @@ apiClient.interceptors.response.use(
                     return apiClient(originalRequest);
                 } catch (refreshError) {
                     // Refresh failed, redirect to login
-                    console.warn('[API Client] Token refresh failed, redirecting to login');
+                    console.warn('[API Client] Falha ao atualizar token, redirecionando para o login');
                     localStorage.removeItem("abp_access_token");
                     localStorage.removeItem("abp_refresh_token");
                     window.location.href = "/auth/login";
@@ -95,7 +95,7 @@ apiClient.interceptors.response.use(
                 }
             } else {
                 // No refresh token, redirect to login
-                console.warn('[API Client] No authentication token, redirecting to login');
+                console.warn('[API Client] Nenhum token de autenticação encontrado, redirecionando para o login');
                 localStorage.removeItem("abp_access_token");
                 localStorage.removeItem("abp_refresh_token");
                 window.location.href = "/auth/login";
@@ -105,7 +105,7 @@ apiClient.interceptors.response.use(
 
         // Handle 403 Forbidden - redirect to login
         if (error.response?.status === 403) {
-            console.warn('[API Client] Access forbidden (403), redirecting to login');
+            console.warn('[API Client] Acesso proibido (403), redirecionando para o login');
             window.location.href = "/auth/login";
             return Promise.reject(error);
         }
@@ -113,8 +113,8 @@ apiClient.interceptors.response.use(
         // Handle ABP error format
         if (error.response?.data?.error) {
             const abpError = error.response.data.error;
-            console.error("[API Client] ABP Error:", abpError);
-            return Promise.reject(new Error(abpError.message || "An error occurred"));
+            console.error("[API Client] Erro ABP:", abpError);
+            return Promise.reject(new Error(abpError.message || "Ocorreu um erro inesperado"));
         }
 
         // Handle 400 Bad Request
