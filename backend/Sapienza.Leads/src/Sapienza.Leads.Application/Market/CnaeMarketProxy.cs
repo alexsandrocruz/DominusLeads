@@ -69,7 +69,8 @@ public class CnaeMarketProxy : ICnaeMarketProxy, ITransientDependency
             client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
         }
 
-        var url = $"{baseUrl}/api/v1/cnpj/{cnpj}";
+        var cleanCnpj = cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
+        var url = $"{baseUrl}/api/v1/cnpj/{cleanCnpj}";
         var response = await client.GetAsync(url);
         response.EnsureSuccessStatusCode();
 

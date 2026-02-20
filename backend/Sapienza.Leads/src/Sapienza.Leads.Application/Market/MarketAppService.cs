@@ -94,6 +94,7 @@ public class MarketAppService : ApplicationService, IMarketAppService
         return ParseMunicipiosJson(rawJson);
     }
 
+    [AllowAnonymous]
     public async Task ExtractLeadsAsync(ExtractLeadsDto input)
     {
         foreach (var cnpj in input.Cnpjs)

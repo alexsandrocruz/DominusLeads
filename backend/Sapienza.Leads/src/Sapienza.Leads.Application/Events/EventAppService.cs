@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Sapienza.Leads.Events;
 
-[Authorize]
+[AllowAnonymous]
 public class EventAppService : ApplicationService, IEventAppService
 {
     private readonly IRepository<Event, Guid> _eventRepository;

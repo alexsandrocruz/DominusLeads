@@ -6,7 +6,7 @@ namespace Sapienza.Leads.Credits;
 public class AddCreditDto
 {
     [Required]
-    [Range(0.01, 1000000)]
+    [Range(-1000000, 1000000)]
     public decimal Valor { get; set; }
 
     [Required]
