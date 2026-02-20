@@ -3,14 +3,11 @@ import { AppShell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { Progress } from "@/components/ui/Progress";
-import { ScrollArea } from "@/components/ui/ScrollArea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Separator } from "@/components/ui/Separator";
+import { Textarea } from "@/components/ui/Textarea";
 import {
     MessageSquare,
     Phone,
-    Calendar,
     Copy,
     MapPin,
     Mail,
@@ -19,61 +16,70 @@ import {
     CheckCircle2,
     Send,
     Bot,
-    UserPlus,
     History,
-    Loader2
+    Loader2,
+    RefreshCw,
+    FileText,
+    StickyNote
 } from "lucide-react";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { getLead, type LeadDto } from "@/lib/services/LeadService";
+import { getLead, addLeadNote, type LeadDto } from "@/lib/services/LeadService";
 import { getLeadEvents, type EventDto } from "@/lib/services/EventService";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
+// EventType: WhatsApp=1, Ligacao=2, Email=3, Automacao=4, MudancaStatus=5, Nota=6
 const getEventIcon = (tipo: number) => {
     switch (tipo) {
-        case 0: return UserPlus;
-        case 1: return MessageSquare;
-        case 2: return MessageSquare; // WhatsApp
-        case 3: return Phone;
-        case 4: return Mail;
-        case 5: return Bot;
+        case 1: return MessageSquare; // WhatsApp
+        case 2: return Phone;         // Ligação
+        case 3: return Mail;          // Email
+        case 4: return Bot;           // Automação
+        case 5: return RefreshCw;     // Mudança de Status
+        case 6: return StickyNote;    // Nota
         default: return History;
     }
 };
 
 const getEventStyles = (tipo: number) => {
     switch (tipo) {
-        case 0: return { color: "text-slate-500", bgColor: "bg-slate-100" };
-        case 2: return { color: "text-emerald-500", bgColor: "bg-emerald-100" };
-        case 5: return { color: "text-purple-500", bgColor: "bg-purple-100" };
-        case 3: return { color: "text-primary", bgColor: "bg-primary/10" };
+        case 1: return { color: "text-emerald-500", bgColor: "bg-emerald-100" };   // WhatsApp
+        case 2: return { color: "text-primary", bgColor: "bg-primary/10" };         // Ligação
+        case 3: return { color: "text-blue-500", bgColor: "bg-blue-100" };          // Email
+        case 4: return { color: "text-purple-500", bgColor: "bg-purple-100" };      // Automação
+        case 5: return { color: "text-sky-500", bgColor: "bg-sky-100" };            // Mudança de Status
+        case 6: return { color: "text-amber-500", bgColor: "bg-amber-100" };        // Nota
         default: return { color: "text-slate-500", bgColor: "bg-slate-100" };
     }
 };
 
 const getStatusLabel = (status: number) => {
     switch (status) {
-        case 0: return "Novo";
-        case 1: return "Qualificado";
-        case 2: return "Em Negociação";
-        case 3: return "Validado";
-        case 4: return "Perdido";
+        case 1: return "Novo";
+        case 2: return "Contatado";
+        case 3: return "Qualificado";
+        case 4: return "Proposta";
+        case 5: return "Fechado";
+        case 6: return "Descartado";
         default: return "Novo";
     }
 };
 
-export default function LeadDetailPage({ params }: { params: { id: string } }) {
+export default function LeadDetailPage({ id }: { id: string }) {
     const [, setLocation] = useLocation();
     const [loading, setLoading] = useState(true);
     const [lead, setLead] = useState<LeadDto | null>(null);
     const [events, setEvents] = useState<EventDto[]>([]);
+    const [noteText, setNoteText] = useState("");
+    const [submittingNote, setSubmittingNote] = useState(false);
 
     useEffect(() => {
-        if (params.id) {
-            fetchData(params.id);
+        if (id) {
+            fetchData(id);
         }
-    }, [params.id]);
+    }, [id]);
 
     const fetchData = async (id: string) => {
         setLoading(true);
@@ -91,7 +97,24 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
         }
     };
 
-    // Mock data based on prototype
+    const handleAddNote = async () => {
+        if (!noteText.trim() || !id) return;
+        setSubmittingNote(true);
+        try {
+            await addLeadNote(id, noteText.trim());
+            setNoteText("");
+            toast.success("Nota adicionada com sucesso!");
+            // Refresh events to show new note
+            const eventsRes = await getLeadEvents(id);
+            setEvents(eventsRes.data);
+        } catch (err) {
+            console.error("Erro ao adicionar nota:", err);
+            toast.error("Erro ao adicionar nota.");
+        } finally {
+            setSubmittingNote(false);
+        }
+    };
+
     if (loading) {
         return (
             <AppShell>
@@ -237,6 +260,45 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
                     </CardContent>
                 </Card>
 
+                {/* Add Note Section */}
+                <Card className="border-none shadow-xl shadow-slate-200/50">
+                    <CardHeader className="pb-3 border-b border-muted/50">
+                        <CardTitle className="text-base font-black flex items-center gap-2">
+                            <FileText className="size-5 text-primary" />
+                            Adicionar Nota
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4 space-y-3">
+                        <Textarea
+                            placeholder="Escreva uma observação, registro de contato, ou anotação sobre este lead..."
+                            value={noteText}
+                            onChange={(e) => setNoteText(e.target.value)}
+                            className="min-h-[80px] resize-none border-muted focus-visible:ring-primary/20"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                                    handleAddNote();
+                                }
+                            }}
+                        />
+                        <div className="flex items-center justify-between">
+                            <p className="text-[10px] text-muted-foreground font-medium">⌘+Enter para enviar</p>
+                            <Button
+                                size="sm"
+                                className="gap-2 font-bold shadow-lg shadow-primary/20"
+                                onClick={handleAddNote}
+                                disabled={!noteText.trim() || submittingNote}
+                            >
+                                {submittingNote ? (
+                                    <Loader2 className="size-4 animate-spin" />
+                                ) : (
+                                    <Send className="size-4" />
+                                )}
+                                Salvar Nota
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+
                 {/* Timeline Section */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -244,7 +306,9 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
                             <History className="size-5 text-primary" />
                             <h3 className="text-base font-black">Linha do Tempo</h3>
                         </div>
-                        <Button variant="link" className="text-xs font-bold text-primary px-0">Ver Tudo</Button>
+                        <Badge variant="secondary" className="text-[10px] font-bold">
+                            {events.length} evento{events.length !== 1 ? "s" : ""}
+                        </Badge>
                     </div>
 
                     <div className="relative pl-6 space-y-8 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2px] before:bg-muted">
@@ -276,7 +340,11 @@ export default function LeadDetailPage({ params }: { params: { id: string } }) {
                                 </div>
                             );
                         }) : (
-                            <p className="text-xs text-muted-foreground italic">Nenhum evento registrado ainda.</p>
+                            <div className="py-8 text-center">
+                                <History className="size-8 text-muted-foreground/20 mx-auto mb-2" />
+                                <p className="text-xs text-muted-foreground italic">Nenhum evento registrado ainda.</p>
+                                <p className="text-[10px] text-muted-foreground/60 mt-1">Adicione uma nota acima para começar.</p>
+                            </div>
                         )}
                     </div>
                 </div>

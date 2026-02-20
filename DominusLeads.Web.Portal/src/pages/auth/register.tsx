@@ -65,19 +65,19 @@ export default function RegisterPage() {
                             </div>
                         </div>
                         <CardTitle className="text-2xl font-display font-bold">
-                            {isRoot ? "Workspace Created!" : "Awaiting Approval"}
+                            {isRoot ? "Workspace Criado!" : "Aguardando Aprovação"}
                         </CardTitle>
                         <CardDescription>
                             {isRoot
-                                ? "Your new workspace is being prepared. You can now log in."
-                                : "Your registration was successful and is now being reviewed."}
+                                ? "Seu novo workspace está sendo preparado. Você já pode fazer login."
+                                : "Seu cadastro foi realizado com sucesso e está sendo analisado."}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <p className="text-sm text-muted-foreground">
                             {isRoot
-                                ? `You will be redirected to your new dashboard shortly.`
-                                : "An administrator will evaluate your access request soon. You will receive an email once approved."}
+                                ? `Você será redirecionado para o seu painel em instantes.`
+                                : "Um administrador avaliará sua solicitação em breve. Você receberá um e-mail quando aprovado."}
                         </p>
                     </CardContent>
                     <CardFooter className="flex flex-col gap-3">
@@ -91,15 +91,15 @@ export default function RegisterPage() {
                                 }}
                                 className="w-full h-11 bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/20"
                             >
-                                Go to Workspace
+                                Ir para o Workspace
                             </Button>
                         ) : (
                             <Button onClick={() => setLocation("/auth/login")} className="w-full h-11">
-                                Back to Login
+                                Voltar ao Login
                             </Button>
                         )}
                         <Button variant="ghost" onClick={() => setLocation("/auth/login")} className="w-full">
-                            Cancel
+                            Cancelar
                         </Button>
                     </CardFooter>
                 </Card>
@@ -117,12 +117,12 @@ export default function RegisterPage() {
                         </div>
                     </div>
                     <CardTitle className="text-2xl font-display font-bold">
-                        {isRoot ? "Start your Workspace" : "Join the Platform"}
+                        {isRoot ? "Crie seu Workspace" : "Cadastre-se na Plataforma"}
                     </CardTitle>
                     <CardDescription>
                         {isRoot
-                            ? "Register your organization to start using the platform"
-                            : `Creating an account for ${tenant || 'current workspace'}`}
+                            ? "Cadastre sua organização para começar a usar a plataforma"
+                            : `Criando uma conta para ${tenant || 'workspace atual'}`}
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
@@ -134,12 +134,12 @@ export default function RegisterPage() {
                         )}
                         {isRoot && (
                             <div className="space-y-2">
-                                <Label htmlFor="workspace">Workspace Name (Tenant)</Label>
+                                <Label htmlFor="workspace">Nome do Workspace</Label>
                                 <div className="relative">
                                     <Building2 className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
                                     <Input
                                         id="workspace"
-                                        placeholder="Company Name"
+                                        placeholder="Nome da Empresa"
                                         value={workspaceName}
                                         onChange={(e) => setWorkspaceName(e.target.value)}
                                         required
@@ -148,12 +148,12 @@ export default function RegisterPage() {
                                 </div>
                                 <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                                     <Globe className="size-3" />
-                                    Your workspace will be accessible at {workspaceName.toLowerCase().replace(/\s+/g, '-')}.zensuite.com.br
+                                    Seu workspace estará acessível em {workspaceName.toLowerCase().replace(/\s+/g, '-')}.zensuite.com.br
                                 </p>
                             </div>
                         )}
                         <div className="space-y-2">
-                            <Label htmlFor="username">Username</Label>
+                            <Label htmlFor="username">Nome de Usuário</Label>
                             <Input
                                 id="username"
                                 type="text"
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email Address</Label>
+                            <Label htmlFor="email">Endereço de E-mail</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -179,7 +179,7 @@ export default function RegisterPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Senha</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -222,16 +222,16 @@ export default function RegisterPage() {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Creating account...
+                                    Criando conta...
                                 </>
                             ) : (
-                                "Register"
+                                "Cadastrar"
                             )}
                         </Button>
                         <p className="text-sm text-muted-foreground text-center">
-                            Already have an account?{" "}
+                            Já tem uma conta?{" "}
                             <Link href="/auth/login" className="text-primary font-medium hover:underline">
-                                Sign in
+                                Entre aqui
                             </Link>
                         </p>
                     </CardFooter>

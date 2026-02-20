@@ -25,3 +25,11 @@ export const getLeads = async (params?: any) => {
 export const getLead = async (id: string) => {
     return apiClient.get<LeadDto>(`/api/app/lead/${id}`);
 };
+
+export const updateLeadStatus = async (id: string, status: number) => {
+    return apiClient.put(`/api/app/lead/${id}/status`, null, { params: { status } });
+};
+
+export const addLeadNote = async (id: string, content: string) => {
+    return apiClient.post(`/api/app/lead/${id}/note`, null, { params: { content } });
+};

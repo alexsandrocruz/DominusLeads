@@ -7,11 +7,13 @@ import {
     CheckCircle2,
     ArrowRight,
     Zap,
-    Plus,
     Building2,
     Target,
     Sparkles,
-    ChevronRight
+    ChevronRight,
+    ChevronLeft,
+    BrainCircuit,
+    SearchCheck
 } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
@@ -19,6 +21,32 @@ import { cn } from "@/lib/utils";
 
 export default function OnboardingPage() {
     const [, setLocation] = useLocation();
+    const [showCarousel, setShowCarousel] = useState(true);
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    const slides = [
+        {
+            title: "A Nova Era da Prospecção",
+            description: "Esqueça listas frias e planilhas. O Dominus Leads usa Inteligência Artificial para encontrar e qualificar seus clientes ideais enquanto você dorme.",
+            icon: BrainCircuit,
+            color: "from-blue-600 to-indigo-600",
+            button: "Próximo"
+        },
+        {
+            title: "Resultados em Tempo Real",
+            description: "Nossos robôs varrem a internet em busca de empresas com o perfil exato (CNAE) que você definiu. Extraímos, validamos e entregamos no seu CRM.",
+            icon: SearchCheck,
+            color: "from-indigo-600 to-purple-600",
+            button: "Tendi, e agora?"
+        },
+        {
+            title: "Configuração Relâmpago",
+            description: "Em menos de 5 minutos você configura seu tenant, define sua persona e ativa sua primeira campanha de prospecção automatizada.",
+            icon: Zap,
+            color: "from-purple-600 to-primary",
+            button: "Vamos começar!"
+        }
+    ];
 
     const steps = [
         {
@@ -54,6 +82,86 @@ export default function OnboardingPage() {
             completed: false
         }
     ];
+
+    const nextSlide = () => {
+        if (currentSlide < slides.length - 1) {
+            setCurrentSlide(currentSlide + 1);
+        } else {
+            setShowCarousel(false);
+        }
+    };
+
+    const prevSlide = () => {
+        if (currentSlide > 0) {
+            setCurrentSlide(currentSlide - 1);
+        }
+    };
+
+    if (showCarousel) {
+        const slide = slides[currentSlide];
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+                <div className="max-w-xl w-full">
+                    <Card className="border-none shadow-2xl rounded-[2.5rem] overflow-hidden bg-white">
+                        <div className={cn("h-64 flex items-center justify-center bg-gradient-to-br transition-all duration-700", slide.color)}>
+                            <div className="size-24 rounded-3xl bg-white/20 backdrop-blur-xl flex items-center justify-center text-white border border-white/20 animate-in zoom-in duration-500">
+                                <slide.icon className="size-12" />
+                            </div>
+                        </div>
+                        <CardContent className="p-10 space-y-8">
+                            <div className="space-y-4 text-center">
+                                <h1 className="text-4xl font-black tracking-tighter italic animate-in slide-in-from-bottom-2 duration-500">{slide.title}</h1>
+                                <p className="text-muted-foreground font-medium text-lg leading-relaxed animate-in slide-in-from-bottom-4 duration-700">
+                                    {slide.description}
+                                </p>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-4">
+                                <div className="flex gap-2">
+                                    {slides.map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className={cn(
+                                                "h-1.5 transition-all duration-300 rounded-full",
+                                                i === currentSlide ? "w-8 bg-primary" : "w-2 bg-muted"
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="flex gap-3">
+                                    {currentSlide > 0 && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={prevSlide}
+                                            className="h-12 w-12 rounded-2xl"
+                                        >
+                                            <ChevronLeft className="size-6" />
+                                        </Button>
+                                    )}
+                                    <Button
+                                        onClick={nextSlide}
+                                        className="h-12 px-8 rounded-2xl font-black italic gap-2 shadow-lg shadow-primary/20"
+                                    >
+                                        {slide.button}
+                                        <ArrowRight className="size-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <div className="mt-8 text-center px-4">
+                        <button
+                            onClick={() => setShowCarousel(false)}
+                            className="text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-all"
+                        >
+                            Pular por enquanto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <AppShell>
