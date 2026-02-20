@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -8,7 +9,9 @@ public interface ILeadAppService :
     ICrudAppService<
         LeadDto,
         Guid,
-        PagedAndSortedResultRequestDto,
+        GetLeadsInput,
         CreateUpdateLeadDto>
 {
+    Task UpdateStatusAsync(Guid id, LeadStatus status);
+    Task AddNoteAsync(Guid id, string content);
 }

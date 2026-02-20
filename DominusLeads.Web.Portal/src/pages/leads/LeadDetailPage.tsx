@@ -54,26 +54,27 @@ const getEventStyles = (tipo: number) => {
 
 const getStatusLabel = (status: number) => {
     switch (status) {
-        case 0: return "Novo";
-        case 1: return "Qualificado";
-        case 2: return "Em Negociação";
-        case 3: return "Validado";
-        case 4: return "Perdido";
+        case 1: return "Novo";
+        case 2: return "Contatado";
+        case 3: return "Qualificado";
+        case 4: return "Proposta";
+        case 5: return "Fechado";
+        case 6: return "Descartado";
         default: return "Novo";
     }
 };
 
-export default function LeadDetailPage({ params }: { params: { id: string } }) {
+export default function LeadDetailPage({ id }: { id: string }) {
     const [, setLocation] = useLocation();
     const [loading, setLoading] = useState(true);
     const [lead, setLead] = useState<LeadDto | null>(null);
     const [events, setEvents] = useState<EventDto[]>([]);
 
     useEffect(() => {
-        if (params.id) {
-            fetchData(params.id);
+        if (id) {
+            fetchData(id);
         }
-    }, [params.id]);
+    }, [id]);
 
     const fetchData = async (id: string) => {
         setLoading(true);
