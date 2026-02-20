@@ -11,7 +11,7 @@ public class Lead : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public string Cnpj { get; private set; }
     public string RazaoSocial { get; private set; }
-    public string NomeFantasia { get; private set; }
+    public string? NomeFantasia { get; private set; }
     public string CnaePrincipal { get; private set; }
     public LeadStatus Status { get; private set; }
     public string? Email { get; private set; }

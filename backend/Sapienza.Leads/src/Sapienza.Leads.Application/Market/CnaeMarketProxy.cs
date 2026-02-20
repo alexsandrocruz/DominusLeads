@@ -32,7 +32,7 @@ public class CnaeMarketProxy : ICnaeMarketProxy, ITransientDependency
         using var client = _httpClientFactory.CreateClient();
         if (!string.IsNullOrEmpty(apiKey))
         {
-            client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
         }
 
         var url = $"{baseUrl}/api/v1/estabelecimentos-ativos?";
@@ -69,10 +69,63 @@ public class CnaeMarketProxy : ICnaeMarketProxy, ITransientDependency
             client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
         }
 
-        var url = $"{baseUrl}/api/v1/cnpj/{cnpj}";
+        var cleanCnpj = cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
+        var url = $"{baseUrl}/api/v1/cnpj/{cleanCnpj}";
         var response = await client.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();
+    }
+
+    public async Task<string> GetCnaesAsync()
+    {
+        var baseUrl = await _settingProvider.GetOrNullAsync(LeadsSettings.MarketApiBaseUrl);
+        var apiKey = await _settingProvider.GetOrNullAsync(LeadsSettings.MarketApiKey);
+
+        using var client = _httpClientFactory.CreateClient();
+        if (!string.IsNullOrEmpty(apiKey))
+        {
+            client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
+        }
+
+        var url = $"{baseUrl}/api/v1/cnaes";
+        try
+        {
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException)
+        {
+            return "[]";
+        }
+    }
+
+    public async Task<string> GetMunicipiosAsync()
+    {
+        var baseUrl = await _settingProvider.GetOrNullAsync(LeadsSettings.MarketApiBaseUrl);
+        var apiKey = await _settingProvider.GetOrNullAsync(LeadsSettings.MarketApiKey);
+
+        using var client = _httpClientFactory.CreateClient();
+        if (!string.IsNullOrEmpty(apiKey))
+        {
+            client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
+        }
+
+        // Assuming standard endpoint /municipios as discussed.
+        // If it fails, we will need to re-verify the endpoint.
+        var url = $"{baseUrl}/api/v1/municipios"; 
+        
+        try 
+        {
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+             // Fallback attempt or clearer error if needed
+             throw new Volo.Abp.UserFriendlyException($"Failed to fetch municipalities from {url}. Error: {ex.Message}");
+        }
     }
 }

@@ -13,7 +13,5 @@ export interface EventDto {
 }
 
 export const getLeadEvents = async (leadId: string) => {
-    return apiClient.get<EventDto[]>(`/api/app/event/list-by-lead`, {
-        params: { leadId }
-    });
+    return apiClient.get<EventDto[]>(`/api/app/event/by-lead/${leadId}`);
 };

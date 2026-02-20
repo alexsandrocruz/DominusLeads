@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
 namespace Sapienza.Leads.Leads;
 
+[AllowAnonymous]
 public class LeadAppService :
     CrudAppService<
         Lead,
@@ -18,6 +20,12 @@ public class LeadAppService :
     public LeadAppService(IRepository<Lead, Guid> repository)
         : base(repository)
     {
+    }
+
+    protected override Task<LeadDto> MapToGetOutputDtoAsync(Lead entity)
+    {
+        var mapper = new LeadsApplicationMappers();
+        return Task.FromResult(mapper.Map(entity));
     }
 
     protected override Task<Lead> MapToEntityAsync(CreateUpdateLeadDto createInput)
@@ -49,7 +57,6 @@ public class LeadAppService :
 
     protected override Task MapToEntityAsync(CreateUpdateLeadDto updateInput, Lead entity)
     {
-        // For updates, we can use Mapperly because it doesn't need a constructor
         var mapper = new LeadsApplicationMappers();
         mapper.Map(updateInput, entity);
         return Task.CompletedTask;
