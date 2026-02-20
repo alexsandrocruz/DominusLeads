@@ -123,22 +123,26 @@ public class MarketAppService : ApplicationService, IMarketAppService
             var lead = new Lead(
                 GuidGenerator.Create(),
                 cnpj,
-                marketData.Cnaes?.FirstOrDefault() ?? "",
-                marketData.RazaoSocial ?? marketData.NomeFantasia ?? "Sem Razão Social",
-                marketData.NomeFantasia,
+                Truncate(marketData.Cnaes?.FirstOrDefault() ?? "0000000", LeadConsts.MaxCnaeLength),
+                Truncate(marketData.RazaoSocial ?? marketData.NomeFantasia ?? "Sem Razão Social", LeadConsts.MaxRazaoSocialLength),
+                Truncate(marketData.NomeFantasia, LeadConsts.MaxNomeFantasiaLength),
                 LeadStatus.Novo,
                 0,
                 "Extração Mercado",
                 CurrentTenant.Id
             );
 
-            lead.SetContactInfo(marketData.CorreioEletronico, marketData.TelefoneFormatado);
+            lead.SetContactInfo(
+                Truncate(marketData.CorreioEletronico, LeadConsts.MaxEmailLength), 
+                Truncate(marketData.TelefoneFormatado, LeadConsts.MaxTelefoneLength)
+            );
+            
             lead.SetAddress(
                 marketData.Logradouro,
                 marketData.Numero,
                 marketData.Bairro,
                 marketData.Municipio,
-                marketData.Uf,
+                Truncate(marketData.Uf, LeadConsts.MaxUfLength),
                 marketData.Cep
             );
 
@@ -158,6 +162,12 @@ public class MarketAppService : ApplicationService, IMarketAppService
                 CurrentTenant.Id
             ), autoSave: true);
         }
+    }
+
+    private string? Truncate(string? value, int maxLength)
+    {
+        if (string.IsNullOrEmpty(value)) return value;
+        return value.Length <= maxLength ? value : value.Substring(0, maxLength);
     }
 
     // Métodos auxiliares de Parse (Simplificados para o exemplo)
