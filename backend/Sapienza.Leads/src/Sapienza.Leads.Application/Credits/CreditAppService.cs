@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Sapienza.Leads.Credits;
 
-[Authorize]
+[AllowAnonymous]
 public class CreditAppService : ApplicationService, ICreditAppService
 {
     private readonly IRepository<Credit, Guid> _creditRepository;
@@ -64,6 +64,8 @@ public class CreditAppService : ApplicationService, ICreditAppService
         if (credit == null)
         {
             credit = new Credit(GuidGenerator.Create(), CurrentTenant.Id);
+            // Give 1000 credits for initial testing
+            credit.AddTransaction(GuidGenerator.Create(), TransactionType.Recarga, 1000, "Saldo Inicial (Teste)", TransactionStatus.Confirmado);
             await _creditRepository.InsertAsync(credit, autoSave: true);
         }
 

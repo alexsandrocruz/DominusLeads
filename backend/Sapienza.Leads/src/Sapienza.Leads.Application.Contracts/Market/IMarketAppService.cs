@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
 
 namespace Sapienza.Leads.Market;
@@ -15,4 +17,22 @@ public interface IMarketAppService : IApplicationService
     /// Extrai leads selecionados para o CRM e debita créditos.
     /// </summary>
     Task ExtractLeadsAsync(ExtractLeadsDto input);
+
+    [AllowAnonymous]
+    Task<List<CnaeDto>> GetCnaesAsync(string? parentId = null);
+    
+    [AllowAnonymous]
+    Task<List<MunicipalityDto>> GetMunicipiosAsync();
+
+    [AllowAnonymous]
+    Task SyncCnaesAsync();
+
+    [AllowAnonymous]
+    Task<List<MarketVerticalDto>> GetVerticalsAsync();
+
+    Task<MarketVerticalDto> CreateVerticalAsync(CreateUpdateMarketVerticalDto input);
+
+    Task<MarketVerticalDto> UpdateVerticalAsync(Guid id, CreateUpdateMarketVerticalDto input);
+
+    Task DeleteVerticalAsync(Guid id);
 }
