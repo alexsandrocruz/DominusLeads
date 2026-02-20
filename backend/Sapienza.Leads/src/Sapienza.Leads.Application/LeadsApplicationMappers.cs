@@ -3,6 +3,7 @@ using Sapienza.Leads.Leads;
 using Sapienza.Leads.Credits;
 using Sapienza.Leads.Searches;
 using Sapienza.Leads.Events;
+using Sapienza.Leads.Dashboard;
 
 namespace Sapienza.Leads;
 
@@ -20,4 +21,13 @@ public partial class LeadsApplicationMappers
     public partial SearchDto Map(Search source);
 
     public partial EventDto Map(Event source);
+
+    [MapProperty(nameof(Event.Tipo), nameof(RecentActivityDto.Type))]
+    [MapProperty(nameof(Event.Icone), nameof(RecentActivityDto.Icon))]
+    [MapProperty(nameof(Event.Titulo), nameof(RecentActivityDto.Title))]
+    [MapProperty(nameof(Event.Descricao), nameof(RecentActivityDto.Description))]
+    [MapProperty(nameof(Event.Cor), nameof(RecentActivityDto.Color))]
+    public partial RecentActivityDto MapToRecentActivity(Event source);
+
+    public string MapEventTypeToString(EventType source) => source.ToString();
 }
