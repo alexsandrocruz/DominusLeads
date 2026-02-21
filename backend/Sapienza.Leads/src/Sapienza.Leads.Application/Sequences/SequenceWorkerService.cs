@@ -23,7 +23,7 @@ public class SequenceWorkerService : AsyncPeriodicBackgroundWorkerBase
     private readonly IRepository<SequenceExecution, Guid> _executionRepository;
     private readonly IRepository<Sequence, Guid> _sequenceRepository;
     private readonly IRepository<Lead, Guid> _leadRepository;
-    private readonly IMessageGateway _messageGateway;
+    private readonly IMessageGatewayFactory _gatewayFactory;
     private readonly IResponseClassifier _responseClassifier;
     private readonly IJsonSerializer _jsonSerializer;
     private readonly IRepository<Event, Guid> _eventRepository;
@@ -38,7 +38,7 @@ public class SequenceWorkerService : AsyncPeriodicBackgroundWorkerBase
         IRepository<SequenceExecution, Guid> executionRepository,
         IRepository<Sequence, Guid> sequenceRepository,
         IRepository<Lead, Guid> leadRepository,
-        IMessageGateway messageGateway,
+        IMessageGatewayFactory gatewayFactory,
         IResponseClassifier responseClassifier,
         IJsonSerializer jsonSerializer,
         IRepository<Event, Guid> eventRepository,
@@ -52,7 +52,7 @@ public class SequenceWorkerService : AsyncPeriodicBackgroundWorkerBase
         _executionRepository = executionRepository;
         _sequenceRepository = sequenceRepository;
         _leadRepository = leadRepository;
-        _messageGateway = messageGateway;
+        _gatewayFactory = gatewayFactory;
         _responseClassifier = responseClassifier;
         _jsonSerializer = jsonSerializer;
         _eventRepository = eventRepository;
@@ -185,20 +185,32 @@ public class SequenceWorkerService : AsyncPeriodicBackgroundWorkerBase
         var config = _jsonSerializer.Deserialize<SendMessageConfig>(step.Config ?? "{}");
         var content = ReplacePlaceholders(config.Content ?? "", lead);
 
-        var result = await _messageGateway.SendTextAsync(lead.Telefone ?? "", content);
+        var gateway = _gatewayFactory.GetGateway(config.Provider ?? "evolution");
+        
+        SendResult result;
+        if (gateway is TwilioMessageGateway twilio)
+        {
+            result = await twilio.SendAsync(lead.Telefone ?? "", content, config.Channel ?? "sms");
+        }
+        else
+        {
+            result = await gateway.SendTextAsync(lead.Telefone ?? "", content);
+        }
 
         if (result.Success)
         {
             execution.AddStepExecution(_guidGenerator.Create(), execution.CurrentStepIndex, StepExecutionStatus.Executed, _clock.Now, _jsonSerializer.Serialize(result));
             execution.AdvanceToStep(execution.CurrentStepIndex + 1);
             
+            var channelLabel = config.Channel?.ToUpper() ?? (config.Provider?.Equals("twilio", StringComparison.OrdinalIgnoreCase) == true ? "SMS" : "WhatsApp");
+            
             // Log as Event
             await _eventRepository.InsertAsync(new Event(
                 _guidGenerator.Create(),
                 lead.Id,
-                EventType.WhatsApp,
-                "Mensagem Enviada",
-                $"Sequência automação: {content}",
+                EventType.WhatsApp, // We can keep this for now or add a generic Message type
+                $"Mensagem enviada via {config.Provider ?? "Evolution"} ({channelLabel})",
+                content,
                 _clock.Now,
                 "#10b981", // Emerald
                 "send",
@@ -355,7 +367,12 @@ public class SequenceWorkerService : AsyncPeriodicBackgroundWorkerBase
     }
 
     // Config DTOs for internal use
-    private class SendMessageConfig { public string? Content { get; set; } }
+    private class SendMessageConfig 
+    { 
+        public string? Content { get; set; } 
+        public string? Provider { get; set; } // "evolution" or "twilio"
+        public string? Channel { get; set; }  // "whatsapp" or "sms"
+    } 
     private class WaitConfig { public int Hours { get; set; } }
     private class WaitForReplyConfig { public int TimeoutHours { get; set; } public string? OnTimeout { get; set; } }
     private class UpdateStatusConfig { public int Status { get; set; } }

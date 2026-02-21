@@ -42,6 +42,8 @@ import {
 interface StepConfig {
     content?: string;
     mediaUrl?: string;
+    provider?: string;
+    channel?: string;
     timeoutHours?: number;
     onTimeout?: string;
     hours?: number;
@@ -472,6 +474,30 @@ function renderConfigPanel(
         case StepType.SendMessage:
             return (
                 <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                        <div>
+                            <label className="text-xs font-medium mb-1 block">Provedor</label>
+                            <select
+                                value={config.provider || "evolution"}
+                                onChange={(e) => updateField(step._key, "provider", e.target.value)}
+                                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                            >
+                                <option value="evolution">Evolution API</option>
+                                <option value="twilio">Twilio</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="text-xs font-medium mb-1 block">Canal</label>
+                            <select
+                                value={config.channel || "whatsapp"}
+                                onChange={(e) => updateField(step._key, "channel", e.target.value)}
+                                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                            >
+                                <option value="whatsapp">WhatsApp</option>
+                                {config.provider === "twilio" && <option value="sms">SMS</option>}
+                            </select>
+                        </div>
+                    </div>
                     <div>
                         <label className="text-xs font-medium mb-1 block">Conteúdo da mensagem</label>
                         <Textarea

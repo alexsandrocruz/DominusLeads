@@ -30,7 +30,14 @@ public class LeadsApplicationModule : AbpModule
     {
         context.Services.AddHttpClient();
         
-        context.Services.AddTransient<IMessageGateway, EvolutionMessageGateway>();
+        // Gateways
+        context.Services.AddTransient<EvolutionMessageGateway>();
+        context.Services.AddTransient<TwilioMessageGateway>();
+        context.Services.AddTransient<IMessageGateway, EvolutionMessageGateway>(); // Default for backward compatibility
+        
+        // Factory
+        context.Services.AddTransient<IMessageGatewayFactory, MessageGatewayFactory>();
+
         context.Services.AddTransient<IResponseClassifier, OpenAiResponseClassifier>();
     }
 
