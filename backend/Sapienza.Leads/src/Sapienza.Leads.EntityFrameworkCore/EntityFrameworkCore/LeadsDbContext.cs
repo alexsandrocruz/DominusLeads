@@ -19,6 +19,8 @@ using Sapienza.Leads.Credits;
 using Sapienza.Leads.Searches;
 using Sapienza.Leads.Events;
 using Sapienza.Leads.Market;
+using Sapienza.Leads.Sequences;
+using Sapienza.Leads.Campaigns;
 
 namespace Sapienza.Leads.EntityFrameworkCore;
 
@@ -39,6 +41,14 @@ public class LeadsDbContext :
     public DbSet<ConsultedLead> ConsultedLeads { get; set; }
     public DbSet<Cnae> Cnaes { get; set; }
     public DbSet<MarketVertical> MarketVerticals { get; set; }
+    public DbSet<Sequence> Sequences { get; set; }
+    public DbSet<SequenceStep> SequenceSteps { get; set; }
+    public DbSet<SequenceExecution> SequenceExecutions { get; set; }
+    public DbSet<StepExecution> StepExecutions { get; set; }
+
+    // Campaigns
+    public DbSet<Campaign> Campaigns { get; set; }
+    public DbSet<CampaignLead> CampaignLeads { get; set; }
 
 
 
@@ -181,6 +191,64 @@ public class LeadsDbContext :
             b.ToTable(LeadsConsts.DbTablePrefix + "MarketVerticalCnaes", LeadsConsts.DbSchema);
             b.ConfigureByConvention();
             b.HasKey(x => new { x.MarketVerticalId, x.CnaeId });
+        });
+
+        // Sequence Builder
+        builder.Entity<Sequence>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Sequences", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Nome).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Descricao).HasMaxLength(1000);
+            b.HasMany(x => x.Steps).WithOne().HasForeignKey(x => x.SequenceId).IsRequired();
+            b.HasIndex(x => x.TenantId);
+        });
+
+        builder.Entity<SequenceStep>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "SequenceSteps", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Config).HasMaxLength(4000);
+        });
+
+        builder.Entity<SequenceExecution>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "SequenceExecutions", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.LastClassification).HasMaxLength(100);
+            b.Property(x => x.LastReply).HasMaxLength(4000);
+            b.HasMany(x => x.StepExecutions).WithOne().HasForeignKey(x => x.SequenceExecutionId).IsRequired();
+            b.HasIndex(x => x.TenantId);
+            b.HasIndex(x => x.SequenceId);
+            b.HasIndex(x => x.LeadId);
+            b.HasIndex(x => new { x.Status, x.NextActionAt });
+        });
+
+        builder.Entity<StepExecution>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "StepExecutions", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Result).HasMaxLength(4000);
+        });
+
+        // Campaigns
+        builder.Entity<Campaign>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "Campaigns", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Name).IsRequired().HasMaxLength(200);
+            b.Property(x => x.Description).HasMaxLength(1000);
+            b.HasOne(x => x.Sequence).WithMany().HasForeignKey(x => x.SequenceId).IsRequired();
+            b.HasMany(x => x.Leads).WithOne().HasForeignKey(x => x.CampaignId).IsRequired();
+            b.HasIndex(x => x.TenantId);
+        });
+
+        builder.Entity<CampaignLead>(b =>
+        {
+            b.ToTable(LeadsConsts.DbTablePrefix + "CampaignLeads", LeadsConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasOne(x => x.Lead).WithMany().HasForeignKey(x => x.LeadId).IsRequired();
+            b.HasIndex(x => new { x.CampaignId, x.LeadId }).IsUnique();
         });
     }
 }

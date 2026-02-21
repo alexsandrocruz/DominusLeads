@@ -1,0 +1,18 @@
+  Determinando os projetos a serem restaurados...
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj : warning NU1504: Duplicar 'PackageReference' itens encontrados. Remova os itens duplicados ou use a funcionalidade Atualizar para garantir um comportamento de restauração consistente. Os itens duplicados 'PackageReference' são: Microsoft.EntityFrameworkCore.InMemory 10.0.0, Microsoft.EntityFrameworkCore.InMemory 10.0.0.
+  Todos os projetos estão atualizados para restauração.
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj : warning NU1504: Duplicar 'PackageReference' itens encontrados. Remova os itens duplicados ou use a funcionalidade Atualizar para garantir um comportamento de restauração consistente. Os itens duplicados 'PackageReference' são: Microsoft.EntityFrameworkCore.InMemory 10.0.0, Microsoft.EntityFrameworkCore.InMemory 10.0.0.
+  Sapienza.Leads.Domain.Shared -> /Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Domain.Shared/bin/Debug/net10.0/Sapienza.Leads.Domain.Shared.dll
+  Sapienza.Leads.Domain -> /Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Domain/bin/Debug/net10.0/Sapienza.Leads.Domain.dll
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Application.Contracts/Campaigns/ICampaignAppService.cs(23,12): error CS0246: O nome do tipo ou do namespace "CampaignStatus" não pode ser encontrado (está faltando uma diretiva using ou uma referência de assembly?) [/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Application.Contracts/Sapienza.Leads.Application.Contracts.csproj]
+  Sapienza.Leads.EntityFrameworkCore -> /Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.EntityFrameworkCore/bin/Debug/net10.0/Sapienza.Leads.EntityFrameworkCore.dll
+
+FALHA da compilação.
+
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj : warning NU1504: Duplicar 'PackageReference' itens encontrados. Remova os itens duplicados ou use a funcionalidade Atualizar para garantir um comportamento de restauração consistente. Os itens duplicados 'PackageReference' são: Microsoft.EntityFrameworkCore.InMemory 10.0.0, Microsoft.EntityFrameworkCore.InMemory 10.0.0.
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.HttpApi.Host/Sapienza.Leads.HttpApi.Host.csproj : warning NU1504: Duplicar 'PackageReference' itens encontrados. Remova os itens duplicados ou use a funcionalidade Atualizar para garantir um comportamento de restauração consistente. Os itens duplicados 'PackageReference' são: Microsoft.EntityFrameworkCore.InMemory 10.0.0, Microsoft.EntityFrameworkCore.InMemory 10.0.0.
+/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Application.Contracts/Campaigns/ICampaignAppService.cs(23,12): error CS0246: O nome do tipo ou do namespace "CampaignStatus" não pode ser encontrado (está faltando uma diretiva using ou uma referência de assembly?) [/Users/alexsandrocruz/dev/DominusLeads/backend/Sapienza.Leads/src/Sapienza.Leads.Application.Contracts/Sapienza.Leads.Application.Contracts.csproj]
+    2 Aviso(s)
+    1 Erro(s)
+
+Tempo Decorrido 00:00:01.45

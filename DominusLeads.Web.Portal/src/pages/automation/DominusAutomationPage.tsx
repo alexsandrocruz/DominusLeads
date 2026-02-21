@@ -49,10 +49,10 @@ export default function DominusAutomationPage() {
                     </div>
                     <Button
                         className="gap-2 font-bold shadow-lg shadow-primary/20 h-11 px-6"
-                        onClick={() => setLocation("/automation/flow")}
+                        onClick={() => setLocation("/automation/sequences")}
                     >
                         <Plus className="h-4 w-4" />
-                        Nova Automação
+                        Ver Sequências
                     </Button>
                 </div>
 
@@ -70,7 +70,7 @@ export default function DominusAutomationPage() {
                             <Card
                                 key={bot.id}
                                 className="hover:border-primary/50 transition-colors overflow-hidden group cursor-pointer"
-                                onClick={() => setLocation("/automation/flow")}
+                                onClick={() => setLocation("/automation/sequences")}
                             >
                                 <CardHeader className="flex flex-row items-start justify-between pb-2 bg-muted/30">
                                     <div className="flex items-center gap-3">
@@ -124,11 +124,14 @@ export default function DominusAutomationPage() {
                             </Card>
                         ))}
 
-                        <button className="border-2 border-dashed border-muted rounded-xl p-8 flex flex-col items-center justify-center gap-3 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary">
+                        <button
+                            className="border-2 border-dashed border-muted rounded-xl p-8 flex flex-col items-center justify-center gap-3 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary"
+                            onClick={() => setLocation("/automation/sequences")}
+                        >
                             <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10">
                                 <Plus className="h-6 w-6" />
                             </div>
-                            <span className="font-bold">Criar Nova Automação</span>
+                            <span className="font-bold">Gerenciar Sequências</span>
                         </button>
                     </div>
                 </div>

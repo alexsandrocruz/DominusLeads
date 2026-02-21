@@ -7,6 +7,9 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.BackgroundWorkers;
+using Volo.Abp;
+using Sapienza.Leads.Sequences;
 
 namespace Sapienza.Leads;
 
@@ -26,5 +29,13 @@ public class LeadsApplicationModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClient();
+        
+        context.Services.AddTransient<IMessageGateway, EvolutionMessageGateway>();
+        context.Services.AddTransient<IResponseClassifier, OpenAiResponseClassifier>();
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context.AddBackgroundWorkerAsync<SequenceWorkerService>();
     }
 }

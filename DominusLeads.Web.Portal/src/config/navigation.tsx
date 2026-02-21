@@ -45,6 +45,8 @@ import DominusAutomationPage from "@/pages/automation/DominusAutomationPage";
 import AutomationFlowPage from "@/pages/automation/AutomationFlowPage";
 import AiTrainingPage from "@/pages/automation/AiTrainingPage";
 import AiLogsPage from "@/pages/automation/AiLogsPage";
+import SequencesListPage from "@/pages/automation/SequencesListPage";
+import SequenceEditorPage from "@/pages/automation/SequenceEditorPage";
 import CampaignListPage from "@/pages/campaigns/CampaignListPage";
 import CampaignConfigPage from "@/pages/campaigns/CampaignConfigPage";
 import BillingDashboardPage from "@/pages/billing/BillingDashboardPage";
@@ -104,6 +106,8 @@ export const routes: RouteConfig[] = [
     { path: "/automation/flow", component: AutomationFlowPage },
     { path: "/automation/training", component: AiTrainingPage },
     { path: "/automation/logs", component: AiLogsPage },
+    { path: "/automation/sequences", component: SequencesListPage },
+    { path: "/automation/sequences/:id", component: SequenceEditorPage },
     { path: "/campaigns", component: CampaignListPage },
     { path: "/campaigns/config", component: CampaignConfigPage },
     { path: "/settings/company", component: CompanySettingsPage },
@@ -139,6 +143,7 @@ export const menuItems: NavItem[] = [
     { label: "Gestão de Leads", href: "/leads", icon: Users, section: "main" },
     { label: "Busca e Filtros", href: "/search", icon: Search, section: "main" },
     { label: "Automações", href: "/automation", icon: Zap, section: "main" },
+    { label: "Sequências", href: "/automation/sequences", icon: GitMerge, section: "main" },
     { label: "Logs de IA", href: "/automation/logs", icon: History, section: "main" },
     { label: "Campanhas", href: "/campaigns", icon: LayoutTemplate, section: "main" },
     { label: "Faturamento", href: "/billing", icon: CreditCard, section: "main" },

@@ -39,7 +39,7 @@ export default function AiTrainingPage() {
             <div className="max-w-xl mx-auto space-y-8 pb-32 relative min-h-[calc(100vh-100px)]">
                 {/* Header Navigation */}
                 <div className="flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md py-2 z-50">
-                    <Button variant="ghost" size="sm" onClick={() => setLocation("/automation/flow")} className="gap-2 -ml-2">
+                    <Button variant="ghost" size="sm" onClick={() => setLocation("/automation")} className="gap-2 -ml-2">
                         <ArrowLeft className="size-4" />
                     </Button>
                     <h1 className="text-lg font-black tracking-tight">Treinamento da IA</h1>
